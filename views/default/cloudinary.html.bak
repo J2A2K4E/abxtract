@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+{{include 'navbar.html'}}
+    <script src="{{=URL('static','js/cloudinary-jquery-file-upload.js')}}" type="text/javascript"></script>
+    <style>
+        .clickable-row:hover{background-color:#f5f5f5;cursor: pointer;}
+        .table td, .table th {padding:.2rem;vertical-align:middle;}
+        a {color:black;}
+        .my-container{max-width: 80rem;margin: 0 auto;padding: 1.25rem 0 0;}
+        .my-col{padding:1rem;}
+        .my-header{font-size:22px;color:#929292;}
+    </style>
+</head>
+<body>
+<input name="file" type="file" class="cloudinary-fileupload" data-cloudinary-field="image_id" 
+   data-form-data="[upload-preset-and-other-upload-options-as-html-escaped-JSON-data]"></input>
+
+</body>
+
+<script>
+$(document).ready(function() {
+    $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
+});
+</script>
+</html>

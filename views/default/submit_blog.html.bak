@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head itemscope itemtype="http://schema.org/Organization" lang="en">
+    <title>Submit Post | ViewBase</title>
+    {{include 'navbar.html'}}
+    <link href="{{=URL('static', STATIC_VERSION,'summernote-bs4.css')}}" rel="stylesheet">
+    <script src="{{=URL('static', STATIC_VERSION,'summernote-bs4.js')}}"></script>
+<!--     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet"> -->
+<!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script> -->
+    <style>
+        /* Layout settings */
+        .container-fluid{background-color:#f2f3f5;}
+        .row{max-width:1350px;margin:0 auto;padding:20px 0;}
+        .my-col{padding:15px 30px 20px 30px;}
+        .my-main{background-color:white;padding:15px !important;}
+        .col-header{margin:5px 0 15px 0;width:100%;text-align:center;font-size:25px;font-weight:700;}
+        label{display:block;font-weight:500;}
+        .label-desc{font-size:0.8rem;font-weight:400;color:#929292;}
+        /* Image preview settings */
+        .preview-wrapper{background-color:#f3f3f3;margin: 10px 0;display:none;}
+        .preview-text{width:80px;display:block;padding-left:5px;padding-right:5px;}
+        .preview-image{max-height:200px;object-fit:cover;background-size:cover;overflow:hidden;margin: 0 auto;display:none;}
+        .preview-close{cursor:pointer;text-shadow:1px 1px 1px white;font-size:25px;}
+        .preview-file{display: none;}
+        .preview-buttons{display:flex;margin:5px 0 10px 0;}
+        .upload-btn{cursor:pointer;margin:0;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-3 my-col"></div>
+            <div class="col-12 col-lg-6 my-col my-main">
+                <h1 class="col-header">Submit Article</h1>
+                <form>
+                    <div class="form-group">
+                        <div class="label-desc">Title</div>
+                        <input type="text" class="form-control" id="title" placeholder="Title" value="">
+                        <div id="title-warning"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="label-desc">Add one-line summary of your post</div>
+                        <input type="text" class="form-control" id="description" placeholder="Description" value="">
+                        <div id="desc-warning"></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="category"><i class="fas fa-bars"></i>&nbsp;Category</label>
+                        </div>
+                        <select class="custom-select" id="category">
+                            <option selected>Choose...</option>
+                            <option value="1">Market Insights</option>
+                            <option value="2">News and Announcements</option>
+                            <option value="3">Reviews</option>
+                            <option value="4">General</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="label-desc">Attach a large image to make your post more engaging</div>
+                        <button type="button" class="btn btn-light btn-border">
+                            <label class="upload-btn" for="file"><i class="fas fa-image"></i> Attach Image</label>
+                        </button>
+                        <input class="preview-file" id="file" type="file"/>
+                        <div class="preview-wrapper">
+                            <img class="preview-image" src="#" alt="your image"/>
+                            <i  class="preview-close fas fa-times-circle"></i>
+                        </div>
+                    </div>
+                    <div id="summernote"></div>
+                </form>
+                <div class="container-submit" style="margin:10px 0;">
+                    <button class="btn btn-secondary" id="save-blog"><i class="fas fa-save"></i> Save</button>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#submitModal"><i class="fas fa-arrow-alt-circle-up"></i> Submit for Approval</button>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3 my-col"></div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="submitModalLabel">Submit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          Your post will be reviewed by our moderator before publication.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="submit-blog">Submit for Approval</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    $('#test-blog').click(function(){
+        var select01 = $('#category').children("option:selected").val();
+        alert(select01);
+    });
+
+    // Check title length
+    $('#title').keyup(function(){
+        if ($('#title').val().length < 5) {$("#title-warning").html("<span style='color:red;'>minimum 5 char</span>").attr("accept","false");}
+        else {$("#title-warning").html("").attr("accept","true");}
+    });
+    // Check desc length
+    $('#description').keyup(function(){
+        if ($('#description').val().length < 5) {$("#desc-warning").html("<span style='color:red;'>minimum 5 char</span>").attr("accept","false");}
+        else {$("#desc-warning").html("").attr("accept","true");}
+    });
+
+    function inputValidation() {
+        if ($('#title-warning').attr("accept") == 'false'){
+            $('.alert_placeholder').html('<div class="flash alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert"><span>×</span></button>Title should have minimum 5 characters</div>');
+            return True;
+        } else if ($('#desc-warning').attr("accept") == 'false') {
+            $('.alert_placeholder').html('<div class="flash alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert"><span>×</span></button>Description should have minimum 5 characters</div>');
+            return True;
+        } else if ($('#category').children("option:selected").val()) {
+            $('.alert_placeholder').html('<div class="flash alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert"><span>×</span></button>Please select a category</div>');
+            return True;
+        }
+    }
+
+    function convertToSlug(Text)
+    {return Text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');}
+
+    function submitBlog(image_url, submit) {
+        var title = $('#title').val();
+        var description = $('#description').val();
+        var category = $('#category').children("option:selected").val();
+        var body = $('#summernote').summernote('code');
+        $.ajax({
+            method:'post',
+            url:'{{=URL('request','request_submit_blog')}}',
+            data:{'title':title,'description':description,'category':category,'body':body,'image_url':image_url, 'submit':submit},
+               success:function(data){setTimeout(window.location.replace("https://www.viewbase.com/my_blogs"), 500);} // refresh page after 0.5 seconds
+    });
+    };
+
+    function uploadImage(submit) {
+//         $(".loader").show(); // show loading animation
+        var formData = new FormData();
+        var file = document.getElementById("file").files[0];
+        var xhr = new XMLHttpRequest();
+        const cloudName = 'dnpe8yafk';
+        const unsignedUploadPreset = 'adjxshkq';
+        if (typeof file == 'undefined') {
+            console.log('no file')
+            submitBlog('', submit); // Call InsertComment function to upload comment without image
+        } else {
+            formData.append("file", file);
+            formData.append("upload_preset", unsignedUploadPreset); // REQUIRED
+            xhr.open("POST", "https://api.cloudinary.com/v1_1/"+cloudName +"/image/upload");
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    // Success!
+                    $(".loader").hide(); // Turn off loading animation
+                    var response = JSON.parse(xhr.response); // Get success response
+                    var image_url = response.secure_url; // https address of uploaded file
+                    console.log(image_url);
+                    submitBlog(image_url, submit); // Call InsertComment function to upload comment and image
+                } else {
+                    $(".loader").hide(); // Hide loading animation
+                    alert("Image upload failed. Please try again.");
+                }
+            }
+            xhr.send(formData);
+            return false; // stops form from refreshing page
+        };
+    };
+
+    {{if auth.user:}}
+    $('#submit-blog').click(function() {
+        if (inputValidation()){return;};
+        uploadImage('True');
+    });
+    $('#save-blog').click(function() {
+        if (inputValidation()){return;};
+        uploadImage('False');
+    });
+    {{pass}}
+    // Root comment and image upload - end
+
+    $('#summernote').summernote({
+        tabsize: 2,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']]
+        ]
+    });
+    // Root comment and image upload - start
+    function generatePreview(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $(".preview-image").css("display", "block");
+                $('.preview-image').attr('src', e.target.result);
+                $(".preview-wrapper").css("display", "flex");
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#file").change(function() {
+        generatePreview(this);
+    });
+
+    $(".preview-close").click(function() {
+        $('#file').val('');
+        $(".preview-wrapper").hide();
+    });
+</script>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>{{=blog.title}} | ViewBase</title>
+    <meta property="og:title" itemprop="name" content="{{=blog.title}} - ViewBase">
+    <meta name="twitter:title" content="{{=blog.title}} - ViewBase">
+    <meta property="og:description" itemprop="description" name="description" content="{{=blog.description}}">
+    <meta name="twitter:description" content="{{=blog.description}}">
+    <meta name="twitter:image:src" content="{{=blog.image_url_small}}">
+    <meta property="og:image" itemprop="image" name="image" content="{{=blog.image_url_small}}">
+    <link property="og:url" itemprop="url" rel="canonical" href="https://www.viewbase.com/blog/{{=blog.website_slug}}"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta property="og:site_name" content="ViewBase">
+    <meta property="fb:app_id" content="457354494759406">
+    <meta property="og:type" content="article">
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/blog.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+</head>
+<body>
+    <div class="jumbo-container">
+        <div class="jumbo-image jumbo-item" style="background-image:url({{=blog.image_url}});"></div>
+        <div class="jumbo-overlay jumbo-item">
+            <div class="jumbo-text">
+                <div class="jumbo-tag">{{=blog.tag}}</div>
+                <h1 class="jumbo-header">{{=blog.title}}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg order-2 order-lg-1 blog-col"></div>
+            <div class="col-12 col-lg-7 order-1 order-lg-2 blog-col">
+                <div class="author-container">
+                    {{user = db.auth_user(blog.created_by)}}
+                    <div class="col-avatar">
+                        <a href="{{=URL('profile',args=[db.auth_user(blog.created_by).username_slug],host=True)}}">
+                            <img class="avatar-container rounded-circle" src="{{=get_avatar_url(user.avatar)}}">
+                        </a>
+                    </div>
+                    <div class="col-message">
+                        <div class="message-header">
+                            <span class="message-header-text">
+                                <a href="{{=URL('profile',args=[user.username_slug],host=True)}}"><b>{{=user.username}}</b></a> · 
+                                <span class="message-header-desc">{{=user.description}}</span>
+                                <span class="message-header-date text-grey">
+                                    <br>{{=prettydate(blog.modified_on)}}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-body">
+                    {{=XML(blog.body)}}
+                </div>
+                <div class="blog-section-header">
+                    Comments
+                </div>
+                {{if auth.user and not auth.has_membership('banned'):}}
+                {{=form.custom.begin}}
+                {{form.custom.widget.blog["_value"] = blog.id}}
+                {{form.custom.widget.blog["_class"] = "d-none"}}
+                {{=form.custom.widget.blog}}
+                {{form.custom.widget.parent["_value"] = None}}
+                {{form.custom.widget.parent["_class"] = "d-none"}}
+                {{=form.custom.widget.parent}}
+                {{form.custom.widget.parent_author["_value"] = None}}
+                {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                {{=form.custom.widget.parent_author}}
+                {{form.custom.widget.root_parent["_value"] = None}}
+                {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                {{=form.custom.widget.root_parent}}
+                {{form.custom.widget.body["_class"] = "form-control"}}
+                {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                {{form.custom.widget.body['_style']='height:50px'}}
+                {{form.custom.widget.body["_onkeyup"] = "textAreaAdjust(this)"}}
+                {{=form.custom.widget.body}}
+                {{form.custom.submit["_class"] = "btn btn-success"}}
+                {{form.custom.submit["_style"] = "margin:5px 0 5px 0;"}}
+                {{form.custom.submit["_value"] = "Post"}}
+                {{=form.custom.submit}}
+                {{=form.custom.end}}
+                {{else:}}
+                <textarea class="form-control" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                {{pass}}
+                {{primary_children = db((db.blog_comment.blog==blog.id)&(db.blog_comment.parent==None)).select(orderby=db.blog_comment.created_on)}}
+                {{for primary_child in primary_children:}}
+                <div class="container-reply" id="comment{{=primary_child.id}}">
+                    <div class="col-avatar">
+                        <a href="{{=URL('profile',args=[db.auth_user(primary_child.created_by).username_slug],host=True)}}">
+                            <img class="avatar-reply rounded-circle" src="{{=get_avatar_url(primary_child.created_by)}}">
+                        </a>
+                    </div>
+                    <div class="col-message">
+                        <div class="message-header">
+                            <span class="reply-header-text">
+                                {{user = db.auth_user(primary_child.created_by)}}
+                                <a href="{{=URL('profile',args=[user.username_slug],host=True)}}"><b>{{=user.username}}</b></a>
+                            </span>
+                            <div class="message-header-dropdown">
+                                {{=prettydate(primary_child.created_on)}}
+                            </div>
+                        </div>
+                        <div class="reply-body">
+                            {{=XML(markmin2html(primary_child.body.replace('\n','[[NEWLINE]]')))}}
+                        </div>
+                        <div class="reply-buttons">
+                            <span class="icon-container" data-toggle="collapse" data-target="#collapse{{=primary_child.id}}">
+                                <i class="icon fas fa-reply"></i>
+                            </span>
+                            <span class="icon-score"></span>
+                            <span class="dropdown">
+                                <span class="icon-container" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                                    <i class="icon fas fa-ellipsis-h"></i>
+                                </span>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="{{=primary_child.id}}">
+                                    {{if auth.user:}}{{if primary_child.created_by==auth.user.id:}}
+                                    <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal" style="cursor:pointer;">Delete</a>
+                                    {{pass}}{{pass}}
+                                    <a class="dropdown-item report">Report</a>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="collapse reply-form" id="collapse{{=primary_child.id}}">
+                            {{if auth.user and not auth.has_membership('banned'):}}
+                            {{=form.custom.begin}}
+                            {{form.custom.widget.blog["_value"] = blog.id}}
+                            {{form.custom.widget.blog["_class"] = "d-none"}}
+                            {{=form.custom.widget.blog}}
+                            {{form.custom.widget.parent["_value"] = primary_child.id}}
+                            {{form.custom.widget.parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.parent}}
+                            {{form.custom.widget.parent_author["_value"] = primary_child.created_by}}
+                            {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                            {{=form.custom.widget.parent_author}}
+                            {{form.custom.widget.root_parent["_value"] = primary_child.id}}
+                            {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.root_parent}}
+                            {{form.custom.widget.body["_class"] = "form-control"}}
+                            {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                            {{form.custom.widget.body['_style']='height:50px'}}
+                            {{=form.custom.widget.body}}
+                            {{form.custom.submit["_class"] = "btn btn-success"}}
+                            {{form.custom.submit["_style"] = "margin:5px 0 5px 0;"}}
+                            {{form.custom.submit["_value"] = "Post"}}
+                            {{=form.custom.submit}}
+                            {{=form.custom.end}}
+                            {{else:}}
+                            <textarea class="form-control" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                            {{pass}}
+                        </div>
+                    </div>
+                </div>
+                <div class="container-secondary">
+                    {{secondary_children = db(db.blog_comment.root_parent==primary_child.id).select(orderby=db.blog_comment.created_on)}}
+                    {{for secondary_child in secondary_children:}}
+                    <div class="container-sec-reply" id="comment{{=secondary_child.id}}">
+                        <div class="col-avatar">
+                            <a href="{{=URL('profile',args=[db.auth_user(secondary_child.created_by).username_slug],host=True)}}">
+                                <img class="avatar-reply rounded-circle" src="{{=get_avatar_url(secondary_child.created_by)}}">
+                            </a>
+                        </div>
+                        <div class="col-message">
+                            <div class="message-header">
+                                <span class="reply-header-text">
+                                    {{user = db.auth_user(secondary_child.created_by)}}
+                                    <a href="{{=URL('profile',args=[user.username_slug],host=True)}}"><b>{{=user.username}}</b></a> · 
+                                    <span class="message-header-date">
+                                        <i class="fas fa-reply"></i> {{=XML(author(secondary_child.parent_author))}}
+                                    </span>
+                                </span>
+                                <div class="message-header-dropdown">
+                                    {{=prettydate(secondary_child.created_on)}}
+                                </div>
+                            </div>
+                            <div class="reply-body">
+                                {{=XML(markmin2html(secondary_child.body.replace('\n','[[NEWLINE]]')))}}
+                            </div>
+                            <div class="reply-buttons">
+                                <span class="icon-container" data-toggle="collapse" data-target="#collapse{{=secondary_child.id}}">
+                                    <i class="icon fas fa-reply"></i>
+                                </span>
+                                <span class="icon-score"></span>
+                                <span class="dropdown">
+                                    <span class="icon-container" id="dropdownMenuLink" data-toggle="dropdown">
+                                        <i class="icon fas fa-ellipsis-h"></i>
+                                    </span>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="{{=secondary_child.id}}">
+                                        {{if auth.user:}}{{if secondary_child.created_by==auth.user.id:}}
+                                        <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                                        {{pass}}{{pass}}
+                                        <a class="dropdown-item report">Report</a>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="collapse" id="collapse{{=secondary_child.id}}" style="width: 100%;margin-top:5px;">
+                                {{if auth.user and not auth.has_membership('banned'):}}
+                                {{=form.custom.begin}}
+                                {{form.custom.widget.blog["_value"] = blog.id}}
+                                {{form.custom.widget.blog["_class"] = "d-none"}}
+                                {{=form.custom.widget.blog}}
+                                {{form.custom.widget.parent["_value"] = secondary_child.id}}
+                                {{form.custom.widget.parent["_class"] = "d-none"}}
+                                {{=form.custom.widget.parent}}
+                                {{form.custom.widget.parent_author["_value"] = secondary_child.created_by}}
+                                {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                                {{=form.custom.widget.parent_author}}
+                                {{form.custom.widget.root_parent["_value"] = primary_child.id}}
+                                {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                                {{=form.custom.widget.root_parent}}
+                                {{form.custom.widget.body["_class"] = "form-control"}}
+                                {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                                {{form.custom.widget.body['_style']='height:50px'}}
+                                {{=form.custom.widget.body}}
+                                {{form.custom.submit["_class"] = "btn btn-success"}}
+                                {{form.custom.submit["_style"] = "margin:5px 0 5px 0;"}}
+                                {{form.custom.submit["_value"] = "Post"}}
+                                {{=form.custom.submit}}
+                                {{=form.custom.end}}
+                                {{else:}}
+                                <textarea class="form-control" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                                {{pass}}
+                            </div>
+                        </div>
+                    </div>
+                    {{pass}}
+                </div>
+                {{pass}}
+                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Delete comment</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete your comment?
+                            </div>
+                            <div class="modal-footer deleteModal" id="">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keep</button>
+                                <button type="button" class="btn btn-primary confirm-delete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg order-3 order-lg-3 blog-col"></div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+<script>
+    // Adjust textarea height based on content
+    function textAreaAdjust(o) {o.style.height="1px";o.style.height=(22+o.scrollHeight)+"px";}
+    // Check if username exists
+    function checkUsername(){
+        var username = $('.registerUsername').val();
+        $.ajax({
+            method:'post',
+            url:'{{=URL('check_username')}}',
+            data:{'username':username},
+            success:function(data){$('.registerUsernameMessage').html(data);}
+        });
+    };
+    $(function(){
+        $('.registerUsername').keyup(function(){checkUsername();});
+    });
+
+    // Check if email is valid
+    function validateEmail(email) {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+
+    function validate() {
+        var $result = $(".registerEmailMessage");
+        var email = $(".registerEmail").val();
+        if (validateEmail(email)) {
+            $result.text("Email is valid");
+            $result.css("color", "green");
+        } else {
+            $result.text("Invalid email");
+            $result.css("color", "red");
+        }
+        return false;
+    }
+    $(function(){
+        $('.registerEmail').keyup(function(){validate();});
+    });
+
+    // Variable to check if logged in or not
+    var loggedin = {{='true' if auth.user else 'false'}};
+
+    function confirm_delete(t){
+        var id = $(t).closest('div').attr('id'); //this retrieves data-id
+        $.ajax({
+            method:'post',
+            url:'{{=URL('request','delete_blog_comment')}}',
+            data:{'id':id},
+            success: function(data){
+                $(".alert_placeholder").html(data);
+                setTimeout(window.location.reload(), 500);
+            }
+        });
+    };
+    $(".confirm-delete").click(function(){confirm_delete(this);});
+
+    function change_deleteModal_id(t){
+        var id = $(t).closest('div').attr('id'); //this retrieves data-id
+        $(".deleteModal").attr("id",id);
+    };
+    $(".delete").click(function(){change_deleteModal_id(this);});
+
+    function report(t){
+        var id = $(t).closest('div').attr('id'); //this retrieves data-id
+        $.ajax({
+            method:'post',
+            url:'{{=URL('request','report_blog_comment')}}',
+            data:{'id':id},
+            success: function(data){$(".alert_placeholder").html(data);}
+        });
+    };
+    $(".report").click(function(){report(this);});
+</script>
+</html>

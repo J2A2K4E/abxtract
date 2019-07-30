@@ -1,0 +1,33 @@
+<!-- {{extend 'layout.html'}}
+<h1>This is the user_side_panel.html template</h1>
+{{=BEAUTIFY(response._vars)}} -->
+
+<div style="display: flex; justify-content: flex-end;">
+    <div class="d-sm-none d-md-block" style="position: fixed; width: 250px;">
+        <div style="background-color: #ffffff;">
+            <div style="background-color: #2cc891; height: 80px;"></div>
+            {{if auth.user:}}
+            <div style="text-align: center; margin-top: -40px;">
+                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">
+                    <img class="avatar rounded-circle" src="{{=get_avatar_url(auth.user.avatar)}}" style="height: 100%; width: 100%;">
+                </div>
+                <div style="padding: 20px 0; margin-bottom: 16px;">
+                    Welcome, {{ =auth.user.username }}!
+                </div>
+            </div>
+            {{else:}}
+            <div style="text-align: center; margin-top: -40px;">
+                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">
+                    <i class="fas fa-user avatar-icon" style="font-size: 40px; margin-top: 14px;"></i>
+                </div>
+                <div style="padding: 20px 0;">
+                    You are not <span data-toggle="modal" data-target="#loginModal" style="font-weight: bold; color: #2cc891; cursor: pointer;">logged in</span>.<br>
+                    Don't have an account?<br>
+                    <button class="btn btn-success" data-toggle="modal" data-target="{{=registerModal}}" style="font-weight: bold; margin: 10px 0;">Sign Up</button>
+                </div>
+            </div>
+            {{pass}}
+        </div>
+
+    </div>
+</div>

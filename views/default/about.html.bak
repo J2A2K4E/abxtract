@@ -1,0 +1,11 @@
+<html>
+    {{=test}}
+    {{variable1 = 1234}}
+    {{variable2 = variable1*2}}
+    <div>
+        {{=variable2}}
+    </div>
+    {{for i in range(0, 5):}}
+        {{=i}}  
+    {{pass}}
+</html>

@@ -1,0 +1,8 @@
+.profile-container{padding:15px;margin-bottom:10px;display:block;width:100%;text-align:center;background-color:white;border-radius:8px;}
+.profile-field{color:#666;font-size: 14px;margin-bottom:5px;}
+.ethaddress{font-size:10px !important;cursor:pointer;}
+.profile-avatar{width:120px;margin-bottom:10px;}
+.profile-section{margin-bottom:20px;}
+.profile-name{font-size:22px;font-weight:600;}
+.profile-icon{margin-right:10px;}
+.btn-follow{border-radius:30px;max-width:120px;width:100%;font-size:15px;font-weight:600;}

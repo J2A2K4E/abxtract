@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+    <html class="no-js" lang="en">
+        <head itemscope itemtype="http://schema.org/Organization" lang="en">
+            <title>Abxtract: Crypto Social Trading</title>
+            {{include 'navbar.html'}}
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/spinner.css')}}"/>
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/index.css')}}"/>
+            <style>
+                div.comment-action:hover, div.comment-action:hover *{color:#2cc891 !important;}
+            </style>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+                google.charts.load("current", {packages:["corechart"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Sentiment', 'Tweets Count'],
+                        ['Bullish', {{=ethereumStats.bullish_count}}],
+                        ['Neutral', {{=ethereumStats.neutral_count}}],
+                        ['Bearish', {{=ethereumStats.bearish_count}}]
+                    ]);
+                    var options = {
+                        pieSliceTextStyle: {color: 'black',},
+                        pieHole: 0.6,
+                        slices: {0: { color:'#2cc891'}, 1: { color:'grey'}, 2: { color:'c82c2c'}},
+                        height: 150,
+                        width: 150,
+                        legend:{position:'none'},
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('ethereumchart'));
+                    chart.draw(data, options);
+                }
+            </script>
+            <script type="text/javascript">
+                google.charts.load("current", {packages:["corechart"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Sentiment', 'Tweets Count'],
+                        ['Bullish', {{=litecoinStats.bullish_count}}],
+                        ['Neutral', {{=litecoinStats.neutral_count}}],
+                        ['Bearish', {{=litecoinStats.bearish_count}}]
+                    ]);
+                    var options = {
+                        pieSliceTextStyle: {color: 'black',},
+                        pieHole: 0.6,
+                        slices: {0: { color:'#2cc891'}, 1: { color:'grey'}, 2: { color:'c82c2c'}},
+                        height: 150,
+                        width: 150,
+                        legend:{position:'none'},
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('litecoinchart'));
+                    chart.draw(data, options);
+                }
+            </script>
+            <script type="text/javascript">
+                google.charts.load("current", {packages:["corechart"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Sentiment', 'Tweets Count'],
+                        ['Bullish', {{=moneroStats.bullish_count}}],
+                        ['Neutral', {{=moneroStats.neutral_count}}],
+                        ['Bearish', {{=moneroStats.bearish_count}}]
+                    ]);
+                    var options = {
+                        pieSliceTextStyle: {color: 'black',},
+                        pieHole: 0.6,
+                        slices: {0: { color:'#2cc891'}, 1: { color:'grey'}, 2: { color:'c82c2c'}},
+                        height: 150,
+                        width: 150,
+                        legend:{position:'none'},
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('monerochart'));
+                    chart.draw(data, options);
+                }
+            </script>
+        </head>
+    <body>
+    <div class="container-fluid">
+        <div class="row" style="margin: 0; max-width: inherit;">
+            <div class="col-md-3"></div>
+            <div class="col-md-5"></div>
+            <div class="col-md-4 col-lg-4">
+                <div style="background-color:#ffffff; padding: 20px;">
+                    <h2 class="section-header">
+                        <a class="section-header" href="/dashboard">Today's Market - {{=nowDate.strftime('%B %d, %Y')}}</a>
+                    </h2>
+                    <hr>
+                    <div style="display: flex;height:200px;text-align:center;">
+                        <div style="display:flex;flex-direction:column;flex:1;text-align:center;">
+                            <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                                Ethereum (ETH)
+                            </div>
+                            <div id="ethereumchart" style="display:flex;height:100;"></div>
+                            {{=sum(filter(None, [ethereumStats.bullish_count,ethereumStats.neutral_count,ethereumStats.bearish_count]))}} tweets today<br>
+                            {{if ethereumStats.bullish_count > ethereumStats.bearish_count and ethereumStats.bullish_count > ethereumStats.neutral_count:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">
+                                Bullish
+                            </div>
+                            {{elif ethereumStats.bearish_count > ethereumStats.bullish_count and ethereumStats.bearish_count > ethereumStats.neutral_count:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">
+                                Bearish
+                            </div>
+                            {{else:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">
+                                Neutral
+                            </div>
+                            {{pass}}
+                        </div>
+                        <div style="display:flex;flex-direction:column;flex:1;text-align:center;">
+                            <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                                Litecoin (LTC)
+                            </div>
+                            <div id="litecoinchart" style="display:flex;height:100;"></div>
+                            {{=sum(filter(None, [litecoinStats.bullish_count,litecoinStats.neutral_count,litecoinStats.bearish_count]))}} tweets today<br>
+                            {{if litecoinStats.bullish_count > litecoinStats.bearish_count and litecoinStats.bullish_count > litecoinStats.neutral_count:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">
+                                Bullish
+                            </div>
+                            {{elif litecoinStats.bearish_count > litecoinStats.bullish_count and litecoinStats.bearish_count > litecoinStats.neutral_count:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">
+                                Bearish
+                            </div>
+                            {{else:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">
+                                Neutral
+                            </div>
+                            {{pass}}
+                        </div>
+                        <div style="display:flex;flex-direction:column;flex:1;text-align:center;">
+                            <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                                Monero (XMR)
+                            </div>
+                            <div id="monerochart" style="display:flex;height:100;"></div>
+                            {{=sum(filter(None, [moneroStats.bullish_count,moneroStats.neutral_count,moneroStats.bearish_count]))}} tweets today<br>
+                            {{if moneroStats.bullish_count > moneroStats.bearish_count and moneroStats.bullish_count > moneroStats.neutral_count:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">
+                                Bullish
+                            </div>
+                            {{elif moneroStats.bearish_count > moneroStats.bullish_count and moneroStats.bearish_count > moneroStats.neutral_count:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">
+                                Bearish
+                            </div>
+                            {{else:}}
+                            <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">
+                                Neutral
+                            </div>
+                            {{pass}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    {{include 'footer.html'}}
+    </body>
+    {{include 'comment.html'}}
+    </html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>Coin | Abxtract</title>
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <style>
+        .row-container{
+            display:flex;
+            flex-direction:row;
+            justify-content: space-around;
+        }
+        .twitter-tweet{
+            display:flex;
+            flex-direction:column;
+        }
+        .sentiment-col{
+            display:flex;
+            flex-direction:column;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            justify-content: center;
+            height:100%;
+            margin:10px 0;
+            flex: 1;
+        }
+        .sentiment-col{
+            display:flex;
+            flex-direction:column;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            justify-content: center;
+            height:100%;
+            margin:10px 0;
+            width:0;
+        }
+        .sentiment-box-small {
+            width: 60px;
+            text-align:center;
+            padding: 1px 10px;
+            border-radius: 1px;
+            height:100%;
+            font-size: .7rem;
+            transform: translate(-120px, 20px);
+            pointer-events: none;
+            visibility: hidden;
+        }
+        .setVisible {
+            visibility: visible;
+        }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Sentiment', 'Tweets Count'],
+                ['Bullish', {{=positiveCount}}],
+                ['Neutral', {{=negativeCount}}],
+                ['Bearish', {{=neutralCount}}]
+            ]);
+
+            var options = {
+                pieSliceTextStyle: {
+                    color: 'black',
+                },
+                pieHole: 0.6,
+                slices: {
+                    0: { color:'#8bc34a'},
+                    1: { color:'#bdbdbd'},
+                    2: { color:'#ef5350'}
+                },
+                'height': 250,
+                legend: {position: 'none'},
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+<body style="background-color: #f2f3f5;">
+    <div class="container-fluid">
+        <div class="row" style="margin: 0; max-width: inherit;">
+            <div class="col-md-3">
+                <div style="display: flex; justify-content: flex-end;">
+                    <div class="d-none d-md-block" style="position: fixed; width: 250px;">
+                        <div style="border: 1px solid #eeeeee; border-radius: 0px; background-color: #ffffff;">
+                            <div style="background-color: #2cc891; height: 80px;"></div>
+                            {{if auth.user:}}
+                            <div style="text-align: center; margin-top: -40px;">
+                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">
+                                    <img class="avatar rounded-circle" src="{{=get_avatar_url(auth.user.avatar)}}" style="height: 100%; width: 100%;">
+                                </div>
+                                <div style="padding: 20px 0; padding-bottom: 40px;">
+                                    Welcome, {{ =auth.user.username }}!
+                                </div>
+                             </div>
+                            {{else:}}
+                            <div style="text-align: center; margin-top: -40px;">
+                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">
+                                    <i class="fas fa-user avatar-icon" style="font-size: 40px; margin-top: 14px;"></i>
+                                </div>
+                                <div style="padding: 20px 0;">
+                                    You are not 
+                                    <span data-toggle="modal" data-target="#loginModal" style="font-weight: bold; color: #2cc891; cursor: pointer;">logged in</span>.
+                                    <br>
+                                    Don't have an account?<br>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="{{=registerModal}}" style="font-weight: bold; margin: 10px 0;">
+                                        Sign Up
+                                    </button>
+                                </div>
+                             </div>
+                            {{pass}}
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="padding: 20px; border-radius: 0px;">
+                    <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                       Latest Tweets and Their Sentiment
+                    </div>
+                    <hr>
+                    <div style="font-size: 30px; font-weight: bold;">
+                       {{=coin.name}} (${{=coin.symbol}})
+                    </div>
+                    <div id="volume">
+                        <br>
+                        <div id="test" style="">
+                            {{max_user_followers_count = 0}}
+                            {{for tweet_obj in tweets:}}
+                            {{if tweet_obj['user']['followers_count'] > max_user_followers_count:}}
+                            {{max_user_followers_count = tweet_obj['user']['followers_count']}}
+                            {{max_user_followers_tweet = tweet_obj}}
+                            {{pass}}
+                            <div class="row-container">
+                                <blockquote class="twitter-tweet" data-cards="hidden"><a href="https://twitter.com/test/status/{{=str(tweet_obj['id'])}}"></a></blockquote>
+                                <div class="sentiment-col">
+                                    {{if tweet_obj['sentiment_analysis']['prediction'] == 'Positive':}}
+                                    <div class="sentiment-box-small" style="background-color: #8bc34a;">
+                                        Bullish
+                                    </div>
+                                    {{elif tweet_obj['sentiment_analysis']['prediction'] == 'Negative':}}
+                                    <div class="sentiment-box-small" style="background-color: #ef5350;">
+                                        Bearish
+                                    </div>
+                                    {{else:}}
+                                    <div class="sentiment-box-small" style="background-color: #bdbdbd;">
+                                        Neutral
+                                    </div>
+                                    {{pass}}
+                                </div>
+                            </div>
+                            {{pass}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-md-2">
+                <div class="card" style="position: fixed; width:220px;">
+                    <div class="d-sm-none d-md-block" style="padding: 10px 0; text-align: center; background-color: #ffffff; padding: 20px;">
+                        <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                           Sentiment Now
+                        </div>
+                        <hr>
+                        <div>
+                            <div id="donutchart" style=""></div>
+                        </div>
+                        <div style="color: #ffffff; font-size: 20px; font-weight: bold; display: flex; justify-content: center;">
+                            {{if isBullish:}}
+                            <div style="background-color: #8bc34a; padding: 4px 10px; border-radius: 1px; width: 120px;">
+                              Bullish
+                            </div>
+                            {{else:}}
+                            <div style="background-color: #ef5350; padding: 4px 10px; border-radius: 1px; width: 120px;">
+                              Bearish
+                            </div>
+                            {{pass}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card" style="position: fixed; width: 350px;">
+                    <div class="d-sm-none d-md-block" style="padding: 10px 0; text-align: center; background-color: #ffffff; padding: 20px;">
+                        <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                           Tweet by Most Influential User
+                        </div>
+                        <hr>
+                        <div style="color: #ffffff; font-size: 20px; font-weight: bold; display: flex; justify-content: center;">
+                            {{if max_user_followers_tweet['sentiment_analysis']['prediction'] == 'Positive':}}
+                            <div style="background-color: #8bc34a; padding: 4px 10px; border-radius: 1px; width: 120px;">
+                              Bullish
+                            </div>
+                            {{elif max_user_followers_tweet['sentiment_analysis']['prediction'] == 'Negative':}}
+                            <div style="background-color: #ef5350; padding: 4px 10px; border-radius: 1px; width: 120px;">
+                              Bearish
+                            </div>
+                            {{else:}}
+                            <div style="background-color: #bdbdbd; padding: 4px 10px; border-radius: 1px; width: 120px;">
+                              Neutral
+                            </div>
+                            {{pass}}
+                        </div>
+                        <blockquote class="twitter-tweet" data-cards="hidden"><a href="https://twitter.com/test/status/{{=max_user_followers_tweet['id']}}"></a></blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function() {
+    setTimeout(() => {
+        let elements = document.getElementsByClassName('sentiment-box-small');
+        for (element of elements) {
+            element.classList.add('setVisible');
+        }
+    }, 2000);
+    
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myRadarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Bullish', 'Bearish'],
+            datasets: [{
+                label: '',
+                {{if isBullish:}}
+                backgroundColor: 'rgb(139, 195, 74, 0.1)',
+                borderColor: 'rgb(139, 195, 74)',
+                {{else:}}
+                backgroundColor: 'rgb(239, 83, 80, 0.1)',
+                borderColor: 'rgb(239, 83, 80)',
+                {{pass}}
+                data: [{{=len(allPositiveTweets)}}, {{=len(allNegativeTweets)}}]
+            }]
+        },
+        options: {
+            scale: {
+                // Hides the scale
+                display: true,
+                ticks: {
+                    display: false,
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltips: {
+                enabled: false
+            }
+        }
+    });
+//       const elements = document.getElementsByClassName('tweet');
+//       var tweetsArray = jQuery.makeArray(elements);
+//       for (var i=0; i<tweetsArray.length; i++) {
+//           const tweet = tweetsArray[i].textContent;
+//           tweetArray = tweet.split(" ");
+//           console.log(tweetArray[0]);
+//       }
+//       //console.log(array.map((element) => element.outerText));
+});
+</script>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+    <html class="no-js" lang="en">
+        <head itemscope itemtype="http://schema.org/Organization" lang="en">
+            <title>Abxtract: Crypto Social Trading</title>
+            {{include 'navbar.html'}}
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/spinner.css')}}"/>
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/index.css')}}"/>
+            <style>
+                div.comment-action:hover, div.comment-action:hover *{color:#2cc891 !important;}
+            </style>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+                google.charts.load("current", {packages:["corechart"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Sentiment', 'Tweets Count'],
+                        ['Bullish', {{=ethereumStats.bullish_count if ethereumStats.bullish_count else 0}}],
+                        ['Neutral', {{=ethereumStats.neutral_count if ethereumStats.neutral_count else 0}}],
+                        ['Bearish', {{=ethereumStats.bearish_count if ethereumStats.bearish_count else 0}}]
+                    ]);
+                    var options = {
+                        pieSliceTextStyle: {color: 'black',},
+                        pieHole: 0.6,
+                        slices: {0: { color:'#2cc891'}, 1: { color:'grey'}, 2: { color:'c82c2c'}},
+                        height: 150,
+                        width: 150,
+                        legend:{position:'none'},
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('ethereumchart'));
+                    chart.draw(data, options);
+                }
+            </script>
+            <script type="text/javascript">
+                google.charts.load("current", {packages:["corechart"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Sentiment', 'Tweets Count'],
+                        ['Bullish', {{=litecoinStats.bullish_count if litecoinStats.bullish_count else 0}}],
+                        ['Neutral', {{=litecoinStats.neutral_count if litecoinStats.neutral_count else 0}}],
+                        ['Bearish', {{=litecoinStats.bearish_count if litecoinStats.bearish_count else 0}}]
+                    ]);
+                    var options = {
+                        pieSliceTextStyle: {color: 'black',},
+                        pieHole: 0.6,
+                        slices: {0: { color:'#2cc891'}, 1: { color:'grey'}, 2: { color:'c82c2c'}},
+                        height: 150,
+                        width: 150,
+                        legend:{position:'none'},
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('litecoinchart'));
+                    chart.draw(data, options);
+                }
+            </script>
+            <script type="text/javascript">
+                google.charts.load("current", {packages:["corechart"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Sentiment', 'Tweets Count'],
+                        ['Bullish', {{=moneroStats.bullish_count if moneroStats.bullish_count else 0}}],
+                        ['Neutral', {{=moneroStats.neutral_count if moneroStats.neutral_count else 0}}],
+                        ['Bearish', {{=moneroStats.bearish_count if moneroStats.bearish_count else 0}}]
+                    ]);
+                    var options = {
+                        pieSliceTextStyle: {color: 'black',},
+                        pieHole: 0.6,
+                        slices: {0: { color:'#2cc891'}, 1: { color:'grey'}, 2: { color:'c82c2c'}},
+                        height: 150,
+                        width: 150,
+                        legend:{position:'none'},
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('monerochart'));
+                    chart.draw(data, options);
+                }
+            </script>
+        </head>
+    <body>
+    <div class="container-fluid">
+        <div class="row" style="margin: 0; max-width: inherit;">
+            <div class="col-md-3">
+                <div style="display: flex; justify-content: flex-end;">
+                    <div class="d-none d-md-block" style="position: fixed; width: 250px;">
+                        <div style="border: 1px solid #eeeeee; border-radius: 0px; background-color: #ffffff;">
+                            <div style="background-color: #2cc891; height: 80px;"></div>
+                            {{if auth.user:}}
+                            <div style="text-align: center; margin-top: -40px;">
+                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">
+                                    <img class="avatar rounded-circle" src="{{=get_avatar_url(auth.user.avatar)}}" style="height: 100%; width: 100%;">
+                                </div>
+                                <div style="padding: 20px 0; padding-bottom: 40px;">
+                                    Welcome, {{ =auth.user.username }}!
+                                </div>
+                             </div>
+                            {{else:}}
+                            <div style="text-align: center; margin-top: -40px;">
+                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">
+                                    <i class="fas fa-user avatar-icon" style="font-size: 40px; margin-top: 14px;"></i>
+                                </div>
+                                <div style="padding: 20px 0;">
+                                    You are not 
+                                    <span data-toggle="modal" data-target="#loginModal" style="font-weight: bold; color: #2cc891; cursor: pointer;">logged in</span>.
+                                    <br>
+                                    Don't have an account?<br>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="{{=registerModal}}" style="font-weight: bold; margin: 10px 0;">
+                                        Sign Up
+                                    </button>
+                                </div>
+                             </div>
+                            {{pass}}
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+
+                {{if auth.user:}}
+                <div style="background-color: #ffffff; padding: 20px 20px 10px 20px; border-radius: 0px; border: 1px solid #eeeeee;">
+                    <div style="color: 2c2c2c; font-weight: 500; font-size: 1rem;">
+                        Post a comment
+                    </div>
+                    <hr>
+                    <div class="container-submit">
+                        <div class="col-avatar">
+                            {{if auth.user:}}
+                            <a href="{{=URL('profile',args=[auth.user.username_slug],host=True)}}">
+                                <img class="avatar rounded-circle" src="{{=get_avatar_url(auth.user.avatar)}}" style="height: 40px; width: 40px; margin-top: 4px;">
+                            </a>
+                            {{else:}}
+                            <div class="avatar-container" style="height: 40px; width: 40px;">
+                                <i class="fas fa-user avatar-icon" style="margin-top: -10px;"></i>
+                            </div>
+                            {{pass}}
+                        </div>
+                        <div class="col-message">
+                            <textarea style="border-radius: 0px;" class="form-control main-form" onkeyup="textAreaAdjust(this)" rows="4" name="body" id="body" minlength="4" maxlength="999"  placeholder="{{='Write a comment...' if auth.user else 'Please login to comment'}}"  data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                            <div class="loader">
+                                <div class="lds-spinner">
+                                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                                </div>
+                            </div>
+                            <div class="preview-buttons">
+                                {{if auth.user:}}
+                                <button type="submit" class="btn btn-success" id="my-submit">Submit</button>
+                                {{else:}}
+                                <button class="btn btn-success" data-toggle="modal" data-target="{{=registerModal}}">Submit</button>
+                                {{pass}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{else:}}
+                <div style="background-color: #ffffff; padding: 20px; border: 1px solid #eeeeee;">
+                    <div style="color: 2c2c2c; font-weight: 500; font-size: 1rem;">
+                        Post a comment
+                    </div>
+                    <hr>
+                    You need to be logged in to post a comment.
+                </div>
+
+                {{pass}}
+
+                <hr>
+                {{for comment in comments:}}
+                {{comment_url=num_encode(comment['id']+10000)}}
+                {{sentiment = get_sentiment_results(comment['body'])}}
+                <div class="container-post" style="margin: 10px 0; background-color: #ffffff; padding: 10px; border-radius: 0px; border: 1px solid #eeeeee;
+                 {{if sentiment['prediction']=='Positive':}}
+                 border-left: 3px solid #8bc34a;
+                 {{elif sentiment['prediction']=='Negative':}}
+                 border-left: 3px solid #ef5350;
+                 {{pass}}
+                 ">
+                    <div class="post-header">
+                        <div class="col-avatar">
+                            <a href="{{=URL('profile',args=comment['username_slug'],host=True)}}">
+                                <img class="avatar-container rounded-circle" src="{{=get_avatar_url(comment['avatar'])}}" style="height: 40px; width: 40px; margin-top: 4px;">
+                            </a>
+                        </div>
+                        <div class="col-message">
+                            <div class="message-header">
+                                <span class="message-header-text">
+                                    <a href="{{=URL('profile',args=comment['username_slug'],host=True)}}"><b>{{=comment['username']}}</b></a> · 
+                                    <span class="message-header-desc">{{=comment['description']}}</span>
+                                    <span class="message-header-date text-grey">
+                                        <br>Posted 
+                                        {{if comment['coin'] != None and comment['coin'] != '':}}
+                                        in <a class="link-grey" href="{{=URL('default','coin',args=comment['custom_slug'])}}">{{=comment['name']}}</a> 
+                                        {{pass}}
+                                        <a class="link-grey" href="{{=URL('comment',args=comment_url)}}">{{=prettydate(comment['created_on'])}}</a>
+                                    </span>
+                                </span>
+                                <div class="dropdown message-header-dropdown">
+                                    {{for keyword in keywords.getRelatedCurrencies(comment['body']):}}
+                                    <div style="display: inline-block; font-weight: bold; text-align: right; margin-right: 2px; background-color: #bdbdbd; color: #ffffff; padding: 4px 10px; border-radius: 1px; ">{{=keyword}}</div>
+                                    {{pass}}
+                                    {{if sentiment['prediction']=='Positive':}}
+                                    <div style="display: inline-block; color: #ffffff; background-color: #8bc34a; padding: 4px 10px; border-radius: 1px; width: 90px; text-align: center;">
+                                        Bullish
+                                    </div>
+                                    {{elif sentiment['prediction']=='Negative':}}
+                                    <div style="display: inline-block; color: #ffffff; background-color: #ef5350; padding: 4px 10px; border-radius: 1px; width: 90px; text-align: center;">
+                                        Bearish
+                                    </div>
+                                    {{else:}}
+<!--                                     <div style="display: inline-block; color: #ffffff; background-color: #bdbdbd; padding: 4px 10px; border-radius: 1px; width: 90px; text-align: center;">
+                                        Neutral
+                                    </div> -->
+                                    {{pass}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-body" id="{{=comment['id']}}">
+                        {{if comment['created_by']==4:}}
+                        {{=XML(comment['body'].replace('\n','<br/>'), sanitize=False)}}
+                        {{else:}}
+                        {{=XML(comment['body'].replace('\n','<br/>'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES)}}
+                        {{pass}}
+                    </div>
+                    <div class="container-buttons" style="border-top: 1px solid #eeeeee; margin-top: 10px;">
+                        <button type="button" class="btn btn-light {{=comment_voted(comment['id'],auth.user.id,1) if auth.user else ""}} vote like text-grey" id="{{=comment['id']}}" data-toggle="tooltip" data-placement="top" title="Like" style="background-color: #ffffff; border: 0px; width: 52px;">
+                            <i class="far fa-thumbs-up vote-icon" data-toggle="modal" data-target="{{=registerModal}}"></i>
+                            <span id="score" class="vote-score">{{if comment['like']>0:}}{{=comment['like']}}{{pass}}</span>
+                        </button>
+                        <button type="button" class="btn btn-light round-btn reply-btn text-grey" data-toggle="collapse" data-target="#collapse{{=comment['id']}}" style="background-color: #ffffff; border: 0px; font-weight: bold;">
+                            <i class="far fa-comment btn-icon"></i> 
+                            <span class="btn-text">
+                                Reply 
+                                {{if comment['reply_count']:}}· {{=comment['reply_count']}}{{pass}}
+                            </span>
+                        </button>
+                    </div>
+                    <!-- Start of collapsed dropdown -->
+                    <div class="collapse container-collapse" id="collapse{{=comment['id']}}">
+                               {{if auth.user and not auth.has_membership('banned'):}}
+                               <div class="container-reply">
+                                   <div class="col-avatar"></div>
+                                   <div class="col-message">
+                                        {{=form.custom.begin}}
+                                        {{form.custom.widget.parent["_value"] = comment['id']}}
+                                        {{form.custom.widget.parent["_class"] = "d-none"}}
+                                        {{=form.custom.widget.parent}}
+                                        {{form.custom.widget.parent_author["_value"] = comment['created_by']}}
+                                        {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                                        {{=form.custom.widget.parent_author}}
+                                        {{form.custom.widget.root_parent["_value"] = comment['id']}}
+                                        {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                                        {{=form.custom.widget.root_parent}}
+                                        {{form.custom.widget.body["_class"] = "form-control reply-textarea"}}
+                                        {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                                        {{=form.custom.widget.body}}
+                                        {{form.custom.submit["_class"] = "btn btn-success btn-post"}}
+                                        {{form.custom.submit["_value"] = "Post"}}
+                                        {{=form.custom.submit}}
+                                        {{=form.custom.end}}
+                                    </div>
+                               </div>
+                               {{else:}}
+                               <div class="container-reply">
+                                   <div class="col-avatar"></div>
+                                   <div class="col-message">
+                                      <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                                   </div>
+                               </div>
+                              {{pass}}
+
+                              {{primary_children = db.executesql("SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.parent="+str(comment['id'])+" ORDER BY a.like DESC;", as_dict = True)}}
+                              {{for primary_child in primary_children:}}
+                              <div class="container-reply">
+                                    <div class="col-avatar">
+                                        <a href="{{=URL('profile',args=[primary_child['username_slug']],host=True)}}">
+                                            <img class="avatar-reply rounded-circle" src="{{=get_avatar_url(primary_child['avatar'])}}">
+                                        </a>
+                                    </div>
+                                    <div class="col-message">
+                                        <div class="message-header">
+                                            <span class="reply-header-text">
+                                                <a href="{{=URL('profile',args=[primary_child['username_slug']],host=True)}}"><b>{{=primary_child['username']}}</b></a>
+                                            </span>
+                                            <div class="message-header-date" style="padding-top: 6px; padding-bottom: 10px;">
+                                                Posted
+                                                {{=prettydate(primary_child['created_on'])}}
+                                            </div>
+                                        </div>
+                                        <div class="reply-body">
+                                            {{=XML(primary_child['body'].replace('\n','<br/>'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES)}}
+                                        </div>
+                                        <div class="reply-buttons">
+                                            <span class="child-vote like {{=comment_voted(primary_child['id'],auth.user.id,1) if auth.user else ""}}" id="{{=primary_child['id']}}" data-toggle="modal" data-target="{{=registerModal}}">
+                                                <span class="icon-container">
+                                                    <i class="icon fas fa-thumbs-up"></i>
+                                                </span>
+                                                <span id="score" class="icon-score">
+                                                    {{if primary_child['like']>0:}}
+                                                        {{=primary_child['like']}}
+                                                    {{pass}}
+                                                </span>
+                                            </span>
+                                            <span class="icon-container" data-toggle="collapse" data-target="#collapse{{=primary_child['id']}}">
+                                                <i class="icon fas fa-reply"></i>
+                                            </span>
+                                            <span class="icon-score"></span>
+                                            <span class="dropdown">
+                                                <span class="icon-container" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                                                    <i class="icon fas fa-ellipsis-h"></i>
+                                                </span>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="{{=primary_child['id']}}">
+                                                    {{if auth.user:}}{{if primary_child['created_by']==auth.user.id:}}
+                                                    <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal" style="cursor:pointer;">Delete</a>
+                                                    {{pass}}{{pass}}
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="collapse reply-form" id="collapse{{=primary_child['id']}}">
+                                            {{if auth.user and not auth.has_membership('banned'):}}
+                                            {{=form.custom.begin}}
+                                            {{form.custom.widget.parent["_value"] = primary_child['id']}}
+                                            {{form.custom.widget.parent["_class"] = "d-none"}}
+                                            {{=form.custom.widget.parent}}
+                                            {{form.custom.widget.parent_author["_value"] = primary_child['created_by']}}
+                                            {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                                            {{=form.custom.widget.parent_author}}
+                                            {{form.custom.widget.root_parent["_value"] = comment['id']}}
+                                            {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                                            {{=form.custom.widget.root_parent}}
+                                            {{form.custom.widget.secondary_parent["_value"] = primary_child['id']}}
+                                            {{form.custom.widget.secondary_parent["_class"] = "d-none"}}
+                                            {{=form.custom.widget.secondary_parent}}
+                                            {{form.custom.widget.body["_class"] = "form-control reply-textarea"}}
+                                            {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                                            {{=form.custom.widget.body}}
+                                            {{form.custom.submit["_class"] = "btn btn-success btn-post"}}
+                                            {{form.custom.submit["_value"] = "Post"}}
+                                            {{=form.custom.submit}}
+                                            {{=form.custom.end}}
+                                            {{else:}}
+                                                <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                                            {{pass}}
+                                        </div>
+                                   </div>
+                              </div>
+                {{secondary_children = db.executesql("SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.secondary_parent="+str(primary_child['id'])+" ORDER BY a.like DESC;", as_dict = True)}}
+                {{for secondary_child in secondary_children:}}
+                <div class="container-sec-reply" style="margin-left: 56px; border-left: 0px; border-top: 1px solid #e5e5e5;">
+                    <div class="col-avatar">
+                        <a href="{{=URL('profile',args=[secondary_child['username_slug']],host=True)}}">
+                            <img class="avatar-reply rounded-circle" src="{{=get_avatar_url(secondary_child['avatar'])}}">
+                        </a>
+                    </div>
+                    <div class="col-message">
+                        <div class="message-header">
+                            <span class="reply-header-text">
+                                <a href="{{=URL('profile',args=[secondary_child['username_slug']],host=True)}}"><b>{{=secondary_child['username']}}</b></a> · 
+                                <span class="message-header-date">
+                                    <i class="fas fa-reply"></i> {{=XML(author(secondary_child['parent_author']))}}
+                                </span>
+                            </span>
+                            <div class="message-header-date" style="padding-top: 6px; padding-bottom: 10px;">
+                                Posted {{=prettydate(secondary_child['created_on'])}}
+                            </div>
+                        </div>
+                        <div class="reply-body">
+                            {{=XML(secondary_child['body'].replace('\n','<br />'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES)}}
+                        </div>
+                        <div class="reply-buttons">
+                            <span class="child-vote like {{=comment_voted(secondary_child['id'],auth.user.id,1) if auth.user else ""}}" id="{{=secondary_child['id']}}" data-toggle="modal" data-target="{{=registerModal}}">
+                                <span class="icon-container">
+                                    <i class="icon fas fa-thumbs-up"></i>
+                                </span>
+                                <span id="score" class="icon-score">
+                                    {{if secondary_child['like']>0:}}
+                                        {{=secondary_child['like']}}
+                                    {{pass}}
+                                </span>
+                            </span>
+                            <span class="icon-container" data-toggle="collapse" data-target="#collapse{{=secondary_child['id']}}">
+                                <i class="icon fas fa-reply"></i>
+                            </span>
+                            <span class="icon-score"></span>
+                            <span class="dropdown">
+                                <span class="icon-container" id="dropdownMenuLink" data-toggle="dropdown">
+                                    <i class="icon fas fa-ellipsis-h"></i>
+                                </span>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="{{=secondary_child['id']}}">
+                                    {{if auth.user:}}{{if secondary_child['created_by']==auth.user.id:}}
+                                    <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                                    {{pass}}{{pass}}
+                                </div>
+                            </span>
+                        </div>
+                        <div class="collapse reply-form" id="collapse{{=secondary_child['id']}}">
+                            {{if auth.user and not auth.has_membership('banned'):}}
+                            {{=form.custom.begin}}
+                            {{form.custom.widget.parent["_value"] = secondary_child['id']}}
+                            {{form.custom.widget.parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.parent}}
+                            {{form.custom.widget.parent_author["_value"] = secondary_child['created_by']}}
+                            {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                            {{=form.custom.widget.parent_author}}
+                            {{form.custom.widget.root_parent["_value"] = comment['id']}}
+                            {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.root_parent}}
+                            {{form.custom.widget.secondary_parent["_value"] = primary_child['id']}}
+                            {{form.custom.widget.secondary_parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.secondary_parent}}
+                            {{form.custom.widget.body["_class"] = "form-control reply-textarea"}}
+                            {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                            {{=form.custom.widget.body}}
+                            {{form.custom.submit["_class"] = "btn btn-success btn-post"}}
+                            {{form.custom.submit["_value"] = "Post"}}
+                            {{=form.custom.submit}}
+                            {{=form.custom.end}}
+                            {{else:}}
+                                <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                            {{pass}}
+                         </div>
+                    </div>
+                 </div>
+               {{pass}}
+            {{pass}}
+            </div>
+        <!-- End of collapsed dropdown -->
+        </div>
+    {{pass}}
+        <div style="text-align:center;margin-top:10px;">
+            {{if int(page)>0:}}
+            <a href="{{=URL('index',vars=dict(page=int(page)-1),host=True)}}" class="btn btn-success round-btn">
+                <i class="fas fa-caret-left"></i> Previous
+            </a>
+            {{pass}}
+            {{if comment_count > last_comment_on_page:}}
+            <a href="{{=URL('index',vars=dict(page=int(page)+1),host=True)}}" class="btn btn-success round-btn btn-page">Next <i class="fas fa-caret-right"></i></a>
+            {{pass}}
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-4">
+        <div style="background-color:#ffffff; padding: 20px 20px 40px 20px;position:fixed;width:480px;">
+            <h2 class="section-header">
+                <a class="section-header" href="/dashboard">Today's Market - {{=nowDate.strftime('%B %d, %Y')}}</a>
+            </h2>
+            <hr>
+            <div style="display: flex;height:200px;text-align:center;">
+                <a href="/dashboard" style="display:block;">
+                <div style="display:flex;flex-direction:column;flex:1;text-align:center;">
+                    <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                        Ethereum (ETH)
+                    </div>
+                    <div id="ethereumchart" style="display:flex;height:100;"></div>
+                    {{=sum(filter(None, [ethereumStats.bullish_count,ethereumStats.neutral_count,ethereumStats.bearish_count]))}} tweets today<br>
+                    {{if ethereumStats.bullish_count > ethereumStats.bearish_count and ethereumStats.bullish_count > ethereumStats.neutral_count:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">
+                        Bullish
+                    </div>
+                    {{elif ethereumStats.bearish_count > ethereumStats.bullish_count and ethereumStats.bearish_count > ethereumStats.neutral_count:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">
+                        Bearish
+                    </div>
+                    {{else:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">
+                        Neutral
+                    </div>
+                    {{pass}}
+                </div>
+                </a>
+                <a href="/dashboard" style="display:block;">
+                <div style="display:flex;flex-direction:column;flex:1;text-align:center;">
+                    <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                        Litecoin (LTC)
+                    </div>
+                    <div id="litecoinchart" style="display:flex;height:100;"></div>
+                    {{=sum(filter(None, [litecoinStats.bullish_count,litecoinStats.neutral_count,litecoinStats.bearish_count]))}} tweets today<br>
+                    {{if litecoinStats.bullish_count > litecoinStats.bearish_count and litecoinStats.bullish_count > litecoinStats.neutral_count:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">
+                        Bullish
+                    </div>
+                    {{elif litecoinStats.bearish_count > litecoinStats.bullish_count and litecoinStats.bearish_count > litecoinStats.neutral_count:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">
+                        Bearish
+                    </div>
+                    {{else:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">
+                        Neutral
+                    </div>
+                    {{pass}}
+                </div>
+                </a>
+                <a href="/dashboard" style="display:block;">
+                <div style="display:flex;flex-direction:column;flex:1;text-align:center;">
+                    <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                        Monero (XMR)
+                    </div>
+                    <div id="monerochart" style="display:flex;height:100;"></div>
+                    {{=sum(filter(None, [moneroStats.bullish_count,moneroStats.neutral_count,moneroStats.bearish_count]))}} tweets today<br>
+                    {{if moneroStats.bullish_count > moneroStats.bearish_count and moneroStats.bullish_count > moneroStats.neutral_count:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">
+                        Bullish
+                    </div>
+                    {{elif moneroStats.bearish_count > moneroStats.bullish_count and moneroStats.bearish_count > moneroStats.neutral_count:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">
+                        Bearish
+                    </div>
+                    {{else:}}
+                    <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">
+                        Neutral
+                    </div>
+                    {{pass}}
+                </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    {{include 'footer.html'}}
+    </body>
+    {{include 'comment.html'}}
+    </html>

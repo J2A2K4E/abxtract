@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>Terms and Conditions | ViewBase</title>
+    <meta property="og:title" itemprop="name" content="Terms and Conditions | ViewBase">
+    <meta name="twitter:title" content="Terms and Conditions | ViewBase">
+    <meta property="og:description" itemprop="description" name="description" content="Terms and Conditions">
+    <meta name="twitter:description" content="Terms and Conditions">
+    <meta name="twitter:image:src" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <meta property="og:image" itemprop="image" name="image" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <link property="og:url" itemprop="url" rel="canonical" href="https://www.viewbase.com/terms"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta property="og:site_name" content="ViewBase">
+    <meta property="fb:app_id" content="457354494759406">
+    <meta property="og:type" content="article">
+    {{include 'navbar.html'}}
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-3 order-2 order-lg-1 my-col"></div>
+            <div class="col-12 col-lg-6 order-1 order-lg-2 my-col col-main">
+                <h1 style="margin:24px 0;width:100%;font-size:25px;font-weight:700;line-height:1.44em;">
+                    Terms and Conditions
+                </h1>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Conditions of Use
+                </h3>
+                <p>
+                    By using our (ViewBase’s) site you (the site visitor) must completely agree to the following Terms and Conditions (the “Agreement”). Please take the time to read them carefully.
+                </p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Nature of the Website and Content Disclaimer
+                </h3>
+                <p>
+                    ViewBase is an informational website that provides discussion, market data and market research. None of the information you read on ViewBase should be taken as investment advice in any way. ViewBase is not an investment adviser and you agree to not cite ViewBase as the reason or cause for making any investments. You agree not to consider the discussion or market data on this site as a solicitation to invest in any cryptocurrencies, initial coin offerings, or other financial instruments. Buying and trading cryptocurrencies should be considered a high-risk activity. ViewBase strongly encourages you to consult with a registered investment adviser or qualified investment professional and to do your own due diligence before making any investment decisions. ViewBase is not accountable, directly or indirectly, for any damage or loss incurred, alleged or otherwise, in connection to the use or reliance of any content you read on the site.
+                </p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Privacy
+                </h3>
+                <p>
+                    Please thoroughly review our <a href="https://www.viewbase.com/privacy">Privacy Policy</a>, which also governs your use of our website.
+                </p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Warranty Disclaimer and Limitation of Liability
+                </h3>
+                <p>
+                    ViewBase and its associates attempt to be as accurate as possible. However, ViewBase does not warrant that the content of this site is accurate, complete, reliable, current, or error-free.
+                </p>
+                <p>
+                    DISCLAIMER OF WARRANTIES AND LIMITATION OF LIABILITY: THIS SITE IS PROVIDED BY VIEWBASE ON AN “AS IS” AND “AS AVAILABLE” BASIS. VIEWBASE MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THIS SITE OR THE INFORMATION, CONTENT, MATERIALS, OR PRODUCTS INCLUDED ON THIS SITE. YOU EXPRESSLY AGREE THAT YOUR USE OF THIS SITE IS AT YOUR SOLE RISK. TO THE FULL EXTENT PERMISSIBLE BY APPLICABLE LAW, VIEWBASE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. VIEWBASE DOES NOT WARRANT THAT THIS SITE, ITS SERVERS, OR E-MAIL SENT FROM VIEWBASE ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS. VIEWBASE WILL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING FROM THE USE OF THIS SITE, INCLUDING, BUT NOT LIMITED TO DIRECT, INDIRECT, INCIDENTAL, PUNITIVE, AND CONSEQUENTIAL DAMAGES.
+                </p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Copyright
+                </h3>
+                <p>
+                    All content included on this site, such as text, graphics, logos, button icons, images, audio clips, digital downloads, data compilations, and software, is the property of  ViewBase or its content suppliers and protected by international copyright laws unless otherwise cited to its original copyright owners. The compilation of all content on this site is the exclusive property of ViewBase, with copyright authorship for this collection by ViewBase, and protected by international copyright laws.
+                </p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Links to Other Sites
+                </h3>
+                <p>
+                    Our content, listings and market research may contain links to other sites. If you click on a third-party link, you will be directed to that site. These links are purely for informational purposes and do not constitute any endorsement of the linked site’s operator or its content. Therefore, we strongly advise you to review the Privacy Policy and Terms and Conditions of these websites. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.
+                </p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Sponsored Content Disclaimer
+                </h3>
+                <p>
+                    You agree to acknowledge any sponsored post as provided by a third-party which compensates ViewBase for the placement of the sponsored content. These sponsorships are clearly disclosed and are not to be confused with ViewBase’s standard content (non-sponsored). In no case will ViewBase be liable for any sponsored content in the event of direct, indirect, special, incidental, or consequential damages. By using our site, you agree to these terms.
+                </p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Cookies and User Data
+                </h3>
+                <p>
+                    Cookies are files with a small amount of data that is commonly used as an anonymous unique identifier. These are sent to your browser from the website that you visit and are stored on your computer’s hard drive. Our website uses these “cookies” to ensure certain website features function properly. This data is not mined, shared, or otherwise collected for commercial use. You are free to delete these cookies from within your web browser. You agree to the use of these cookies by visiting our website and using its features.
+                </p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Changes to This Agreement
+                </h3>
+                <p>
+                    ViewBase may update these Terms and Conditions from time to time. Thus, we advise you to review this page periodically for any changes. We will notify you of any changes by posting the new Terms and Conditions on this page. These changes are effective immediately after they are posted.
+                </p>
+            </div>
+            <div class="col-12 col-lg-3 order-3 order-lg-3 my-col"></div>
+        </div>
+    </div>
+{{include 'footer.html'}}
+</body>
+</html>

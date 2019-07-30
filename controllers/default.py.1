@@ -1,0 +1,466 @@
+from gluon.custom_import import track_changes; track_changes(True)
+from datetime import datetime, date, timedelta
+import time
+import gluon.contrib.simplejson as json
+import oauth2
+
+# time.sleep(5) # Set time lag
+stop_words = ["a","about","above","after","again","against","ain","all","am","an","and","any","are","aren","aren't","as","at","be","because","been","before","being","below","between","both","but","by","can","couldn","couldn't","d","did","didn","didn't","do","does","doesn","doesn't","doing","don","don't","down","during","each","few","for","from","further","had","hadn","hadn't","has","hasn","hasn't","have","haven","haven't","having","he","her","here","hers","herself","him","himself","his","how","i","if","in","into","is","isn","isn't","it","it's","its","itself","just","ll","m","ma","me","mightn","mightn't","more","most","mustn","mustn't","my","myself","needn","needn't","no","nor","not","now","o","of","off","on","once","only","or","other","our","ours","ourselves","out","over","own","re","s","same","shan","shan't","she","she's","should","should've","shouldn","shouldn't","so","some","such","t","than","that","that'll","the","their","theirs","them","themselves","then","there","these","they","this","those","through","to","too","under","until","up","ve","very","was","wasn","wasn't","we","were","weren","weren't","what","when","where","which","while","who","whom","why","will","with","won","won't","wouldn","wouldn't","y","you","you'd","you'll","you're","you've","your","yours","yourself","yourselves","could","he'd","he'll","he's","here's","how's","i'd","i'll","i'm","i've","let's","ought","she'd","she'll","that's","there's","they'd","they'll","they're","they've","we'd","we'll","we're","we've","what's","when's","where's","who's","why's","would","able","abst","accordance","according","accordingly","across","act","actually","added","adj","affected","affecting","affects","afterwards","ah","almost","alone","along","already","also","although","always","among","amongst","announce","another","anybody","anyhow","anymore","anyone","anything","anyway","anyways","anywhere","apparently","approximately","arent","arise","around","aside","ask","asking","auth","available","away","awfully","b","back","became","become","becomes","becoming","beforehand","begin","beginning","beginnings","begins","behind","believe","beside","besides","beyond","biol","brief","briefly","c","ca","came","cannot","can't","cause","causes","certain","certainly","co","com","come","comes","contain","containing","contains","couldnt","date","different","done","downwards","due","e","ed","edu","effect","eg","eight","eighty","either","else","elsewhere","end","ending","enough","especially","et","etc","even","ever","every","everybody","everyone","everything","everywhere","ex","except","f","far","ff","fifth","first","five","fix","followed","following","follows","former","formerly","forth","found","four","furthermore","g","gave","get","gets","getting","give","given","gives","giving","go","goes","gone","got","gotten","h","happens","hardly","hed","hence","hereafter","hereby","herein","heres","hereupon","hes","hi","hid","hither","home","howbeit","however","hundred","id","ie","im","immediate","immediately","importance","important","inc","indeed","index","information","instead","invention","inward","itd","it'll","j","k","keep","keeps","kept","kg","km","know","known","knows","l","largely","last","lately","later","latter","latterly","least","less","lest","let","lets","like","liked","likely","line","little","'ll","look","looking","looks","ltd","made","mainly","make","makes","many","may","maybe","mean","means","meantime","meanwhile","merely","mg","might","million","miss","ml","moreover","mostly","mr","mrs","much","mug","must","n","na","name","namely","nay","nd","near","nearly","necessarily","necessary","need","needs","neither","never","nevertheless","new","next","nine","ninety","nobody","non","none","nonetheless","noone","normally","nos","noted","nothing","nowhere","obtain","obtained","obviously","often","oh","ok","okay","old","omitted","one","ones","onto","ord","others","otherwise","outside","overall","owing","p","page","pages","part","particular","particularly","past","per","perhaps","placed","please","plus","poorly","possible","possibly","potentially","pp","predominantly","present","previously","primarily","probably","promptly","proud","provides","put","q","que","quickly","quite","qv","r","ran","rather","rd","readily","really","recent","recently","ref","refs","regarding","regardless","regards","related","relatively","research","respectively","resulted","resulting","results","right","run","said","saw","say","saying","says","sec","section","see","seeing","seem","seemed","seeming","seems","seen","self","selves","sent","seven","several","shall","shed","shes","show","showed","shown","showns","shows","significant","significantly","similar","similarly","since","six","slightly","somebody","somehow","someone","somethan","something","sometime","sometimes","somewhat","somewhere","soon","sorry","specifically","specified","specify","specifying","still","stop","strongly","sub","substantially","successfully","sufficiently","suggest","sup","sure","take","taken","taking","tell","tends","th","thank","thanks","thanx","thats","that've","thence","thereafter","thereby","thered","therefore","therein","there'll","thereof","therere","theres","thereto","thereupon","there've","theyd","theyre","think","thou","though","thoughh","thousand","throug","throughout","thru","thus","til","tip","together","took","toward","towards","tried","tries","truly","try","trying","ts","twice","two","u","un","unfortunately","unless","unlike","unlikely","unto","upon","ups","us","use","used","useful","usefully","usefulness","uses","using","usually","v","value","various","'ve","via","viz","vol","vols","vs","w","want","wants","wasnt","way","wed","welcome","went","werent","whatever","what'll","whats","whence","whenever","whereafter","whereas","whereby","wherein","wheres","whereupon","wherever","whether","whim","whither","whod","whoever","whole","who'll","whomever","whos","whose","widely","willing","wish","within","without","wont","words","world","wouldnt","www","x","yes","yet","youd","youre","z","zero","a's","ain't","allow","allows","apart","appear","appreciate","appropriate","associated","best","better","c'mon","c's","cant","changes","clearly","concerning","consequently","consider","considering","corresponding","course","currently","definitely","described","despite","entirely","exactly","example","going","greetings","hello","help","hopefully","ignored","inasmuch","indicate","indicated","indicates","inner","insofar","it'd","keep","keeps","novel","presumably","reasonably","second","secondly","sensible","serious","seriously","sure","t's","third","thorough","thoroughly","three","well","wonder","a", "about", "above", "above", "across", "after", "afterwards", "again", "against", "all", "almost", "alone", "along", "already", "also","although","always","am","among", "amongst", "amoungst", "amount", "an", "and", "another", "any","anyhow","anyone","anything","anyway", "anywhere", "are", "around", "as", "at", "back","be","became", "because","become","becomes", "becoming", "been", "before", "beforehand", "behind", "being", "below", "beside", "besides", "between", "beyond", "bill", "both", "bottom","but", "by", "call", "can", "cannot", "cant", "co", "con", "could", "couldnt", "cry", "de", "describe", "detail", "do", "done", "down", "due", "during", "each", "eg", "eight", "either", "eleven","else", "elsewhere", "empty", "enough", "etc", "even", "ever", "every", "everyone", "everything", "everywhere", "except", "few", "fifteen", "fify", "fill", "find", "fire", "first", "five", "for", "former", "formerly", "forty", "found", "four", "from", "front", "full", "further", "get", "give", "go", "had", "has", "hasnt", "have", "he", "hence", "her", "here", "hereafter", "hereby", "herein", "hereupon", "hers", "herself", "him", "himself", "his", "how", "however", "hundred", "ie", "if", "in", "inc", "indeed", "interest", "into", "is", "it", "its", "itself", "keep", "last", "latter", "latterly", "least", "less", "ltd", "made", "many", "may", "me", "meanwhile", "might", "mill", "mine", "more", "moreover", "most", "mostly", "move", "much", "must", "my", "myself", "name", "namely", "neither", "never", "nevertheless", "next", "nine", "no", "nobody", "none", "noone", "nor", "not", "nothing", "now", "nowhere", "of", "off", "often", "on", "once", "one", "only", "onto", "or", "other", "others", "otherwise", "our", "ours", "ourselves", "out", "over", "own","part", "per", "perhaps", "please", "put", "rather", "re", "same", "see", "seem", "seemed", "seeming", "seems", "serious", "several", "she", "should", "show", "side", "since", "sincere", "six", "sixty", "so", "some", "somehow", "someone", "something", "sometime", "sometimes", "somewhere", "still", "such", "system", "take", "ten", "than", "that", "the", "their", "them", "themselves", "then", "thence", "there", "thereafter", "thereby", "therefore", "therein", "thereupon", "these", "they", "thickv", "thin", "third", "this", "those", "though", "three", "through", "throughout", "thru", "thus", "to", "together", "too", "top", "toward", "towards", "twelve", "twenty", "two", "un", "under", "until", "up", "upon", "us", "very", "via", "was", "we", "well", "were", "what", "whatever", "when", "whence", "whenever", "where", "whereafter", "whereas", "whereby", "wherein", "whereupon", "wherever", "whether", "which", "while", "whither", "who", "whoever", "whole", "whom", "whose", "why", "will", "with", "within", "without", "would", "yet", "you", "your", "yours", "yourself", "yourselves", "the","a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "co","op","research-articl", "pagecount","cit","ibid","les","le","au","que","est","pas","vol","el","los","pp","u201d","well-b", "http", "volumtype", "par", "0o", "0s", "3a", "3b", "3d", "6b", "6o", "a1", "a2", "a3", "a4", "ab", "ac", "ad", "ae", "af", "ag", "aj", "al", "an", "ao", "ap", "ar", "av", "aw", "ax", "ay", "az", "b1", "b2", "b3", "ba", "bc", "bd", "be", "bi", "bj", "bk", "bl", "bn", "bp", "br", "bs", "bt", "bu", "bx", "c1", "c2", "c3", "cc", "cd", "ce", "cf", "cg", "ch", "ci", "cj", "cl", "cm", "cn", "cp", "cq", "cr", "cs", "ct", "cu", "cv", "cx", "cy", "cz", "d2", "da", "dc", "dd", "de", "df", "di", "dj", "dk", "dl", "do", "dp", "dr", "ds", "dt", "du", "dx", "dy", "e2", "e3", "ea", "ec", "ed", "ee", "ef", "ei", "ej", "el", "em", "en", "eo", "ep", "eq", "er", "es", "et", "eu", "ev", "ex", "ey", "f2", "fa", "fc", "ff", "fi", "fj", "fl", "fn", "fo", "fr", "fs", "ft", "fu", "fy", "ga", "ge", "gi", "gj", "gl", "go", "gr", "gs", "gy", "h2", "h3", "hh", "hi", "hj", "ho", "hr", "hs", "hu", "hy", "i", "i2", "i3", "i4", "i6", "i7", "i8", "ia", "ib", "ic", "ie", "ig", "ih", "ii", "ij", "il", "in", "io", "ip", "iq", "ir", "iv", "ix", "iy", "iz", "jj", "jr", "js", "jt", "ju", "ke", "kg", "kj", "km", "ko", "l2", "la", "lb", "lc", "lf", "lj", "ln", "lo", "lr", "ls", "lt", "m2", "ml", "mn", "mo", "ms", "mt", "mu", "n2", "nc", "nd", "ne", "ng", "ni", "nj", "nl", "nn", "nr", "ns", "nt", "ny", "oa", "ob", "oc", "od", "of", "og", "oi", "oj", "ol", "om", "on", "oo", "oq", "or", "os", "ot", "ou", "ow", "ox", "oz", "p1", "p2", "p3", "pc", "pd", "pe", "pf", "ph", "pi", "pj", "pk", "pl", "pm", "pn", "po", "pq", "pr", "ps", "pt", "pu", "py", "qj", "qu", "r2", "ra", "rc", "rd", "rf", "rh", "ri", "rj", "rl", "rm", "rn", "ro", "rq", "rr", "rs", "rt", "ru", "rv", "ry", "s2", "sa", "sc", "sd", "se", "sf", "si", "sj", "sl", "sm", "sn", "sp", "sq", "sr", "ss", "st", "sy", "sz", "t1", "t2", "t3", "tb", "tc", "td", "te", "tf", "th", "ti", "tj", "tl", "tm", "tn", "tp", "tq", "tr", "ts", "tt", "tv", "tx", "ue", "ui", "uj", "uk", "um", "un", "uo", "ur", "ut", "va", "wa", "vd", "wi", "vj", "vo", "wo", "vq", "vt", "vu", "x1", "x2", "x3", "xf", "xi", "xj", "xk", "xl", "xn", "xo", "xs", "xt", "xv", "xx", "y2", "yj", "yl", "yr", "ys", "yt", "zi", "zz"]
+
+def dashboard():
+    ethereum_id = 243 # ethereum
+    litecoin_id = 2 # litecoin
+    monero_id = 110 # monero
+    moneroHistory = db(db.coin_history.coin_id==monero_id).select()
+    ethereumHistory = db(db.coin_history.coin_id==ethereum_id).select()
+    litecoinHistory = db(db.coin_history.coin_id==litecoin_id).select()
+    return locals()
+
+def insights():
+    CONSUMER_KEY = '2972187968-JmUT3zeu2UyVIw315arct0tFjFO0J92r5ozwE1W'
+    CONSUMER_SECRET = 'FLqXC5f1UGUX4AwaKURWNDSUrB2FkRDajZemus9TKWhwY'
+    ACCESS_KEY = 'Z0ITlc1Fp5fAjZmX1ks8OzM2j'
+    ACCESS_SECRET = 'aLqR5uoV2vLLHCkIFmej3R43WGrqrfluZAguHuRRq0Xk8ScDBa'
+
+    consumer = oauth2.Consumer(key=ACCESS_KEY, secret=ACCESS_SECRET)
+    token = oauth2.Token(key=CONSUMER_KEY, secret=CONSUMER_SECRET)
+    client = oauth2.Client(consumer, token)
+
+    todaysDate = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d")
+    searchTerm = 'bitcoin'
+    url = 'https://api.twitter.com/1.1/search/tweets.json?q='+searchTerm+'&result_type=recent&count=100&lang=en&until='+todaysDate
+
+    resp, content = client.request(url, method="GET", headers=None)
+
+    tweets_list = json.loads(content)['statuses']
+
+    def rm_html_tags(str):
+        html_prog = re.compile(r'<[^>]+>',re.S)
+        return html_prog.sub('', str)
+
+    def rm_html_escape_characters(str):
+        pattern_str = r'&quot;|&amp;|&lt;|&gt;|&nbsp;|&#34;|&#38;|&#60;|&#62;|&#160;|&#20284;|&#30524;|&#26684|&#43;|&#20540|&#23612;'
+        escape_characters_prog = re.compile(pattern_str, re.S)
+        return escape_characters_prog.sub('', str)
+
+    def rm_at_user(str):
+        return re.sub(r'@[a-zA-Z_0-9]*', '', str)
+
+    def rm_url(str):
+        return re.sub(r'http[s]?:[/+]?[a-zA-Z0-9_\.\/]*', '', str)
+
+    def rm_repeat_chars(str):
+        return re.sub(r'(.)(\1){2,}', r'\1\1', str)
+
+    def rm_hashtag_symbol(str):
+        return re.sub(r'#', '', str)
+
+    def replace_emoticon(emoticon_dict, str):
+        for k, v in emoticon_dict.items():
+            str = str.replace(k, v)
+        return str
+
+    def rm_time(str):
+        return re.sub(r'[0-9][0-9]:[0-9][0-9]', '', str)
+
+    def rm_punctuation(current_tweet):
+        return re.sub(r'[^\w\s]','',current_tweet)
+
+    def preprocess(str):
+        if str[:2] == 'RT':
+            str = str[2:]
+
+        str = re.sub(r'[0-9]', '', str)
+
+        str = str.lower()
+        str = rm_url(str)
+        str = rm_at_user(str)
+        str = rm_repeat_chars(str)
+        str = rm_hashtag_symbol(str)
+        str = rm_time(str)
+        str = rm_punctuation(str)
+
+        def remove_stopwords(str):
+            result = []
+            for word in str.split():
+                if word not in stop_words:
+                    result.append(word)
+            return ' '.join(result)
+
+        str = remove_stopwords(str)
+
+        return str
+
+    def get_sentiment_results(str):
+        import sentiment_analyzer
+
+        preprocessed_data = preprocess(str)
+        analyzed_sentiment = sentiment_analyzer.predict(preprocessed_data)
+
+        if analyzed_sentiment[0] > analyzed_sentiment[2]:
+              prediction = 'Negative'
+        elif analyzed_sentiment[0] < analyzed_sentiment[2]:
+              prediction = 'Positive'
+        else:
+              prediction = 'Neutral'
+
+        return { 'prediction': prediction, 'values': analyzed_sentiment }
+
+    def get_tweet_analysis(tweet_obj):
+        #return tweet_obj['user']['screen_name'] + unicode('\n|\n','utf-8') + tweet_obj['text'] + unicode('\n|\n','utf-8') + unicode(get_sentiment_results(tweet_obj['text']), 'utf-8')
+        timestamp_in_utc = datetime.strptime(tweet_obj['created_at'],'%a %b %d %H:%M:%S +0000 %Y')
+        offset_hours = 8
+        timestamp_in_sgt = timestamp_in_utc + timedelta(hours=offset_hours)
+
+        return {
+            'user': tweet_obj['user'],
+            'text': tweet_obj['text'],
+            'sentiment_analysis': get_sentiment_results(tweet_obj['text']),
+            'created_at': datetime.strftime(timestamp_in_sgt, '%I:%M:%S %p - %d %b %Y')
+        }
+
+    tweets = list(map(get_tweet_analysis, tweets_list))
+
+    humanReadableDate = date.today().strftime("%d %B, %Y")
+
+    def positiveTweets(tweet):
+        if tweet['sentiment_analysis']['prediction'] == 'Positive':
+            return True
+        else:
+            return False
+
+    def negativeTweets(tweet):
+        if tweet['sentiment_analysis']['prediction'] == 'Negative':
+            return True
+        else:
+            return False
+
+    def neutralTweets(tweet):
+        if tweet['sentiment_analysis']['prediction'] == 'Neutral':
+            return True
+        else:
+            return False
+
+    #time.sleep(1)
+
+    allPositiveTweets = filter(positiveTweets, tweets)
+    allNegativeTweets = filter(negativeTweets, tweets)
+    allNeutralTweets = filter(neutralTweets, tweets)
+
+    isBullish = (len(allPositiveTweets) >= len(allNegativeTweets))
+
+    placeholder = "" if auth.user else "Please login or register"
+    if auth.user and not auth.has_membership('banned'):
+        registerModal = ""
+        form = SQLFORM(db.comment)
+        if form.process().accepted:
+            parent_author = db(db.auth_user.id == form.vars.parent_author).select().first()
+            if parent_author:
+                parent_author.update_record(count_new_reply = parent_author.count_new_reply + 1)
+            redirect(URL('comment',args=[num_encode(int(form.vars.root_parent)+10000)],anchor='comment'+str(form.vars.id)))
+        elif form.errors:
+            form.errors.body = ''
+            response.flash = 'Submission error. Please key in a minimum of 5 characters.'
+    else:
+        registerModal = "#registerModal"
+        form=A('Please login to comment',_rel="nofollow",_href=URL('user/login',vars=dict(_next=URL(args=request.args, vars=request.vars))))
+
+    return locals()
+
+POST_PER_PAGE = 15
+
+# Get first post to show on page based on page number
+def start(page):
+    page=int(page)
+    start_id = page*POST_PER_PAGE
+    return start_id
+
+# Get last post to show on page based on page number
+def stop(page):
+    page=int(page)
+    stop_id = start(page)+POST_PER_PAGE
+    return stop_id
+
+def coin():
+    custom_slug = request.args(0)
+    coin = db(db.master.custom_slug==custom_slug).select().first() or redirect(URL('index'))
+
+    CONSUMER_KEY = '2972187968-JmUT3zeu2UyVIw315arct0tFjFO0J92r5ozwE1W'
+    CONSUMER_SECRET = 'FLqXC5f1UGUX4AwaKURWNDSUrB2FkRDajZemus9TKWhwY'
+    ACCESS_KEY = 'Z0ITlc1Fp5fAjZmX1ks8OzM2j'
+    ACCESS_SECRET = 'aLqR5uoV2vLLHCkIFmej3R43WGrqrfluZAguHuRRq0Xk8ScDBa'
+
+    consumer = oauth2.Consumer(key=ACCESS_KEY, secret=ACCESS_SECRET)
+    token = oauth2.Token(key=CONSUMER_KEY, secret=CONSUMER_SECRET)
+    client = oauth2.Client(consumer, token)
+
+    todaysDate = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d")
+    searchTerm = coin.name
+    url = 'https://api.twitter.com/1.1/search/tweets.json?q='+searchTerm+'&result_type=recent&count=100&lang=en&until='+todaysDate
+
+    resp, content = client.request(url, method="GET", headers=None)
+
+    tweets_list = json.loads(content)['statuses']
+
+    def rm_html_tags(str):
+        html_prog = re.compile(r'<[^>]+>',re.S)
+        return html_prog.sub('', str)
+
+    def rm_html_escape_characters(str):
+        pattern_str = r'&quot;|&amp;|&lt;|&gt;|&nbsp;|&#34;|&#38;|&#60;|&#62;|&#160;|&#20284;|&#30524;|&#26684|&#43;|&#20540|&#23612;'
+        escape_characters_prog = re.compile(pattern_str, re.S)
+        return escape_characters_prog.sub('', str)
+
+    def rm_at_user(str):
+        return re.sub(r'@[a-zA-Z_0-9]*', '', str)
+
+    def rm_url(str):
+        return re.sub(r'http[s]?:[/+]?[a-zA-Z0-9_\.\/]*', '', str)
+
+    def rm_repeat_chars(str):
+        return re.sub(r'(.)(\1){2,}', r'\1\1', str)
+
+    def rm_hashtag_symbol(str):
+        return re.sub(r'#', '', str)
+
+    def replace_emoticon(emoticon_dict, str):
+        for k, v in emoticon_dict.items():
+            str = str.replace(k, v)
+        return str
+
+    def rm_time(str):
+        return re.sub(r'[0-9][0-9]:[0-9][0-9]', '', str)
+
+    def rm_punctuation(current_tweet):
+        return re.sub(r'[^\w\s]','',current_tweet)
+
+    def preprocess(str):
+        if str[:2] == 'RT':
+            str = str[2:]
+
+        str = re.sub(r'[0-9]', '', str)
+
+        str = str.lower()
+        str = rm_url(str)
+        str = rm_at_user(str)
+        str = rm_repeat_chars(str)
+        str = rm_hashtag_symbol(str)
+        str = rm_time(str)
+        str = rm_punctuation(str)
+
+        def remove_stopwords(str):
+            result = []
+            for word in str.split():
+                if word not in stop_words:
+                    result.append(word)
+            return ' '.join(result)
+
+        str = remove_stopwords(str)
+
+        return str
+
+    def get_sentiment_results(str):
+        import sentiment_analyzer
+
+        preprocessed_data = preprocess(str)
+        analyzed_sentiment = sentiment_analyzer.predict(preprocessed_data)
+
+        if analyzed_sentiment[0] > analyzed_sentiment[2]:
+              prediction = 'Negative'
+        elif analyzed_sentiment[0] < analyzed_sentiment[2]:
+              prediction = 'Positive'
+        else:
+              prediction = 'Neutral'
+
+        return { 'prediction': prediction, 'values': analyzed_sentiment }
+
+    def get_tweet_analysis(tweet_obj):
+        #return tweet_obj['user']['screen_name'] + unicode('\n|\n','utf-8') + tweet_obj['text'] + unicode('\n|\n','utf-8') + unicode(get_sentiment_results(tweet_obj['text']), 'utf-8')
+        timestamp_in_utc = datetime.strptime(tweet_obj['created_at'],'%a %b %d %H:%M:%S +0000 %Y')
+        offset_hours = 8
+        timestamp_in_sgt = timestamp_in_utc + timedelta(hours=offset_hours)
+
+        return {
+            'user': tweet_obj['user'],
+            'text': tweet_obj['text'],
+            'sentiment_analysis': get_sentiment_results(tweet_obj['text']),
+            'created_at': datetime.strftime(timestamp_in_sgt, '%I:%M:%S %p - %d %b %Y')
+        }
+
+    tweets = list(map(get_tweet_analysis, tweets_list))
+
+    humanReadableDate = date.today().strftime("%d %B, %Y")
+
+    def positiveTweets(tweet):
+        if tweet['sentiment_analysis']['prediction'] == 'Positive':
+            return True
+        else:
+            return False
+
+    def negativeTweets(tweet):
+        if tweet['sentiment_analysis']['prediction'] == 'Negative':
+            return True
+        else:
+            return False
+
+    def neutralTweets(tweet):
+        if tweet['sentiment_analysis']['prediction'] == 'Neutral':
+            return True
+        else:
+            return False
+
+    #time.sleep(1)
+
+    allPositiveTweets = filter(positiveTweets, tweets)
+    allNegativeTweets = filter(negativeTweets, tweets)
+    allNeutralTweets = filter(neutralTweets, tweets)
+
+    isBullish = (len(allPositiveTweets) >= len(allNegativeTweets))          
+
+    placeholder = "" if auth.user else "Please login or register"
+    if auth.user and not auth.has_membership('banned'):
+        registerModal = ""
+        form = SQLFORM(db.comment)
+        if form.process().accepted:
+            parent_author = db(db.auth_user.id == form.vars.parent_author).select().first()
+            if parent_author:
+                parent_author.update_record(count_new_reply = parent_author.count_new_reply + 1)
+            redirect(URL('comment',args=[num_encode(int(form.vars.root_parent)+10000)],anchor='comment'+str(form.vars.id)))
+        elif form.errors:
+            form.errors.body = ''
+            response.flash = 'Submission error. Please key in a minimum of 5 characters.'
+    else:
+        registerModal = "#registerModal"
+        form=A('Please login to comment',_rel="nofollow",_href=URL('user/login',vars=dict(_next=URL(args=request.args, vars=request.vars))))
+    return locals()
+
+
+@auth.requires(not auth.has_membership('banned'))
+def edit_profile():
+    user = db(db.auth_user.id==auth.user.id).select().first()
+    return locals()
+
+
+def profile():
+    username_slug = request.args(0)
+    member = db(db.auth_user.username_slug==username_slug).select().first() or redirect(URL('index'))
+    vars = request.get_vars
+    page = 0 if not vars.page else int(vars.page)
+    comment_count = db(db.comment.parent==None).count()
+    last_comment_on_page = stop(page)
+    sqlQuery = "SELECT c.*, d.reply_count, e.name, e.custom_slug FROM (SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.created_by="+str(member.id)+" AND a.parent IS NULL ORDER BY a.created_on DESC LIMIT "+str(POST_PER_PAGE)+" OFFSET "+str(start(page))+") c LEFT JOIN (SELECT root_parent AS root,COUNT(*) AS reply_count FROM comment GROUP BY root) d ON c.id = d.root LEFT JOIN master e ON c.coin=e.id;"
+    comments = db.executesql(sqlQuery, as_dict=True)
+    placeholder = "" if auth.user else "Please login or register"
+    if auth.user and not auth.has_membership('banned'):
+        registerModal = ""
+        form = SQLFORM(db.comment)
+        if form.process().accepted:
+            parent_author = db(db.auth_user.id == form.vars.parent_author).select().first()
+            if parent_author:
+                parent_author.update_record(count_new_reply = parent_author.count_new_reply + 1)
+            redirect(URL('comment',args=[num_encode(int(form.vars.root_parent)+10000)],anchor='comment'+str(form.vars.id)))
+        elif form.errors:
+            form.errors.body = ''
+            response.flash = 'Submission error. Please key in a minimum of 5 characters.'
+    else:
+        registerModal = "#registerModal"
+        form=A('Please login to comment',_rel="nofollow",_href=URL('user/login',vars=dict(_next=URL(args=request.args, vars=request.vars))))
+    return locals()
+
+def comment():
+    slug = request.args(0) or redirect(URL('index'))
+    comment_id = num_decode(slug)-10000
+    sqlQuery = "SELECT c.*, d.reply_count, e.name, e.custom_slug FROM (SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.id="+str(comment_id)+") c LEFT JOIN (SELECT root_parent AS root,COUNT(*) AS reply_count FROM comment GROUP BY root) d ON c.id = d.root LEFT JOIN master e ON c.coin=e.id;"
+    comment = db.executesql(sqlQuery, as_dict = True)
+    comment = comment[0]
+    placeholder = "" if auth.user else "Please login or register"
+    if auth.user and not auth.has_membership('banned'):
+        registerModal = ""
+        form = SQLFORM(db.comment)
+        if form.process().accepted:
+            parent_author = db(db.auth_user.id == form.vars.parent_author).select().first()
+            if parent_author:
+                parent_author.update_record(count_new_reply = parent_author.count_new_reply + 1)
+            redirect(URL('comment',args=[num_encode(int(form.vars.root_parent)+10000)],anchor='comment'+str(form.vars.id)))
+        elif form.errors:
+            form.errors.body = ''
+            response.flash = 'Submission error. Please key in a minimum of 5 characters.'
+    else:
+        registerModal = "#registerModal"
+        form=A('Please login to comment',_rel="nofollow",_href=URL('user/login',vars=dict(_next=URL(args=request.args, vars=request.vars))))
+    return locals()
+
+
+def index():
+    vars = request.get_vars
+    page = 0 if not vars.page else int(vars.page)
+    comment_count = db(db.comment.parent==None).count()
+    last_comment_on_page = stop(page)
+
+    sqlQuery = "SELECT c.*, d.reply_count, e.name, e.custom_slug FROM (SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.parent IS NULL AND COALESCE(a.is_hidden,1) <> 'T' ORDER BY a.created_on DESC LIMIT "+str(POST_PER_PAGE)+" OFFSET "+str(start(page))+") c LEFT JOIN (SELECT root_parent AS root,COUNT(*) AS reply_count FROM comment GROUP BY root) d ON c.id = d.root LEFT JOIN master e ON c.coin=e.id;"
+    comments = db.executesql(sqlQuery, as_dict = True)
+
+    top_gainers = db.executesql("SELECT a.custom_slug, a.image_thumb, a.symbol, a.name, a.usd_percent_change_24h FROM master a WHERE a.usd_volume_24h > 1000000 AND a.usd_percent_change_24h > 0 ORDER BY a.usd_percent_change_24h DESC LIMIT 5;", as_dict = True)
+    top_losers = db.executesql("SELECT a.custom_slug, a.image_thumb, a.symbol, a.name, a.usd_percent_change_24h FROM master a WHERE a.usd_volume_24h > 1000000 AND a.usd_percent_change_24h < 0 ORDER BY a.usd_percent_change_24h ASC LIMIT 5;", as_dict = True)
+
+    placeholder = "" if auth.user else "Please login or register"
+    if auth.user and not auth.has_membership('banned'):
+        registerModal = ""
+        form = SQLFORM(db.comment)
+        if form.process().accepted:
+            parent_author = db(db.auth_user.id == form.vars.parent_author).select().first()
+            if parent_author:
+                parent_author.update_record(count_new_reply = parent_author.count_new_reply + 1)
+            redirect(URL('comment',args=[num_encode(int(form.vars.root_parent)+10000)],anchor=form.vars.id))
+        elif form.errors:
+            form.errors.body = ''
+            response.flash = 'Submission error. Please key in a minimum of 5 characters.'
+    else:
+        registerModal = "#registerModal"
+        form=A('Please login to comment',_rel="nofollow",_href=URL('user/login',vars=dict(_next=URL(args=request.args, vars=request.vars))))
+    return locals()
+
+# ---- Action for login/register/etc (required for auth) -----
+def user():
+    page = request.args(0)
+    redirect_URL = request.get_vars._next
+    if page == 'profile':
+        db.auth_user.email.writable = False
+        db.auth_user.email.readable = False
+        db.auth_user.newsletter.writable = True
+        db.auth_user.description.writable = True
+        db.auth_user.website.writable = True
+        db.auth_user.avatar.writable = True
+        form = auth()
+
+        if form.process().accepted:
+            db.auth_user(form.vars.id).update_record(username_slug=IS_SLUG.urlify(form.vars.username))
+            auth.user.update(username=form.vars.username)
+            redirect(URL("profile")) if redirect_URL == "/" else redirect(redirect_URL)
+    elif page == 'login':
+        db.auth_user.username.label = T("Username or Email")
+        auth.settings.login_userfield = 'username'
+        if request.vars.username and not IS_EMAIL()(request.vars.username)[1]:
+            auth.settings.login_userfield = 'email'
+            request.vars.email = request.vars.username
+            request.post_vars.email = request.vars.email
+            request.vars.username = None
+            request.post_vars.username = None
+        form=auth()
+    elif page == 'request_reset_password':
+        db.auth_user.username.label = T("Email")
+        auth.settings.login_userfield = 'email'
+        form = auth()
+    else:
+        form = auth()
+    return locals()
+
+
+# ---- action to server uploaded static content (required) ---
+@cache.action(time_expire=315360000)
+def download():
+    """
+    allows downloading of uploaded files
+    http://..../[app]/default/download/[filename]
+    """
+    return response.download(request, db)

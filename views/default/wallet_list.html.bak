@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+    <title>ERC20 Token Supply on Exchange | ViewBase</title>
+    <meta itemprop="name" content="ERC20 Token Supply on Exchange | ViewBase" />
+    <meta itemprop="description" name="description" content="" />
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="ERC20 Token Supply on Exchange | ViewBase" />
+    <meta property="og:description" content="ERC20 Token Supply on Exchange" />
+    <meta property="og:image" content="" />
+    <meta property="og:image" name="twitter:image" content="" />
+    <meta itemprop="image" content="" />
+    <link itemprop="url" rel="canonical" href="https://www.viewbase.com/exchange"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ViewBase" />
+    <meta property="fb:admins" content="TBC" />
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:title" content="ERC20 Token Supply on Exchange| ViewBase">
+    <meta name="twitter:description" content="ERC20 Token Supply on Exchange">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta name="twitter:image" content="">
+
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static','css/index.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/comment.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/table.css')}}"/>
+    <script type="text/javascript" src="{{=URL('static','js/jquery.tablesorter.js')}}"></script>
+    <style>
+        td{white-space: nowrap;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-3 order-2 order-lg-1 my-col">
+            </div>
+            <div class="col-12 col-lg-6 order-1 order-lg-2 my-col col-main">
+                <h1 style="margin:24px 0;width:100%;text-align:center;font-size:25px;font-weight:700;line-height:1.44em;">ERC20 Token Supply on Exchange</h1>
+                <p style="margin:0 auto 24px auto;max-width:700px;text-align:center;color:#999;">
+                    Increases in tokens deposited on exchanges could indicate intention to sell by holders.
+                </p>
+                <table class="table tablesorter" id="myTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">
+                                Token  <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th scope="col">
+                                Ticker <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="Percentage of total supply found in exchange wallets">
+                                Supply on Exchange <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="1-day change in tokens found in exchange wallets">
+                                % 1D <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="1-week change in tokens found in exchange wallets">
+                                % 1W <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="1-month change in tokens found in exchange wallets">
+                                % 1M <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{for row in tokens:}}
+                        <tr class='clickable-row' data-href="{{=URL('default','coin',args=row['custom_slug'])}}">
+                            <td>{{=row['market_cap_rank']}}</td>
+                            <td>
+                                <img src="https://www.viewbase.com/static/image_thumb/{{=row['image_thumb']}}">&nbsp;
+                                <a href="{{=URL('default','coin',args=row['custom_slug'])}}">{{=row['name']}}</a>
+                            </td>
+                            <td>{{=row['symbol']}}</td>
+                            <td class="cell-right">{{='{0:,.1f}'.format(row['current_balance']/row['total_supply']*100)}}%</td>
+                            <td class="cell-right">{{=XML(getReturns(row['current_balance'], row['d1_balance']))}}</td>
+                            <td class="cell-right">{{=XML(getReturns(row['current_balance'], row['d7_balance']))}}</td>
+                            <td class="cell-right">{{=XML(getReturns(row['current_balance'], row['d30_balance']))}}</td>
+                        </tr>
+                        {{pass}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-lg-3 order-3 order-lg-3 my-col">
+                <h1 class="section-header">
+                    <a class="section-header" href="{{=URL('default','blog')}}">Related Posts</a>
+                </h1>
+                {{for blog in blogs:}}
+                <a class="blog-container" href="{{=URL('default','blog',args=blog['website_slug'])}}">
+                    <div class="blog-image blog-item" style="background-image:url({{=blog['image_url_small']}});"></div>
+                    <div class="blog-overlay blog-item">
+                        <span class="blog-header">{{=blog['title']}}</span>
+                    </div>
+                </a>
+                {{pass}}
+            </div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+
+<script>
+    $.tablesorter.addParser({
+        id: "commaDelimited",
+        is: function(s) {return /^[0-9]?[0-9,\.]*$/.test(s);},
+        format: function(s) {return jQuery.tablesorter.formatFloat( s.replace(/,/g,'').replace(/\$/g,'') );},
+        type: "numeric"
+    });
+    $(document).ready(function(){
+        $("#myTable").tablesorter({
+            sortList:[[0,0]],
+            headers: {3:{sorter:'commaDelimited'},4:{sorter:'commaDelimited'},5:{sorter:'commaDelimited'}}
+        });
+    });
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
+</html>

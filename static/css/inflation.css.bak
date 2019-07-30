@@ -1,0 +1,13 @@
+td{white-space: nowrap;}
+.cell-small{font-size: 0.70rem;}
+.col-minted{min-width:105px;}
+.col-minted-pct{min-width:122px;}
+.col-annualized{min-width:80px;}
+.col-name{width:167px;}
+.cell-bold{font-weight:600;}
+.cell-wrap{white-space:normal;}
+.cell-comment{white-space: normal !important;font-size:0.65rem;max-width:170px;}
+.source{color:#2cc891;text-decoration:underline;}
+.list-header{margin:24px 0;width:100%;text-align:center;font-size:25px;font-weight:700;line-height:1.44em;}
+.list-desc{margin:0 auto 24px auto;max-width:700px;text-align:center;color:#999;}
+.powered-by{font-size:.65rem;color:#9f9f9f;text-align:center;}

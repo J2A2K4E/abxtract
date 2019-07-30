@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>Live Inflation Rate | ViewBase</title>
+    <meta property="og:title" itemprop="name" content="Live Inflation Rate | ViewBase">
+    <meta name="twitter:title" content="Live Inflation Rate | ViewBase">
+    <meta property="og:description" itemprop="description" name="description" content="Track the amount of newly minted coins added to circulating supply in the last 24 hours.">
+    <meta name="twitter:description" content="Track the amount of newly minted coins added to circulating supply in the last 24 hours.">
+    <meta name="twitter:image:src" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <meta property="og:image" itemprop="image" name="image" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <link property="og:url" itemprop="url" rel="canonical" href="https://www.viewbase.com/inflation"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta property="og:site_name" content="ViewBase">
+    <meta property="fb:app_id" content="457354494759406">
+    <meta property="og:type" content="article">
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/table.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/inflation.css')}}"/>
+    <script type="text/javascript" src="{{=URL('static',STATIC_VERSION,'js/jquery.tablesorter.js')}}"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg order-2 order-lg-1 my-col">
+            </div>
+            <div class="col-12 col-lg-7 order-1 order-lg-2 my-col col-main">
+                <h1 class="list-header">Live Inflation Rates</h1>
+                <p class="list-desc">
+                    Newly minted coins added to circulating supply in the last 24 hours <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="Live inflation data is updated on an hourly basis"></i>
+                </p>
+                <table class="table table-responsive-lg tablesorter" id="myTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">
+                                <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right col-minted" scope="col" data-toggle="tooltip" data-placement="top" title="New coins minted in the last 24 hours">
+                                Newly Minted (last 24h) <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="Total supply of coin currently in existence">
+                                Circulating Supply <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right col-minted-pct" scope="col" data-toggle="tooltip" data-placement="top" title="Newly minted coins in the last 24 hours as percentage of circulating supply">
+                                % Newly Minted (last 24h) <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right col-annualized" scope="col" data-toggle="tooltip" data-placement="top" title="Projected annualized inflation rate based on newly minted coins in the last 24 hours">
+                                Annualized Rate <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{for row in coin_inflation:}}
+                        <tr class='clickable-row' data-href="{{=URL('default','coin',args=row['custom_slug'])}}">
+                            <td>
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/{{=row['image_thumb']}}">&nbsp;
+                                <a href="{{=URL('default','coin',args=row['custom_slug'])}}">{{=row['name']}}</a>
+                            </td>
+                            <td class="cell-right cell-small">{{='{0:,.0f}'.format(row['emission_24h'])}} {{=row['symbol']}}</td>
+                            <td class="cell-right cell-small">{{='{0:,.0f}'.format(row['circulating_supply'])}} {{=row['symbol']}}</td>
+                            <td class="cell-right">{{='{0:,.3f}'.format(row['emission_24h']/row['circulating_supply']*100)}}%</td>
+                            <td class="cell-right cell-bold">{{='{0:,.2f}'.format(row['emission_24h']*365/row['circulating_supply']*100)}}%</td>
+                        </tr>
+                        {{pass}}
+                    </tbody>
+                </table>
+                <h2 class="list-header">Fixed Inflation Rates</h2>
+                <p class="list-desc">
+                    Cryptocurrencies with fixed inflation schedules
+                </p>
+                <table class="table table-responsive-lg" id="fixed-inflation-table">
+                    <thead class="thead-nosort">
+                        <tr>
+                            <th class="col-name" scope="col">
+                                <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-center col-annualized" scope="col" data-toggle="tooltip" data-placement="top" title="% increase in circulating supply per year">
+                                Annual Inflation <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th scope="col">
+                                Comments
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.a2dda5226826605b.726970706c652e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/ripple">XRP</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.00%</td>
+                            <td class="cell-comment">No inflation but 55bn XRP are privately owned by Ripple. Every month, 1 billion XRP will be unlocked from escrow and unused XRP at end of month will be sent to the back of the escrow queue. [<a class="source" href="https://ripple.com/insights/ripple-to-place-55-billion-xrp-in-escrow-to-ensure-certainty-into-total-xrp-supply/" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.bcb7c11581304385.7374656c6c61722e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/stellar">Stellar</a>
+                            </td>
+                            <td class="cell-center cell-bold">1.00%</td>
+                            <td class="cell-comment">New lumens are added at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over 0.05% of the “votes” from other accounts in the network. [<a class="source" href="https://www.stellar.org/developers/guides/concepts/inflation.html" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.b6c3e1e5f39b0cbd.656f732e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/eos">EOS</a>
+                            </td>
+                            <td class="cell-center cell-bold">≤ 5.00%</td>
+                            <td class="cell-comment">Block reward is determined by the median of the desired pay published by all block producers. The EOS.IO software enforce a cap on producer awards such that the total annual increase in token supply does not exceed 5%. [<a class="source" href="https://github.com/EOSIO/Documentation/blob/master/TechnicalWhitePaper.md#worker-proposal-system" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.8f21f6ddb2fda2b8.74726f6e2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/tron">TRON</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.77%</td>
+                            <td class="cell-comment">Tron has a block reward of 48 TRX at a rate of 1 block per 3s, which translates to an annual inflation rate of 0.77%. [<a class="source" href="https://medium.com/tron-foundation/clarifications-on-trx-burn-and-rewards-in-tron-network-3810a47dd5d" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.85c6701a8def2cf6.696f74612e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/tron">IOTA</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.00%</td>
+                            <td class="cell-comment">IOTA is an unconventional cryptocurrency that is not mineable. [<a class="source" href="https://thetangle.org/statistics" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.9838637debc27791.62696e616e6365636f696e2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/binancecoin">Binance</a>
+                            </td>
+                            <td class="cell-center cell-bold">-4.66%</td>
+                            <td class="cell-comment">BNB has a deflationary supply. Each quarter, Binance uses 20% of profits to buy back and burn BNB, until 100MM BNB are burned. In 2018 Q4, 1,643,986 BNB were burned, which translate to annual deflation rate of -4.66%. [<a class="source" href="https://www.binance.com/resources/ico/Binance_WhitePaper_en.pdf" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.9f9d67f2a273d117.6e656d2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/nem">NEM</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.00%</td>
+                            <td class="cell-comment">Miners are only paid transaction fees using coins already in circulation. [<a class="source" href="https://nem.io/xem/harvesting-and-poi/" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.87d04a879fc40fe7.6e656f2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/neo">NEO</a>
+                            </td>
+                            <td class="cell-center cell-bold">18.00%</td>
+                            <td class="cell-comment">50% of total supply is kept by NEO during ICO. The 50% is distributed via the schedule according to this reddit post confirmed by Da Hongfei: 2017: 30%, 2018: 23%, 2019: 18%, 2020: 5%, 2021: 0% [<a class="source" href="https://www.reddit.com/r/NEO/comments/75edgr/neo_inflation_schedule/" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.a133acb348232bda.74657a6f732e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/tezos">Tezos</a>
+                            </td>
+                            <td class="cell-center cell-bold">≤ 5.51%</td>
+                            <td class="cell-comment">Inflation from block rewards and endorsement reward is capped at ENDORSERS_PER_BLOCK * ENDORSEMENT_REWARD + BLOCK_REWARD = 80 XTZ. This means at most 5.51% annual inflation. [<a class="source" href="http://tezos.gitlab.io/mainnet/whitedoc/proof_of_stake.html" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.ad08017e5723bab0.7665636861696e2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/vechain">VeChain</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.00%</td>
+                            <td class="cell-comment">Mining rewards are paid in another cryptocurrency, VTHOR. [<a class="source" href="https://medium.com/@vechainofficial/vechain-apotheosis-part-ii-thor-power-forged-974111a93278" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.9906ea53bf73f0b6.7174756d2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/qtum">Qtum</a>
+                            </td>
+                            <td class="cell-center cell-bold">1.00%</td>
+                            <td class="cell-comment">Mining difficulty is pegged to achieve 1% inflation annually. [<a class="source" href="https://blog.qtum.org/qtum-circulating-supply-updated-791039236da0" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.9495495510254871.6f6d697365676f2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/omisego">OmiseGo</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.00%</td>
+                            <td class="cell-comment">Stakers are paid transaction fees using tokens already in circulation. [<a class="source" href="https://blog.omisego.network/omg-network-staking-returns-5744a23f4569" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.aa1ab00c3b280054.30782e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/0x">0x</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.00%</td>
+                            <td class="cell-comment">No inflation but 50% total supply is held privately.</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.9d06077402218868.6c69736b2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/lisk">Lisk</a>
+                            </td>
+                            <td class="cell-center cell-bold">13.76%</td>
+                            <td class="cell-comment">Lisk has a block reward of 5 LSK at a rate of 1 block per 10s, which translates to an annual inflation of 13.76%. [<a class="source" href="https://lisk.io/help-center/lsk-token/what-is-the-annual-lisk-inflation-rate" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.9640428fa4c27901.6e616e6f2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/nano">Nano</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.00%</td>
+                            <td class="cell-comment">Nano is not mineable. Total supply was distributed via a faucet that ended in October 2017. [<a class="source" href="https://nano.org/en/faq" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.81502b74b44c0db1.64696769627974652e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/digibyte">DigiByte</a>
+                            </td>
+                            <td class="cell-center cell-bold">13.08%</td>
+                            <td class="cell-comment">DigiByte has a block reward of 704 DGB at a rate of 1 block per 15s, which translates to an annual inflation of 13.08%. [<a class="source" href="https://digibyte.io/digibyte-blockchain-faq" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.b912b2423e8c1296.62617369632d617474656e74696f6e2d746f6b656e2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/basic-attention-token">Basic Attention Token</a>
+                            </td>
+                            <td class="cell-center cell-bold">0.00%</td>
+                            <td class="cell-comment">No inflation but 200mn BAT and 300mn BAT are given to development team and user growth pool respectively. [<a class="source" href="https://basicattentiontoken.org/faq/#UGP" target="_blank">source</a>]</td>
+                        </tr>
+                        <tr class='hovershade-row'>
+                            <td class="cell-wrap">
+                                <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.bf1e76944b6cdca3.69636f6e2e706e67.png">&nbsp;
+                                <a href="https://www.viewbase.com/coin/icon">ICON</a>
+                            </td>
+                            <td class="cell-center cell-bold cell-wrap">7.00% - 20.00%</td>
+                            <td class="cell-comment">ICX has a minimal annual inflation of 7% and a maximum cap at 20%. [<a class="source" href="https://icon.foundation/resources/whitepaper/ICON-Whitepaper-EN-Draft.pdf" target="_blank">source</a>]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-lg order-3 order-lg-3 my-col">
+                <h1 class="section-header">
+                    <a class="section-header" href="{{=URL('default','blog')}}">Related Posts</a>
+                </h1>
+                {{for blog in blogs:}}
+                <a class="blog-container" href="{{=URL('default','blog',args=blog['website_slug'])}}">
+                    <div class="blog-image blog-item" style="background-image:url({{=blog['image_url_small']}});"></div>
+                    <div class="blog-overlay blog-item">
+                        <span class="blog-header">{{=blog['title']}}</span>
+                    </div>
+                </a>
+                {{pass}}
+            </div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+
+<script>
+    $.tablesorter.addParser({
+        id: "commaDelimited",
+        is: function(s) {return /^[0-9]?[0-9,\.]*$/.test(s);},
+        format: function(s) {return jQuery.tablesorter.formatFloat( s.replace(/,/g,'').replace(/\$/g,'') );},
+        type: "numeric"
+    });
+    $(document).ready(function(){
+        $("#myTable").tablesorter({
+            sortList:[[4,0]],
+            headers: {3:{sorter:'commaDelimited'},4:{sorter:'commaDelimited'},5:{sorter:'commaDelimited'}}
+        });
+    });
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
+</html>

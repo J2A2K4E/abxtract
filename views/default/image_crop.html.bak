@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head itemscope itemtype="http://schema.org/Organization" lang="en">
+    <title>ViewBase: Cryptocurrency Market Insights</title>
+    <link rel="shortcut icon" type="image/png" href="https://www.viewbase.com/static/images/favicon.png"/>
+    <!-- Google -->
+    <meta name="google-site-verification" content="htn_YpQVybYT2nweZfCQYFJS4lq1XOhJt0riw6rRGgs" />
+    <meta itemprop="description" name="description" content="ViewBase is a community of traders and investors who are passionate about cryptocurrency markets." />
+    <meta itemprop="name" content="ViewBase" />
+    <link itemprop="url" rel="canonical" href="https://www.viewbase.com"/>
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static','css/croppie.css')}}"/>
+    <script src="{{=URL('static','js/croppie.js')}}"></script>
+    <style>
+        .avatar-wrapper{text-align:center;}
+        .avatar-preview-header{margin:5px 0;font-weight:bold;}
+        #avatar-preview-wrapper, #avatar-cancel, #avatar-update{display:none;}
+        .btn-file {margin-bottom:0;}
+    </style>
+</head>
+<body>
+<div class="container-fluid" style="background-color:#f2f3f5;">
+  <div class="row my-container">
+      <div class="col-3 my-col">
+      </div>
+      <div class="col-6 my-col" style="background-color:white;">
+          <div class="avatar-wrapper">
+              <div id="avatar-preview-wrapper">
+                  <div class="avatar-preview-header">New profile</div>
+                  <div id="avatar-preview"></div>
+              </div>
+              <label class="btn btn-secondary btn-file">
+                  Change photo <input id="avatar-input" type="file" name="avatar" accept="image/x-png,image/gif,image/jpeg,image/bmp"  style="display: none;"/>
+              </label>
+              <button id="avatar-cancel" type="button" class="btn btn-secondary">Remove</button>
+              <button id="avatar-update" type="button" class="btn btn-success">Update</button>
+          </div>
+      </div>
+      <div class="col-3 my-col">
+      </div>
+  </div>
+</div>
+</body>
+
+<script>
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {$uploadCrop.croppie('bind', {url: e.target.result});}
+            reader.readAsDataURL(input.files[0]);
+        }
+        else {swal("Sorry - you're browser doesn't support the FileReader API");}
+    }
+
+    $uploadCrop = $('#avatar-preview').croppie({
+        viewport: {width:120, height:120, type:'circle'},
+        boundary: {width:180, height:180}
+    });
+
+    $('#avatar-input').on('change', function(){
+        readFile(this);
+        $('.btn-file').hide();
+        $('#avatar-preview-wrapper').show();
+        $('#avatar-cancel').show();
+        $('#avatar-update').show();
+    });
+    $('#avatar-cancel').on('click', function(ev){
+        $('#avatar-input').val('')
+        $('.cr-image').removeAttr('src');
+        $('.btn-file').show();
+        $('#avatar-preview-wrapper').hide();
+        $('#avatar-cancel').hide();
+        $('#avatar-update').hide();
+    });
+    $('#avatar-update').on('click', function(ev){
+        // Check if input is not empty
+        if ($('#avatar-input').val()) {
+            var path_lowercase = $('#avatar-input').val().toLowerCase();
+            var extension = path_lowercase.substring(path_lowercase.lastIndexOf('.') + 1);
+            var allowed_ext = ['jpg','jpeg','png','bmp'];
+            // Check if input is image file
+            if($.inArray(extension, allowed_ext)== -1){
+                // Input file is not an image
+                alert('Please upload image only');
+            } else {
+                // Input file is an image
+                // Upload cropped image
+                $uploadCrop.croppie('result','base64').then(function(base64) {
+                    $.ajax({
+                        method:'post',
+                        url:'{{=URL('request','upload_avatar')}}',
+                        data:{'image':base64},
+                        success: function(data){}});
+                });
+            }
+        }});
+</script>
+</html>

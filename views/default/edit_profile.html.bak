@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head itemscope itemtype="http://schema.org/Organization" lang="en">
+    <title>Edit profile | ViewBase</title>
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/croppie.css')}}"/>
+    <script src="{{=URL('static',STATIC_VERSION,'js/croppie.js')}}"></script>
+    <style>
+        /* Layout settings */
+        .container-fluid{background-color:#f2f3f5;}
+        .row{max-width:1350px;margin:0 auto;padding:20px 0;}
+        .my-col{padding:15px 30px 20px 30px;}
+        .my-main{background-color:white;padding:15px !important;}
+        .col-header{margin:5px 0 15px 0;width:100%;text-align:center;font-size:25px;font-weight:700;}
+        .avatar-wrapper{display:inline-block;text-align:center;padding-right:20px;}
+        #avatar-preview-wrapper{display:none;border: 1px solid #2cc891;border-radius:5px;padding-bottom:10px;}
+        #avatar-cancel{display:none;}
+        .btn-file {height:40px;margin:auto 0;border-radius:20px;}
+        label{display:block;font-weight:500;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-3 my-col"></div>
+            <div class="col-12 col-lg-6 my-col my-main">
+                <h1 class="col-header">Edit Profile</h1>
+                <form>
+                    <div class="form-group" style="display:flex;justify-content:flex-start;">
+                        <div class="avatar-wrapper">
+                            <label>Profile Photo</label>
+                            <img class="rounded-circle" src="{{=get_avatar_url(auth.user.avatar)}}">
+                        </div>
+                        <label class="btn btn-secondary btn-file">
+                            Change photo <input id="avatar-input" type="file" name="avatar" accept="image/x-png,image/gif,image/jpeg,image/bmp"  style="display: none;"/>
+                        </label>
+                        <div class="avatar-wrapper">
+                            <div id="avatar-preview-wrapper">
+                                <label class="text-theme">New Photo</label>
+                                <div id="avatar-preview"></div>
+                                <button id="avatar-cancel" type="button" class="btn btn-danger">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control registerUsername" id="username" placeholder="Enter username" value="{{=user.username}}">
+                        <small class="form-text text-muted registerUsernameMessage" accept="true"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <input type="text" class="form-control" id="bio" placeholder="About yourself" value="{{=user.description}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="ethaddress">Ethereum Address 
+                            <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="Provide your ETH address to receive payments and donations. We will NEVER ask for your private keys."></i>
+                        </label>
+                        <input type="text" class="form-control" id="ethaddress" placeholder="Your Ethereum wallet public address" value="{{=user.ethaddress if user.ethaddress else ''}}" data-toggle="tooltip" data-placement="top" title="Provide your ETH address to receive payments and donations. We will NEVER ask for your private keys.">
+                        <small class="form-text text-muted updateETHAddress" accept="true"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="website">Website</label>
+                        <input type="text" class="form-control" id="website" placeholder="https://www" value="{{=user.website}}">
+                        <small class="form-text text-muted updateWebsite" accept="true"></small>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="newsletter" {{='checked' if user.newsletter else ''}}>
+                        <label class="form-check-label" for="newsletter" aria-describedby="newsletterHelp">Subscribe to newsletter</label>
+                        <small id="newsletterHelp" class="form-text text-muted">Receive weekly quality content. No spam guaranteed.</small>
+                    </div>
+                </form>
+                <button class="btn btn-success" id="update-profile">Update Profile</button>
+            </div>
+            <div class="col-12 col-lg-3 my-col"></div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+<script>
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {$uploadCrop.croppie('bind', {url: e.target.result});}
+            reader.readAsDataURL(input.files[0]);
+        }
+        else {swal("Sorry - you're browser doesn't support the FileReader API");}
+    }
+
+    $uploadCrop = $('#avatar-preview').croppie({
+        viewport: {width:120, height:120, type:'circle'},
+        boundary: {width:180, height:180}
+    });
+
+    $('#avatar-input').on('change', function(){
+        readFile(this);
+        $('.btn-file').hide();
+        $('#avatar-preview-wrapper').show();
+        $('#avatar-cancel').show();
+    });
+    $('#avatar-cancel').on('click', function(ev){
+        $('#avatar-input').val('')
+        $('.cr-image').removeAttr('src');
+        $('.btn-file').show();
+        $('#avatar-preview-wrapper').hide();
+        $('#avatar-cancel').hide();
+    });
+
+    $('#update-profile').on('click', function(ev){
+        var username = $('#username').val();
+        var bio = $('#bio').val();
+        var website = $('#website').val();
+        var newsletter = $('#newsletter').val();
+        var ethaddress = $('#ethaddress').val();
+        // Check ETH address
+        if (ethaddress!=""){
+            if (!/^(0x){1}[0-9a-fA-F]{40}$/i.test(ethaddress)) {
+                $('.alert_placeholder').html('<div class="flash alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert"><span>×</span></button>Your ETH address is not valid. Please check again.</div>');
+                return;
+            }
+        }
+        // Check if username is valid
+        if ($('.registerUsernameMessage').attr("accept") == 'false'){
+            $('.alert_placeholder').html('<div class="flash alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert"><span>×</span></button>Your username is not valid. Please check again.</div>');
+            return;
+        } else if ($('.updateWebsite').attr("accept") == 'false') {
+            $('.alert_placeholder').html('<div class="flash alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert"><span>×</span></button>Your website is not valid. Please check again.</div>');
+            return;
+        }
+        // Check if photo input is not empty
+        if ($('#avatar-input').val()) {
+            var path_lowercase = $('#avatar-input').val().toLowerCase();
+            var extension = path_lowercase.substring(path_lowercase.lastIndexOf('.') + 1);
+            var allowed_ext = ['jpg','jpeg','png','bmp'];
+            // Check if input is image file
+            if($.inArray(extension, allowed_ext)== -1){
+                // Input file is not an image
+                alert('Please upload image only');
+            } else {
+                // Input file is an image
+                $uploadCrop.croppie('result','base64').then(function(base64){
+                    $.ajax({method:'post',
+                            url:'{{=URL('request','update_profile')}}',
+                            data:{'username':username,'bio':bio,'website':website,'newsletter':newsletter,'ethaddress':ethaddress,'image':base64},
+                           success: function(data){window.location.replace("{{=URL('profile',args=user.username_slug)}}");}});
+                });
+            };
+        } else {
+                                $.ajax({method:'post',
+                                url:'{{=URL('request','update_profile')}}',
+                                data:{'username':username,'bio':bio,'website':website,'newsletter':newsletter,'ethaddress':ethaddress,'image':''},
+                                success: function(data){window.location.replace("{{=URL('profile',args=user.username_slug)}}");}});
+        };
+    });
+
+    // Check if website is valid
+    function validateWebsite() {
+        var pattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+        var website = $("#website").val();
+        if (pattern.test(website) || website=="") {
+            $(".updateWebsite").html("").attr("accept","true");
+        } else {
+            $(".updateWebsite").html("<span style='color:red;'>Invalid website</span>").attr("accept","false");
+        }
+    }
+    $(function(){
+        $('#website').keyup(function(){validateWebsite();});
+    });
+
+    // Check if ETH address is valid
+    function validateETHAddress() {
+        var ethaddress = $("#ethaddress").val();
+        if (/^(0x){1}[0-9a-fA-F]{40}$/i.test(ethaddress) || ethaddress=="") {
+            $(".updateETHAddress").html("").attr("accept","true");
+        } else {
+            $(".updateETHAddress").html("<span style='color:red;'>Invalid ETH Address</span>").attr("accept","false");
+        }
+    }
+    $(function(){
+        $('#ethaddress').keyup(function(){validateETHAddress();});
+    });
+</script>
+</html>

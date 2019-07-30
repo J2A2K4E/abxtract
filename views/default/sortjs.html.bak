@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head itemscope itemtype="http://schema.org/Organization" lang="en">
+    {{include 'navbar.html'}}
+    <style>
+    </style>
+</head>
+<body>
+<div class="container-fluid" style="background-color:#f2f3f5;">
+  <div class="row my-container">
+      <div class="col-3 my-col">
+      </div>
+      <div class="col-6 my-col" style="background-color:white;">
+          
+      </div>
+      <div class="col-3 my-col">
+      </div>
+  </div>
+</div>
+</body>
+
+<script>
+
+</script>
+</html>

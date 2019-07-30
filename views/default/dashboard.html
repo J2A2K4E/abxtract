@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+    <html class="no-js" lang="en">
+        <head itemscope itemtype="http://schema.org/Organization" lang="en">
+            <title>Abxtract: Crypto Social Trading</title>
+            {{include 'navbar.html'}}
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/spinner.css')}}"/>
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+            <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/index.css')}}"/>
+            <script type="text/javascript" src="{{=URL('static',STATIC_VERSION,'js/google_loader.js')}}"/></script>
+            <script>
+                google.charts.load('current', {'packages':['corechart', 'controls']});
+                google.charts.setOnLoadCallback(drawVisualization);
+                function drawVisualization() {
+                    var dashboard = new google.visualization.Dashboard(document.getElementById('monero_dashboard'));
+                    var monero_control = new google.visualization.ControlWrapper({
+                        'controlType': 'ChartRangeFilter',
+                        'containerId': 'monero_control',
+                        'options': {
+                            'filterColumnIndex': 0,
+                            'ui': {
+                                'chartType': 'LineChart',
+                                'chartOptions': {
+                                    'chartArea': {'left':'10%','width':'90%'},
+                                    'hAxis': {'baselineColor': 'none', format: "d MMM yy" }
+                                },
+                                'chartView': {'columns': [0, 1]}
+                            },
+                        },
+                    });
+                    var monero_chart1 = new google.visualization.ChartWrapper({
+                        'chartType': 'SteppedAreaChart',
+                        'containerId': 'monero_chart1',
+                        'options': {
+                            'isStacked': true,
+                            'title':'',
+                            'series': {0:{color:'green'},1:{color:'gray'},2:{color:'red'}},
+                            'chartArea': {'left':'10%','height':'80%','width':'90%'},
+                            'hAxis': {'gridlines': {'color': 'none'}, format: "d MMM yy"},
+                            'vAxis': {format: '#\'%\'','gridlines': {'color': 'transparent'}},
+                            'legend': {position:'top','alignment':'center'},
+                            'crosshair': {'trigger':'both'},
+                            'tooltip': {'trigger': 'both'},
+                            'focusTarget': 'category'
+                        },
+                        view: {columns: [0, 2, 3, 4]}
+                    });
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('date','Date');
+                    data.addColumn('number','USD');
+                    data.addColumn('number','Bullish');
+                    data.addColumn('number','Neutral');
+                    data.addColumn('number','Bearish');
+                    data.addRows([
+                        {{for row in moneroHistory:}}
+                        {{row_total=sum(filter(None, [row.bullish_count,row.neutral_count,row.bearish_count]))}}
+                        {{if row_total > 0:}}
+                [new {{='Date('+str(row.price_date.year)+','+str(row.price_date.month-1)+','+str(row.price_date.day)+')'}}, {{=row.price_usd}}, {{=Decimal(row.bullish_count)/row_total*100 if row.bullish_count else 0}}, {{=Decimal(row.neutral_count)/row_total*100 if row.neutral_count else 0}}, {{=Decimal(row.bearish_count)/row_total*100 if row.bearish_count else 0}}],
+                        {{else:}}
+                    [new {{='Date('+str(row.price_date.year)+','+str(row.price_date.month-1)+','+str(row.price_date.day)+')'}}, {{=row.price_usd}}, 0, 0, 0],{{pass}}{{pass}}]);
+                var monero_chart2 = new google.visualization.ChartWrapper({
+                    'chartType': 'LineChart',
+                    'containerId': 'monero_chart2',
+                    'options': {
+                        'title':'',
+                        'series': {0:{'targetAxisIndex':0,color:'#f7931a'}},
+                        'chartArea': {'left':'10%','height':'80%','width':'90%'},
+                        'hAxis': {'gridlines': {'color': 'none'}, format: "d MMM yy"},
+                        'vAxis': {'gridlines': {'color': 'transparent'}},
+                        'vAxes': {
+                            0:{'title':'',viewWindow: {min:data.getColumnRange(1).min}},
+                            1:{'title':'',viewWindow: {min:data.getColumnRange(2).min}}
+                        },
+                        'legend': {position: 'none'},
+                        'interpolateNulls': true,
+                        'crosshair':{'trigger':'both','orientation':'vertical'},
+                        'tooltip': {'trigger':'both'},
+                        'focusTarget': 'category'
+                    },
+                    view: {columns: [0, 1]}
+                });
+                var priceFormatter = new google.visualization.NumberFormat({fractionDigits: 4});
+                priceFormatter.format(data, 1);
+                var percentFormatter = new google.visualization.NumberFormat({fractionDigits: 2,suffix: '%'});
+                var formatter = new google.visualization.DateFormat({pattern: "MMM dd, yyyy"});
+                dashboard.bind([monero_control], [monero_chart1, monero_chart2]);
+                dashboard.draw(data);
+                }
+            </script>
+            <script>
+                google.charts.load('current', {'packages':['corechart', 'controls']});
+                google.charts.setOnLoadCallback(drawVisualization);
+                function drawVisualization() {
+                    var dashboard = new google.visualization.Dashboard(document.getElementById('ethereum_dashboard'));
+                    var ethereum_control = new google.visualization.ControlWrapper({
+                        'controlType': 'ChartRangeFilter',
+                        'containerId': 'ethereum_control',
+                        'options': {
+                            'filterColumnIndex': 0,
+                            'ui': {
+                                'chartType': 'LineChart',
+                                'chartOptions': {
+                                    'chartArea': {'left':'10%','width':'90%'},
+                                    'hAxis': {'baselineColor': 'none', format: "d MMM yy" }
+                                },
+                                'chartView': {'columns': [0, 1]}
+                            }
+                        },
+                    });
+                    var ethereum_chart1 = new google.visualization.ChartWrapper({
+                        'chartType': 'SteppedAreaChart',
+                        'containerId': 'ethereum_chart1',
+                        'options': {
+                            'isStacked': true,
+                            'series': {0:{color:'green'},1:{color:'gray'},2:{color:'red'}},
+                            'chartArea': {'left':'10%','height':'80%','width': '90%'},
+                            'hAxis': {'gridlines': {'color': 'none'}, format: "d MMM yy"},
+                            'vAxis': {format: '#\'%\'','gridlines': {'color': 'transparent'}},
+                            'legend': {position:'top','alignment':'center'},
+                            'crosshair':{'trigger':'both'},
+                            'tooltip': {'trigger': 'both'},
+                            'focusTarget': 'category'
+                        },
+                        view: {columns: [0, 2, 3, 4]}
+                    });
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('date','Date');
+                    data.addColumn('number','USD');
+                    data.addColumn('number','Bullish');
+                    data.addColumn('number','Neutral');
+                    data.addColumn('number','Bearish');
+                    data.addRows([
+                        {{for row in ethereumHistory:}}
+                        {{row_total=sum(filter(None, [row.bullish_count,row.neutral_count,row.bearish_count]))}}
+                        {{if row_total > 0:}}
+                [new {{='Date('+str(row.price_date.year)+','+str(row.price_date.month-1)+','+str(row.price_date.day)+')'}}, {{=row.price_usd}}, {{=Decimal(row.bullish_count)/row_total*100 if row.bullish_count else 0}}, {{=Decimal(row.neutral_count)/row_total*100 if row.neutral_count else 0}}, {{=Decimal(row.bearish_count)/row_total*100 if row.bearish_count else 0}}],
+                        {{else:}}
+                    [new {{='Date('+str(row.price_date.year)+','+str(row.price_date.month-1)+','+str(row.price_date.day)+')'}}, {{=row.price_usd}}, 0, 0, 0],{{pass}}{{pass}}]);
+                var ethereum_chart2 = new google.visualization.ChartWrapper({
+                    'chartType': 'LineChart',
+                    'containerId': 'ethereum_chart2',
+                    'options': {
+                        'series': {0:{'targetAxisIndex':0,color:'#f7931a'}},
+                        'chartArea': {'left':'10%','height':'80%','width':'90%'},
+                        'hAxis': {'gridlines': {'color': 'none'}, format: "d MMM yy"},
+                        'vAxis': {'gridlines': {'color': 'transparent'}},
+                        'vAxes': {
+                            0:{'title':'',viewWindow: {min:data.getColumnRange(1).min}},
+                            1:{'title':'',viewWindow: {min:data.getColumnRange(2).min}}
+                        },
+                        'legend': {position: 'none'},
+                        'interpolateNulls': true,
+                        'crosshair':{'trigger':'both','orientation':'vertical'},
+                        'tooltip': {'trigger':'both'},
+                        'focusTarget': 'category'
+                    },
+                    view: {columns: [0, 1]}
+                });
+                var priceFormatter = new google.visualization.NumberFormat({fractionDigits: 4});
+                priceFormatter.format(data, 1);
+                var percentFormatter = new google.visualization.NumberFormat({fractionDigits: 2,suffix: '%'});
+                var formatter = new google.visualization.DateFormat({pattern: "MMM dd, yyyy"});
+                dashboard.bind([ethereum_control], [ethereum_chart1, ethereum_chart2]);
+                dashboard.draw(data);
+                }
+            </script>
+            <script>
+                    google.charts.load('current', {'packages':['corechart', 'controls']});
+                    google.charts.setOnLoadCallback(drawVisualization);
+                    function drawVisualization() {
+                        var dashboard = new google.visualization.Dashboard(document.getElementById('litecoin_dashboard'));
+                        var litecoin_control = new google.visualization.ControlWrapper({
+                            'controlType': 'ChartRangeFilter',
+                            'containerId': 'litecoin_control',
+                            'options': {
+                                'filterColumnIndex': 0,
+                                'ui': {
+                                    'chartType': 'LineChart',
+                                    'chartOptions': {
+                                        'chartArea': {'left':'10%','width':'90%'},
+                                        'hAxis': {'baselineColor': 'none', format: "d MMM yy" }
+                                    },
+                                    'chartView': {'columns': [0, 1]}
+                                }
+                            },
+                        });
+                        var litecoin_chart1 = new google.visualization.ChartWrapper({
+                            'chartType': 'SteppedAreaChart',
+                            'containerId': 'litecoin_chart1',
+                            'options': {
+                                'isStacked': true,
+                                'series': {0:{color:'green'},1:{color:'gray'},2:{color:'red'}},
+                                'chartArea': {'left':'10%','height':'80%','width': '90%'},
+                                'hAxis': {'gridlines': {'color': 'none'}, format: "d MMM yy"},
+                                'vAxis': {format: '#\'%\'','gridlines': {'color': 'transparent'}},
+                                'legend': {position:'top','alignment':'center'},
+                                'crosshair':{'trigger':'both'},
+                                'tooltip': {'trigger': 'both'},
+                                'focusTarget': 'category'
+                            },
+                            view: {columns: [0, 2, 3, 4]}
+                        });
+                        var data = new google.visualization.DataTable();
+                        data.addColumn('date','Date');
+                        data.addColumn('number','USD');
+                        data.addColumn('number','Bullish');
+                        data.addColumn('number','Neutral');
+                        data.addColumn('number','Bearish');
+                        data.addRows([
+                            {{for row in litecoinHistory:}}
+                            {{row_total=sum(filter(None, [row.bullish_count,row.neutral_count,row.bearish_count]))}}
+                            {{if row_total > 0:}}
+                    [new {{='Date('+str(row.price_date.year)+','+str(row.price_date.month-1)+','+str(row.price_date.day)+')'}}, {{=row.price_usd}}, {{=Decimal(row.bullish_count)/row_total*100 if row.bullish_count else 0}}, {{=Decimal(row.neutral_count)/row_total*100 if row.neutral_count else 0}}, {{=Decimal(row.bearish_count)/row_total*100 if row.bearish_count else 0}}],
+                            {{else:}}
+                        [new {{='Date('+str(row.price_date.year)+','+str(row.price_date.month-1)+','+str(row.price_date.day)+')'}}, {{=row.price_usd}}, 0, 0, 0],{{pass}}{{pass}}]);
+                    var litecoin_chart2 = new google.visualization.ChartWrapper({
+                        'chartType': 'LineChart',
+                        'containerId': 'litecoin_chart2',
+                        'options': {
+                            'series': {0:{'targetAxisIndex':0,color:'#f7931a'}},
+                            'chartArea': {'left':'10%','height':'80%','width':'90%'},
+                            'hAxis': {'gridlines': {'color': 'none'}, format: "d MMM yy"},
+                            'vAxis': {'gridlines': {'color': 'transparent'}},
+                            'vAxes': {
+                                0:{'title':'',viewWindow: {min:data.getColumnRange(1).min}},
+                                1:{'title':'',viewWindow: {min:data.getColumnRange(2).min}}
+                            },
+                            'legend': {position: 'none'},
+                            'interpolateNulls': true,
+                            'crosshair':{'trigger':'both','orientation':'vertical'},
+                            'tooltip': {'trigger':'both'},
+                            'focusTarget': 'category'
+                        },
+                        view: {columns: [0, 1]}
+                    });
+                    var priceFormatter = new google.visualization.NumberFormat({fractionDigits: 4});
+                    priceFormatter.format(data, 1);
+                    var percentFormatter = new google.visualization.NumberFormat({fractionDigits: 2,suffix: '%'});
+                    var formatter = new google.visualization.DateFormat({pattern: "MMM dd, yyyy"});
+                    dashboard.bind([litecoin_control], [litecoin_chart1, litecoin_chart2]);
+                    dashboard.draw(data);
+                    }
+                </script>
+        <style>
+            .row-container{
+                display:flex;
+                flex-direction:row;
+                justify-content: space-around;
+            }
+            .twitter-tweet{
+                display:flex;
+                flex-direction:column;
+            }
+            .sentiment-col{
+                display:flex;
+                flex-direction:column;
+                color: #ffffff;
+                font-weight: bold;
+                justify-content: center;
+                height:100%;
+                margin:10px 0;
+                width:0;
+            }
+            .sentiment-box-small {
+                width: 60px;
+                text-align:center;
+                padding: 1px 10px;
+                border-radius: 1px;
+                height:100%;
+                font-size: .7rem;
+                transform: translate(-130px, 20px);
+                pointer-events: none;
+            }
+        </style>
+        </head>
+        <body>
+            <div class="container-fluid">
+                <div class="row" style="margin: 0; max-width: inherit;">
+                    <div class="col-md-4">
+                        <div style="background-color: #ffffff; padding: 20px;">
+                            <h2>Monero (XMR)</h2>
+                            <div id="monero_dashboard">
+                                <div style="text-align: center;">
+                                    Tweets sentiments over time
+                                </div>
+                                <div id="monero_chart1" style="height: 170px;"></div>
+                                <hr>
+                                <div style="text-align: center;">
+                                    Price of Monero over time
+                                </div>
+                                <div id="monero_chart2" style="height: 170px;"></div>
+                                <hr>
+
+                                <div style="padding: 10px;">
+                                    <div style="margin-bottom: 10px;">
+                                        <div style="margin-bottom: 10px;">
+                                            Range Slider
+                                        </div>
+                                        <div id="monero_control" style='height: 40px;'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="padding: 20px; border-radius: 0px;">
+                            <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                                Most Influential Tweets by Day
+                            </div>
+                            <hr>
+                            {{for row in moneroDescending:}}
+                            <b>{{=row.price_date.strftime('%b %d, %Y')}} UTC</b>
+                            <div class="row-container">
+                                <blockquote class="twitter-tweet" data-cards="hidden"><a href="https://twitter.com/test/status/{{=str(row.influential_tweet_id)}}"></a></blockquote>
+                                <div class="sentiment-col">
+                                    {{if row.influential_tweet_sentiment == 1:}}
+                                    <div class="sentiment-box-small" style="background-color: #8bc34a;">
+                                        Bullish
+                                    </div>
+                                    {{elif row.influential_tweet_sentiment == -1:}}
+                                    <div class="sentiment-box-small" style="background-color: #ef5350;">
+                                        Bearish
+                                    </div>
+                                    {{else:}}
+                                    <div class="sentiment-box-small" style="background-color: #bdbdbd;">
+                                        Neutral
+                                    </div>
+                                    {{pass}}
+                                </div>
+                            </div>
+                            {{pass}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="background-color: #ffffff; padding: 20px;">
+                            <h2>Ethereum (ETH)</h2>
+                            <div id="ethereum_dashboard">
+                                <div style="text-align: center;">
+                                    Tweets sentiments over time
+                                </div>
+                                <div id="ethereum_chart1" style="height: 170px;"></div>
+                                <hr>
+                                <div style="text-align: center;">
+                                    Price of Ethereum over time
+                                </div>
+                                <div id="ethereum_chart2" style="height: 170px;"></div>
+                                <hr>
+
+                                <div style="padding: 10px;">
+                                    <div style="margin-bottom: 10px;">
+                                        <div style="margin-bottom: 10px;">
+                                            Range Slider
+                                        </div>
+                                        <div id="ethereum_control" style='height: 40px;'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="padding: 20px; border-radius: 0px;">
+                            <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                                Most Influential Tweets by Day
+                            </div>
+                            <hr>
+                            {{for row in ethereumDescending:}}
+                            <b>{{=row.price_date.strftime('%b %d, %Y')}} UTC</b>
+                            <div class="row-container">
+                                <blockquote class="twitter-tweet" data-cards="hidden"><a href="https://twitter.com/test/status/{{=str(row.influential_tweet_id)}}"></a></blockquote>
+                                <div class="sentiment-col">
+                                    {{if row.influential_tweet_sentiment == 1:}}
+                                    <div class="sentiment-box-small" style="background-color: #8bc34a;">
+                                        Bullish
+                                    </div>
+                                    {{elif row.influential_tweet_sentiment == -1:}}
+                                    <div class="sentiment-box-small" style="background-color: #ef5350;">
+                                        Bearish
+                                    </div>
+                                    {{else:}}
+                                    <div class="sentiment-box-small" style="background-color: #bdbdbd;">
+                                        Neutral
+                                    </div>
+                                    {{pass}}
+                                </div>
+                            </div>
+                            {{pass}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="background-color: #ffffff; padding: 20px;">
+                            <h2>Litecoin (LTC)</h2>
+                            <div id="litecoin_dashboard">
+                                <div style="text-align: center;">
+                                    Tweets sentiments over time
+                                </div>
+                                <div id="litecoin_chart1" style="height: 170px;"></div>
+                                <hr>
+                                <div style="text-align: center;">
+                                    Price of Litecoin over time
+                                </div>
+                                <div id="litecoin_chart2" style="height: 170px;"></div>
+                                <hr>
+
+                                <div style="padding: 10px;">
+                                    <div style="margin-bottom: 10px;">
+                                        <div style="margin-bottom: 10px;">
+                                            Range Slider
+                                        </div>
+                                        <div id="litecoin_control" style='height: 40px;'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="padding: 20px; border-radius: 0px;">
+                            <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">
+                                Most Influential Tweets by Day
+                            </div>
+                            <hr>
+                            {{for row in litecoinDescending:}}
+                            <b>{{=row.price_date.strftime('%b %d, %Y')}} UTC</b>
+                            <div class="row-container">
+                                <blockquote class="twitter-tweet" data-cards="hidden"><a href="https://twitter.com/test/status/{{=str(row.influential_tweet_id)}}"></a></blockquote>
+                                <div class="sentiment-col">
+                                    {{if row.influential_tweet_sentiment == 1:}}
+                                    <div class="sentiment-box-small" style="background-color: #8bc34a;">
+                                        Bullish
+                                    </div>
+                                    {{elif row.influential_tweet_sentiment == -1:}}
+                                    <div class="sentiment-box-small" style="background-color: #ef5350;">
+                                        Bearish
+                                    </div>
+                                    {{else:}}
+                                    <div class="sentiment-box-small" style="background-color: #bdbdbd;">
+                                        Neutral
+                                    </div>
+                                    {{pass}}
+                                </div>
+                            </div>
+                            {{pass}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            {{include 'footer.html'}}
+        </body>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</html>

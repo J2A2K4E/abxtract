@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head itemscope itemtype="http://schema.org/Organization" lang="en">
+    <title>{{=coin.name}} ({{=coin.symbol}}) | ViewBase</title>
+    <meta property="og:title" itemprop="name" content="{{=coin.name}} ({{=coin.symbol}}) | ViewBase">
+    <meta name="twitter:title" content="{{=coin.name}} ({{=coin.symbol}}) | ViewBase">
+    <meta property="og:description" itemprop="description" name="description" content="Discuss {{=coin.name}} and view price, ranking, and other cryptocurrency data.">
+    <meta name="twitter:description" content="Discuss {{=coin.name}} and view price, ranking, and other cryptocurrency data.">
+    <meta name="twitter:image:src" content="https://www.viewbase.com/static/_0.0.0/image_small/{{=coin.image_small}}">
+    <meta property="og:image" itemprop="image" name="image" content="https://www.viewbase.com/static/_0.0.0/image_small/{{=coin.image_small}}">
+    <link property="og:url" itemprop="url" rel="canonical" href="{{=URL('coin',custom_slug,host=True)}}"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta property="og:site_name" content="ViewBase">
+    <meta property="fb:app_id" content="457354494759406">
+    <meta property="og:type" content="article">
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/spinner.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+    {{if coin.is_exchange=='T':}}
+    <script type="text/javascript" src="{{=URL('static',STATIC_VERSION,'js/google_loader.js')}}"/></script>
+    <script>
+        google.charts.load('current', {'packages':['corechart', 'controls']});
+        google.charts.setOnLoadCallback(drawVisualization);
+
+        function drawVisualization() {
+            var dashboard = new google.visualization.Dashboard(
+                document.getElementById('dashboard'));
+
+            var control = new google.visualization.ControlWrapper({
+                'controlType': 'ChartRangeFilter',
+                'containerId': 'control',
+                'options': {
+                    'filterColumnIndex': 0,
+                    'ui': {
+                        'chartType': 'LineChart',
+                        'chartOptions': {
+                            'chartArea': {'left':'7%','width':'77%'},
+                            'hAxis': {'baselineColor': 'none', format: "d MMM yy" }
+                        },
+                        'chartView': {'columns': [0, 3]}
+                    }
+                },
+                // Initial range: 2012-02-09 to 2012-03-20.
+                //      'state': {'range': {'start': new Date(2012, 1, 9), 'end': new Date(2012, 2, 20)}}
+            });
+
+            var chart1 = new google.visualization.ChartWrapper({
+                'chartType': 'SteppedAreaChart',
+                'containerId': 'chart1',
+                'options': {
+                    'isStacked': true,
+                    'title':'Percentage of Token Supply on Exchanges',
+                    // Use the same chart area width as the control for axis alignment.
+                    'chartArea': {'left':'7%','height':'80%','width': '77%'},
+                    'hAxis': {'gridlines': {'color': 'none'}, format: "d MMM yy"},
+                    'vAxis': {format: '#\'%\'','gridlines': {'color': 'transparent'}},
+                    'legend': {},
+                    'series': {0: {'type': 'line'}},
+                    'crosshair':{'trigger':'both'}
+                },
+                view: {columns: [0{{=columnString}}]}
+            });
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'Date');
+            data.addColumn('number', 'BTC');
+            data.addColumn('number', 'ETH');
+            data.addColumn('number', 'Total');
+            {{for exchange in exchangeList:}}data.addColumn('number','{{=exchange}}');{{pass}}
+
+            data.addRows([{{for row in balanceHistory:}}
+                          [new {{='Date('+str(row[0].year)+','+str(row[0].month-1)+','+str(row[0].day)+')'}},{{=row[1]}},{{=row[2]}},{{=row[3]/supplyTotal*100}}{{for j in row[4:]:}},{{=j/supplyTotal*100}}{{pass}}],{{pass}}]);
+
+            var chart2 = new google.visualization.ChartWrapper({
+                'chartType': 'LineChart',
+                'containerId': 'chart2',
+                'options': {
+                    'title':'Token Price',
+                    'series': {0:{'targetAxisIndex':0,color:'#f7931a'},1:{'targetAxisIndex':1,color:'#828384'}},
+                    // Use the same chart area width as the control for axis alignment.
+                    'chartArea': {'left':'7%','height':'80%','width':'77%'},
+                    'hAxis': {'textPosition':'none','gridlines':{'color': 'none'}},
+                    'vAxis': {'textPosition':'none','gridlines':{'color':'transparent'}},
+                    'vAxes': {
+                                0:{'title':'',viewWindow: {min:data.getColumnRange(1).min}},
+                                1:{'title':'',viewWindow: {min:data.getColumnRange(2).min}}
+                             },
+                    'legend': {'position':'in', 'alignment':'center'},
+                    'interpolateNulls': true,
+                    'crosshair':{'trigger':'both'},
+                },
+                view: {columns: [0, 1, 2]}
+            });
+
+            var priceFormatter = new google.visualization.NumberFormat({fractionDigits: 7});
+            priceFormatter.format(data, 1);
+            priceFormatter.format(data, 2);
+            var percentFormatter = new google.visualization.NumberFormat({fractionDigits: 2,suffix: '%'});
+            {{for col in range(3, columnStart+1):}}percentFormatter.format(data, {{=col}});{{pass}}
+
+            /* Change the format of the date column, used in chart, but not chart range filter */
+            var formatter = new google.visualization.DateFormat({pattern: "MMM dd, yyyy"});
+            //     formatter.format(data, 0);
+            dashboard.bind(control, [chart1, chart2]);
+            document.getElementsByClassName('chart-loader')[0].style.display = "none";
+            dashboard.draw(data);
+        }
+    </script>
+    {{pass}}
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-4 order-1 order-lg-1 col-side">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <div class="media">
+                                <img class="align-self-center mr-3" src="https://www.viewbase.com/static/_0.0.0/image_small/{{=coin.image_small}}">
+                                <div class="media-body">
+                                    <h3 class="mt-0" style="display:inline;">{{=coin.name}} </h3>
+                                    <span style="display:inline;"><b>({{=coin.symbol}})</b></span>
+                                </div>
+                            </div>
+                        </h5>
+                        <p class="card-text">
+                            <h5 style="display:inline;">${{='{0:,.6f}'.format(coin.usd_price) if coin.usd_price else '-'}}</h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <h5 style="display:inline;{{='color:green' if coin.usd_percent_change_24h>0 else 'color:red'}}">
+                                ({{='{0:.2f}'.format(coin.usd_percent_change_24h) if coin.usd_percent_change_24h else '-'}}%)
+                            </h5>
+                        </p>
+                        <table class="table table-responsive-lg main-table coin-table">
+                            <tbody>
+                                {{if coin.is_exchange=='T':}}
+                                <tr>
+                                    <th scope="row" class="coin-label">
+                                        % Supply on Exchange <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="Percentage of total supply deposited on exchange wallets"></i>
+                                    </th>
+                                    <td class="right">{{='{0:,.1f}'.format(totalBalanceList[0]/supplyTotal*100)}}%</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="coin-label">
+                                        Supply on Exchange <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="Tokens deposited on exchange wallets"></i>
+                                    </th>
+                                    <td class="right">{{='{0:,.0f}'.format(totalBalanceList[0]) if supplyTotal else ''}} {{=coin.symbol}}</td>
+                                </tr>
+                                {{pass}}
+                                <tr>
+                                    <th scope="row" class="coin-label">Circulating Supply</th>
+                                    <td class="right">{{='{0:,.0f}'.format(coin.circulating_supply) if coin.circulating_supply else ''}} {{=coin.symbol}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="coin-label">Total Supply</th>
+                                    <td class="right">{{='{0:,.0f}'.format(coin.total_supply) if coin.total_supply else ''}} {{=coin.symbol}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="coin-label">Market Cap</th>
+                                    <td class="right">${{='{0:,.0f}'.format(coin.usd_market_cap) if coin.usd_market_cap else ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="table-footnote" colspan="2">Powered by <a href="https://www.coingecko.com" target="_blank"><img src="https://www.viewbase.com/viewbase/static/_0.0.0/images/coingecko.png" alt="Coingecko"></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{if coin.is_exchange=='T':}}
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="section-header">
+                            Supply on Exchange Wallets <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="Breakdown of tokens deposited on various exchange wallets"></i>
+                        </h2>
+                        <table class="table table-responsive-lg coin-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="coin-label">Exchange</th>
+                                    <th scope="col" class="right coin-label">Token Balance</th>
+                                    <th scope="col" class="right coin-label">% 1d</th>
+                                    <th scope="col" class="right coin-label">% 7d</th>
+                                    <th scope="col" class="right coin-label">% 30d</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{i = 0}}
+                                {{for group in groups:}}
+                                <tr>
+                                    <td class="">
+                                        {{=group.group}}
+                                    </td>
+                                    <td class="right">
+                                        {{="{:,.0f}".format(groupBalanceList[0][i])}} {{=coin.symbol}}
+                                    </td>
+                                    <td class="right">
+                                        {{=XML(getReturns(groupBalanceList[0][i],groupBalanceList[1][i]))}}
+                                    </td>
+                                    <td class="right">
+                                        {{=XML(getReturns(groupBalanceList[0][i],groupBalanceList[2][i]))}}
+                                    </td>
+                                    <td class="right">
+                                        {{=XML(getReturns(groupBalanceList[0][i],groupBalanceList[3][i]))}}
+                                    </td>
+                                </tr>
+                                {{i += 1}}
+                                {{pass}}
+                            </tbody>
+                            <thead>
+                                <tr>
+                                    <th>Total</th>
+                                    <th class="right">
+                                        {{="{:,.0f}".format(totalBalanceList[0])}} {{=coin.symbol}}
+                                    </th>
+                                    <th class="right">
+                                        {{=XML(getReturns(totalBalanceList[0],totalBalanceList[1]))}}
+                                    </th>
+                                    <th class="right">
+                                        {{=XML(getReturns(totalBalanceList[0],totalBalanceList[2]))}}
+                                    </th>
+                                    <th class="right">
+                                        {{=XML(getReturns(totalBalanceList[0],totalBalanceList[3]))}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="table-footnote" colspan="4">Powered by <a href="https://www.etherscan.io" target="_blank"><img src="https://www.viewbase.com/viewbase/static/_0.0.0/images/etherscan.png" alt="Etherscan"></a></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{pass}}
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">
+                            {{if coin.website:}}
+                            <a class="btn" href="{{=coin.website}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Homepage">
+                                <i class="fas fa-home fa-2x"></i></a>{{pass}}
+                            {{if coin.explorer:}}
+                            <a class="btn" href="{{=coin.explorer}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Explorer">
+                                <i class="fas fa-search fa-2x"></i></a>{{pass}}
+                            {{if coin.github:}}
+                            <a class="btn" href="{{=coin.github}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Github">
+                                <i class="fab fa-github fa-2x"></i></a>{{pass}}
+                            {{if coin.twitter:}}
+                            <a class="btn" href="{{=coin.twitter}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Twitter">
+                                <i class="fab fa-twitter fa-2x"></i></a>{{pass}}
+                            {{if coin.telegram:}}
+                            <a class="btn" href="{{=coin.telegram}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Telegram">
+                                <i class="fab fa-telegram fa-2x"></i></a>{{pass}}
+                            {{if coin.discord:}}
+                            <a class="btn" href="{{=coin.discord}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Discord">
+                                <i class="fab fa-discord fa-2x"></i></a>{{pass}}
+                            {{if coin.bitcointalk:}}
+                            <a class="btn" href="{{=coin.bitcointalk}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Bitcointalk">
+                                <i class="fab fa-bitcoin fa-2x"></i></a>{{pass}}
+                            {{if coin.medium:}}
+                            <a class="btn" href="{{=coin.medium}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Medium">
+                                <i class="fab fa-medium fa-2x"></i></a>{{pass}}
+                            {{if coin.reddit:}}
+                            <a class="btn" href="{{=coin.reddit}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Reddit">
+                                <i class="fab fa-reddit fa-2x"></i></a>{{pass}}
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Similar <a href="{{=URL('sector',args=sector_slug,host=True)}}"><span class="badge badge-secondary">{{=sector_name}}</span></a>
+                        </h5>
+                        <table class="table">
+                            <tbody>
+                                {{for i in range(0, len(competitors)):}}
+                                <tr class='clickable-row' data-href="{{=URL('default','coin',args=competitors[i].custom_slug)}}">
+                                    <td>
+                                        <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/{{=competitors[i]['image_thumb']}}">
+                                        <a href="{{=URL('default','coin',args=competitors[i].custom_slug)}}">{{=competitors[i].name}}</a>
+                                    </td>
+                                    <td>{{=competitors[i].symbol}}</td>
+                                </tr>
+                                {{pass}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-8 order-3 order-lg-2 my-col col-main">
+                {{if coin.is_exchange=='T':}}
+                <div class="chart-loader">
+                    <div class="lds-spinner">
+                        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    </div>
+                </div>
+                <div id="dashboard">
+                    <div id="chart1"></div>
+                    <div id="chart2"></div>
+                    <div id="control" style='height:50px;'></div>
+                </div>
+                {{pass}}
+                <div class="container-submit">
+                    <div class="col-avatar">
+                        {{if auth.user:}}
+                        <a href="{{=URL('profile',args=[auth.user.username_slug],host=True)}}">
+                            <img class="avatar rounded-circle" src="{{=get_avatar_url(auth.user.avatar)}}">
+                        </a>
+                        {{else:}}
+                        <div class="avatar-container">
+                            <i style="" class="fas fa-user avatar-icon"></i>
+                        </div>
+                        {{pass}}
+                    </div>
+                    <div class="col-message">
+                        <textarea class="form-control main-form" onkeyup="textAreaAdjust(this)" rows="2" name="body" id="body" minlength="4" maxlength="999"  placeholder="{{='Write a comment...' if auth.user else 'Please login to comment'}}"  data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                        <div id="link-preview" class="link-preview">
+                            <a class="link-preview-close" href="#"><i class="fas fa-times-circle"></i></a>
+                            <div class="link-image-container">
+                                <img id="link-image" class="link-image" src="">
+                            </div>
+                            <a target="_blank" href="#" class="link-nohover">
+                                <span class="link-text-container">
+                                    <span id="link-title" class="link-title"></span>
+                                    <span id="link-desc" class="link-desc"></span>
+                                    <span id="link-url" class="link-url"></span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="preview-wrapper">
+                            <div class="preview-text"><b>Attached Image:</b></div>
+                            <img class="preview-image" src="#" alt="your image"/>
+                            <i  class="preview-close fas fa-times-circle"></i>
+                        </div>
+                        <div class="loader">
+                            <div class="lds-spinner">
+                                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                            </div>
+                        </div>
+                        <div class="preview-buttons">
+                            {{if auth.user:}}
+                            <button type="submit" class="btn btn-success" id="my-submit">Submit</button>
+                            {{else:}}
+                            <button class="btn btn-success" data-toggle="modal" data-target="{{=registerModal}}">Submit</button>
+                            {{pass}}
+                            <button type="button" class="btn btn-light btn-border">
+                                <label class="upload-btn" for="file"><i class="fas fa-image"></i> Upload Image</label>
+                            </button>
+                            <input class="preview-file" id="file" type="file"/>
+                        </div>
+                    </div>
+                </div>
+    {{for comment in comments:}}
+            <div class="container-post">
+                <div class="post-header">
+                    <div class="col-avatar">
+                        <a href="{{=URL('profile',args=comment['username_slug'],host=True)}}">
+                            <img class="avatar-container rounded-circle" src="{{=get_avatar_url(comment['avatar'])}}">
+                        </a>
+                    </div>
+                    <div class="col-message">
+                        <div class="message-header">
+                            <span class="message-header-text">
+                                <a href="{{=URL('profile',args=comment['username_slug'],host=True)}}"><b>{{=comment['username']}}</b></a> · 
+                                <span class="message-header-desc">{{=comment['description']}}</span>
+                                <span class="message-header-date text-grey">
+                                    <br>Posted 
+                                    {{if comment['coin'] != None and comment['coin'] != '':}}
+                                    in <a class="link-grey" href="{{=URL('default','coin',args=comment['custom_slug'])}}">{{=comment['name']}}</a> 
+                                    {{pass}}
+                                    <a class="link-grey" href="{{=URL('comment',args=num_encode(comment['id']+10000))}}">{{=prettydate(comment['created_on'])}}</a>
+                                </span>
+                            </span>
+                            <div class="dropdown message-header-dropdown">
+                                <a style="padding:0;color:#999;" class="btn" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" id="{{=comment['id']}}" author="{{=comment['created_by']}}">
+                                    {{if auth.user:}}{{if comment['created_by']==auth.user.id:}}
+                                    <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                                    {{pass}}{{pass}}
+                                    <a class="dropdown-item report">Report</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-body" id="{{=comment['id']}}">
+                    {{if comment['created_by']==4:}}
+                    {{=XML(comment['body'].replace('\n','<br/>'), sanitize=False)}}
+                    {{else:}}
+                    {{=XML(comment['body'].replace('\n','<br/>'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES)}}
+                    {{pass}}
+                </div>
+                {{if comment['image_url']:}}
+                <a href="{{=comment['image_url']}}" data-lity>
+                    <img class="message-image" data-toggle="modal" data-target="#modal-{{=comment['id']}}" src="{{=comment['image_url']}}" alt="">
+                </a>
+                {{pass}}
+                {{if not((comment['link_url'] is None) | (comment['link_url'] == "")):}}
+                <div class="link-preview">
+                    {{if comment['link_image'] is not None:}}
+                    <div class="link-image-container">
+                        <img class="link-image" src="{{=comment['link_image']}}">
+                    </div>
+                    {{pass}}
+                    {{if comment['link_url'] is not None:}}
+                    <a target="_blank" href="{{=comment['link_url']}}" class="link-nohover">
+                        <span class="link-text-container">
+                            <span class="link-title">
+                                {{=comment['link_title']}}
+                            </span>
+                            <span class="link-desc">
+                                {{=comment['link_desc']}}
+                            </span>
+                            <span class="link-url">
+                                {{=comment['link_url']}}
+                            </span>
+                        </span>
+                    </a>
+                    {{pass}}
+                </div>
+                {{pass}}
+                <div class="container-buttons">
+                    <button type="button" class="btn btn-light {{=comment_voted(comment['id'],auth.user.id,1) if auth.user else ""}} vote like" id="{{=comment['id']}}" data-toggle="tooltip" data-placement="top" title="Like">
+                        <i class="far fa-thumbs-up vote-icon" data-toggle="modal" data-target="{{=registerModal}}"></i>
+                        <span id="score" class="vote-score">{{if comment['like']>0:}}{{=comment['like']}}{{pass}}</span>
+                    </button>
+                    <button type="button" class="btn btn-light {{=comment_voted(comment['id'],auth.user.id,-1) if auth.user else ""}} vote dislike" id="{{=comment['id']}}" data-toggle="tooltip" data-placement="top" title="Dislike">
+                        <i class="far fa-thumbs-down vote-icon" data-toggle="modal" data-target="{{=registerModal}}"></i>
+                        <span id="score" class="vote-score">{{if comment['dislike']>0:}}{{=comment['dislike']}}{{pass}}</span>
+                    </button>
+                    <button type="button" class="btn btn-light round-btn reply-btn" data-toggle="collapse" data-target="#collapse{{=comment['id']}}">
+                        <i class="far fa-comment btn-icon"></i> 
+                        <span class="btn-text">
+                            Reply 
+                            {{if comment['reply_count']:}}· {{=comment['reply_count']}}{{pass}}
+                        </span>
+                    </button>
+                    <button type="button" class="btn btn-light round-btn" id="dropdownMenuButton" data-toggle="dropdown">
+                        <i class="far fa-share-square btn-icon"></i> 
+                        <span class="btn-text">
+                            Share
+                        </span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={{=quote_plus(URL('comment',args=comment['id'],host=True))}}','facebook-share-dialog','width=626,height=436');return false;">
+                            <i class="fab fa-facebook"></i> Share on Facebook
+                        </a>
+                        <a class="dropdown-item" href="#" onclick="window.open('https://twitter.com/share?text={{=quote_plus(cleanhtml(str(XML(comment['body']))))[:210]}}...&amp;url={{=quote_plus(URL('comment',args=comment['id'],host=True))}}','Twitter-dialog','width=626,height=436');return false;">
+                            <i class="fab fa-twitter-square"></i> Share on Twitter
+                        </a>
+                        <a class="dropdown-item CopyLink" href="#" id="{{=comment['id']}}" data-toggle="modal" data-target="#CopyLinkModal"><i class="fas fa-copy"></i> Copy link to post</a>
+                    </div>
+                </div>
+                <!-- Start of collapsed dropdown -->
+                <div class="collapse container-collapse" id="collapse{{=comment['id']}}">
+                    <div class="container-reply">
+                        <div class="col-avatar"></div>
+                        <div class="col-message">
+                            {{if auth.user and not auth.has_membership('banned'):}}
+                            {{=form.custom.begin}}
+                            {{form.custom.widget.parent["_value"] = comment['id']}}
+                            {{form.custom.widget.parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.parent}}
+                            {{form.custom.widget.parent_author["_value"] = comment['created_by']}}
+                            {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                            {{=form.custom.widget.parent_author}}
+                            {{form.custom.widget.root_parent["_value"] = comment['id']}}
+                            {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.root_parent}}
+                            {{form.custom.widget.body["_class"] = "form-control reply-textarea"}}
+                            {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                            {{=form.custom.widget.body}}
+                            {{form.custom.submit["_class"] = "btn btn-success btn-post"}}
+                            {{form.custom.submit["_value"] = "Post"}}
+                            {{=form.custom.submit}}
+                            {{=form.custom.end}}
+                            {{else:}}
+                            <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                        {{pass}}
+                    </div>
+                </div>
+                {{primary_children = db.executesql("SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.parent="+str(comment['id'])+" ORDER BY a.like DESC;", as_dict = True)}}
+                {{for primary_child in primary_children:}}
+                <div class="container-reply">
+                    <div class="col-avatar">
+                        <a href="{{=URL('profile',args=[primary_child['username_slug']],host=True)}}">
+                            <img class="avatar-reply rounded-circle" src="{{=get_avatar_url(primary_child['avatar'])}}">
+                        </a>
+                    </div>
+                    <div class="col-message">
+                        <div class="message-header">
+                            <span class="reply-header-text">
+                                <a href="{{=URL('profile',args=[primary_child['username_slug']],host=True)}}"><b>{{=primary_child['username']}}</b></a>
+                            </span>
+                            <div class="message-header-dropdown">
+                                {{=prettydate(primary_child['created_on'])}}
+                            </div>
+                        </div>
+                        <div class="reply-body">
+                            {{=XML(primary_child['body'].replace('\n','<br/>'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES)}}
+                        </div>
+                        <div class="reply-buttons">
+                            <span class="child-vote like {{=comment_voted(primary_child['id'],auth.user.id,1) if auth.user else ""}}" id="{{=primary_child['id']}}" data-toggle="modal" data-target="{{=registerModal}}">
+                                <span class="icon-container">
+                                    <i class="icon fas fa-thumbs-up"></i>
+                                </span>
+                                <span id="score" class="icon-score">{{if primary_child['like']>0:}}{{=primary_child['like']}}{{pass}}</span>
+                            </span>
+                            <span class="child-vote dislike {{=comment_voted(primary_child['id'],auth.user.id,-1) if auth.user else ""}}" id="{{=primary_child['id']}}" data-toggle="modal" data-target="{{=registerModal}}">
+                                <span class="icon-container">
+                                    <i class="icon fas fa-thumbs-down"></i>
+                                </span>
+                                <span id="score" class="icon-score">{{if primary_child['dislike']>0:}}{{=primary_child['dislike']}}{{pass}}</span>
+                            </span>
+                            <span class="icon-container" data-toggle="collapse" data-target="#collapse{{=primary_child['id']}}">
+                                <i class="icon fas fa-reply"></i>
+                            </span>
+                            <span class="icon-score"></span>
+                            <span class="dropdown">
+                                <span class="icon-container" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                                    <i class="icon fas fa-ellipsis-h"></i>
+                                </span>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="{{=primary_child['id']}}">
+                                    {{if auth.user:}}{{if primary_child['created_by']==auth.user.id:}}
+                                    <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal" style="cursor:pointer;">Delete</a>
+                                    {{pass}}{{pass}}
+                                    <a class="dropdown-item report">Report</a>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="collapse reply-form" id="collapse{{=primary_child['id']}}">
+                            {{if auth.user and not auth.has_membership('banned'):}}
+                            {{=form.custom.begin}}
+                            {{form.custom.widget.parent["_value"] = primary_child['id']}}
+                            {{form.custom.widget.parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.parent}}
+                            {{form.custom.widget.parent_author["_value"] = primary_child['created_by']}}
+                            {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                            {{=form.custom.widget.parent_author}}
+                            {{form.custom.widget.root_parent["_value"] = comment['id']}}
+                            {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.root_parent}}
+                            {{form.custom.widget.secondary_parent["_value"] = primary_child['id']}}
+                            {{form.custom.widget.secondary_parent["_class"] = "d-none"}}
+                            {{=form.custom.widget.secondary_parent}}
+                            {{form.custom.widget.body["_class"] = "form-control reply-textarea"}}
+                            {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                            {{=form.custom.widget.body}}
+                            {{form.custom.submit["_class"] = "btn btn-success btn-post"}}
+                            {{form.custom.submit["_value"] = "Post"}}
+                            {{=form.custom.submit}}
+                            {{=form.custom.end}}
+                            {{else:}}
+                            <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                        {{pass}}
+                    </div>
+                </div>
+            </div>
+            {{secondary_children = db.executesql("SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.secondary_parent="+str(primary_child['id'])+" ORDER BY a.like DESC;", as_dict = True)}}
+            {{for secondary_child in secondary_children:}}
+            <div class="container-sec-reply">
+                <div class="col-avatar">
+                    <a href="{{=URL('profile',args=[secondary_child['username_slug']],host=True)}}">
+                        <img class="avatar-reply rounded-circle" src="{{=get_avatar_url(secondary_child['avatar'])}}">
+                    </a>
+                </div>
+                <div class="col-message">
+                    <div class="message-header">
+                        <span class="reply-header-text">
+                            <a href="{{=URL('profile',args=[secondary_child['username_slug']],host=True)}}"><b>{{=secondary_child['username']}}</b></a> · 
+                            <span class="message-header-date">
+                                <i class="fas fa-reply"></i> {{=XML(author(secondary_child['parent_author']))}}
+                            </span>
+                        </span>
+                        <div class="message-header-dropdown">
+                            {{=prettydate(secondary_child['created_on'])}}
+                        </div>
+                    </div>
+                    <div class="reply-body">
+                        {{=XML(secondary_child['body'].replace('\n','<br />'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES)}}
+                    </div>
+                    <div class="reply-buttons">
+                        <span class="child-vote like {{=comment_voted(secondary_child['id'],auth.user.id,1) if auth.user else ""}}" id="{{=secondary_child['id']}}" data-toggle="modal" data-target="{{=registerModal}}">
+                            <span class="icon-container">
+                                <i class="icon fas fa-thumbs-up"></i>
+                            </span>
+                            <span id="score" class="icon-score">{{if secondary_child['like']>0:}}{{=secondary_child['like']}}{{pass}}</span>
+                        </span>
+                        <span class="child-vote dislike {{=comment_voted(secondary_child['id'],auth.user.id,-1) if auth.user else ""}}" id="{{=secondary_child['id']}}" data-toggle="modal" data-target="{{=registerModal}}">
+                            <span class="icon-container">
+                                <i class="icon fas fa-thumbs-down"></i>
+                            </span>
+                            <span id="score" class="icon-score">{{if secondary_child['dislike']>0:}}{{=secondary_child['dislike']}}{{pass}}</span>
+                        </span>
+                        <span class="icon-container" data-toggle="collapse" data-target="#collapse{{=secondary_child['id']}}">
+                            <i class="icon fas fa-reply"></i>
+                        </span>
+                        <span class="icon-score"></span>
+                        <span class="dropdown">
+                            <span class="icon-container" id="dropdownMenuLink" data-toggle="dropdown">
+                                <i class="icon fas fa-ellipsis-h"></i>
+                            </span>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="{{=secondary_child['id']}}">
+                                {{if auth.user:}}{{if secondary_child['created_by']==auth.user.id:}}
+                                <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                                {{pass}}{{pass}}
+                                <a class="dropdown-item report">Report</a>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="collapse reply-form" id="collapse{{=secondary_child['id']}}">
+                        {{if auth.user and not auth.has_membership('banned'):}}
+                        {{=form.custom.begin}}
+                        {{form.custom.widget.parent["_value"] = secondary_child['id']}}
+                        {{form.custom.widget.parent["_class"] = "d-none"}}
+                        {{=form.custom.widget.parent}}
+                        {{form.custom.widget.parent_author["_value"] = secondary_child['created_by']}}
+                        {{form.custom.widget.parent_author["_class"] = "d-none"}}
+                        {{=form.custom.widget.parent_author}}
+                        {{form.custom.widget.root_parent["_value"] = comment['id']}}
+                        {{form.custom.widget.root_parent["_class"] = "d-none"}}
+                        {{=form.custom.widget.root_parent}}
+                        {{form.custom.widget.secondary_parent["_value"] = primary_child['id']}}
+                        {{form.custom.widget.secondary_parent["_class"] = "d-none"}}
+                        {{=form.custom.widget.secondary_parent}}
+                        {{form.custom.widget.body["_class"] = "form-control reply-textarea"}}
+                        {{form.custom.widget.body["_placeholder"] = "Write a comment..."}}
+                        {{=form.custom.widget.body}}
+                        {{form.custom.submit["_class"] = "btn btn-success btn-post"}}
+                        {{form.custom.submit["_value"] = "Post"}}
+                        {{=form.custom.submit}}
+                        {{=form.custom.end}}
+                        {{else:}}
+                        <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                    {{pass}}
+                </div>
+            </div>
+            </div>
+        {{pass}}
+        {{pass}}
+    </div>
+    <!-- End of collapsed dropdown -->
+    </div>
+{{pass}}
+<div style="text-align:center;margin-top:10px;">
+    {{if int(page)>0:}}
+    <a href="{{=URL('coin',custom_slug,vars=dict(page=int(page)-1),host=True)}}" class="btn btn-success round-btn">
+        <i class="fas fa-caret-left"></i> Previous
+    </a>
+    {{pass}}
+    {{if comment_count > last_comment_on_page:}}
+    <a href="{{=URL('coin',custom_slug,vars=dict(page=int(page)+1),host=True)}}" class="btn btn-success round-btn">Next <i class="fas fa-caret-right"></i></a>
+    {{pass}}
+</div>
+                {{if len(comments) < 1 and coin.twitter:}}
+                <div class="card">
+                    <div class="card-body">
+                        <a class="twitter-timeline" href="{{=coin.twitter}}" data-tweet-limit="3"></a>
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                </div>
+                {{pass}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{include 'footer.html'}}
+</body>
+{{include 'comment.html'}}
+</html>

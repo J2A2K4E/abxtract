@@ -1,0 +1,281 @@
+import requests
+import datetime
+from random import randint
+try:
+  import simplejson as json
+except:
+  import json
+import cfscrape
+import lxml.html
+from io import BytesIO
+from PIL import Image
+import base64
+
+
+# Get latest replies
+@auth.requires(not auth.has_membership('banned'))
+def getReplies():
+    auth.user.update(count_new_reply=0)
+    db(db.auth_user.id == auth.user.id).update(count_new_reply=0)
+    replies = db(db.comment.parent_author==auth.user.id).select(orderby=~db.comment.created_on,limitby=(0,10))
+    repliesHTML = ""
+    for reply in replies:
+        user = db.auth_user(reply.created_by)
+        repliesHTML += "<a class='dropdown-item reply-container' href='"+URL('default','comment',args=num_encode(reply.id+10000))+"'><div class='reply-avatar'><img class='avatar-container rounded-circle' src='"+get_avatar_url(reply.created_by)+"'></div><div class='reply-text'><b>"+user.username+"</b> replied "+prettydate(reply.created_on)+"</div></a>"
+    return repliesHTML
+
+# Edit blog
+@auth.requires(not auth.has_membership('banned'))
+def request_edit_blog():
+    vars = request.post_vars
+    blog = db((db.blog.id==vars.id)&(db.blog.created_by==auth.user.id)).select().first()
+    if blog:
+        # Generate category
+        category = 'General'
+        if str(vars.category)=='1':
+            category = 'Market Insights'
+        elif str(vars.category)=='2':
+            category = 'News and Announcements'
+        elif str(vars.category)=='3':
+            category = 'Reviews'
+        # Generate website_slug
+        website_slug = blog.website_slug
+        new_website_slug = IS_SLUG()(vars.title)[0]
+        if new_website_slug != website_slug:
+            # Check if blogs with same website_slug exist
+            website_slug = new_website_slug+'-'+str(randint(0,99)) if db(db.blog.website_slug==new_website_slug).select() else new_website_slug
+        # Generate small image url
+        image_url = vars.image_url
+        find_str = "image/upload/"
+        insert_str = "h_200/"
+        try:
+            insert_index = image_url.index(find_str)+len(find_str)
+            image_url_small = image_url[:insert_index] + insert_str + image_url[insert_index:]
+        except:
+            image_url_small = ''
+        # Create new blog
+        submit = True if vars.submit == 'True' else False
+        blog.update_record(title=vars.title, description=vars.description, tag=category, body=vars.body, website_slug=website_slug, image_url=image_url, image_url_small=image_url_small, submit=submit, show=False)
+    return 'success'
+
+# Upload blog
+@auth.requires(not auth.has_membership('banned'))
+def request_submit_blog():
+    vars = request.post_vars
+    if vars and auth.user:
+        website_slug = IS_SLUG()(vars.title)[0]
+        # Check if blogs with same website_slug exist
+        website_slug = website_slug+'-' if db(db.blog.website_slug==website_slug).select() else website_slug
+        # Generate small image url
+        image_url = vars.image_url
+        find_str = "image/upload/"
+        insert_str = "h_200/"
+        try:
+            insert_index = image_url.index(find_str)+len(find_str)
+            image_url_small = image_url[:insert_index] + insert_str + image_url[insert_index:]
+        except:
+            image_url_small = ''
+        # Generate category
+        category = 'General'
+        if str(vars.category)=='1':
+            category = 'Market Insights'
+        elif str(vars.category)=='2':
+            category = 'News and Announcements'
+        elif str(vars.category)=='3':
+            category = 'Reviews'
+        # Create new blog
+        submit = True if vars.submit == 'True' else False
+        db.blog.insert(title=vars.title, description=vars.description, tag=category, body=vars.body, website_slug=website_slug, image_url=image_url, image_url_small=image_url_small, submit=submit, show=False)
+        print('success')
+    return 'success'
+
+
+# Get comment rank
+def comment_rank():
+    comment_id = 1
+    comment = db.comment(comment_id)
+    epochtime = (comment.created_on - datetime.datetime.utcfromtimestamp(0)).total_seconds()
+    # Let 1 vote equal bumping up comment by 1 hour
+    rank = epochtime + max(-345600, min(345600, (comment.like-comment.dislike)*3600))
+    test = (request.now - datetime.datetime.utcfromtimestamp(0)).total_seconds()
+    return locals()
+
+@auth.requires(not auth.has_membership('banned'))
+def delete_blog_comment():
+    vars = request.post_vars
+    html_response = ''
+    if db.blog_comment(vars.id).created_by==auth.user.id:
+        blog_comment = db(db.blog_comment.id==vars.id).select().first()
+        blog = db(db.blog.id==blog_comment.blog).select().first()
+        blog.update_record(comment_count=blog.comment_count-1)
+        db(db.blog_comment.id == vars.id).delete()
+        html_response = '<div class="flash alert alert-success alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>Comment is deleted successfully.</div>'
+        session.flash = 'Comment is deleted successfully.'
+    return html_response
+
+@auth.requires(not auth.has_membership('banned'))
+def report_blog_comment():
+    vars = request.post_vars
+    blog_comment = db(db.blog_comment.id==vars.id).select().first()
+    author_name = db.auth_user(blog_comment.created_by).username
+    blog_comment.update_record(report_count=blog_comment.report_count+1)
+    html_response = '<div class="flash alert alert-success alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>'+author_name+' has been reported. <i class="fas fa-flag"></i></div>'
+    return html_response
+
+# Like comment
+@auth.requires(not auth.has_membership('banned'))
+def comment_like():
+    vars = request.post_vars
+    comment = db.comment(vars.id)
+    comment_vote = db((db.comment_vote.comment==vars.id)&(db.comment_vote.created_by==auth.user.id)).select().first()
+    if not(comment_vote) or comment_vote.vote==0:
+        db.comment_vote.update_or_insert((db.comment_vote.comment==vars.id) & (db.comment_vote.created_by==auth.user.id), comment=vars.id, created_by=auth.user.id, vote=1)
+        like_count = comment.like + 1
+        db(db.comment.id==vars.id).update(like=like_count)
+        return str(like_count)
+    elif comment_vote.vote==-1:
+        db.comment_vote.update_or_insert((db.comment_vote.comment==vars.id) & (db.comment_vote.created_by==auth.user.id), comment=vars.id, created_by=auth.user.id, vote=1)
+        like_count = comment.like + 1
+        dislike_count = comment.dislike - 1
+        db(db.comment.id==vars.id).update(like=like_count, dislike=dislike_count)
+        return str(like_count)
+    else:
+        db.comment_vote.update_or_insert((db.comment_vote.comment==vars.id) & (db.comment_vote.created_by==auth.user.id), comment=vars.id, created_by=auth.user.id, vote=0)
+        like_count = comment.like - 1
+        db(db.comment.id==vars.id).update(like=like_count)
+        html_output = str(like_count) if like_count > 0 else ''
+        return html_output
+
+# Dislike comment
+@auth.requires(not auth.has_membership('banned'))
+def comment_dislike():
+    vars = request.post_vars
+    comment = db.comment(vars.id)
+    comment_vote = db((db.comment_vote.comment==vars.id)&(db.comment_vote.created_by==auth.user.id)).select().first()
+    if not(comment_vote) or comment_vote.vote==0:
+        db.comment_vote.update_or_insert((db.comment_vote.comment==vars.id) & (db.comment_vote.created_by==auth.user.id), comment=vars.id, created_by=auth.user.id, vote=-1)
+        dislike_count = comment.dislike + 1
+        db(db.comment.id==vars.id).update(dislike=dislike_count)
+        return str(dislike_count)
+    elif comment_vote.vote==1:
+        db.comment_vote.update_or_insert((db.comment_vote.comment==vars.id) & (db.comment_vote.created_by==auth.user.id), comment=vars.id, created_by=auth.user.id, vote=-1)
+        like_count = comment.like - 1
+        dislike_count = comment.dislike + 1
+        db(db.comment.id==vars.id).update(like=like_count, dislike=dislike_count)
+        return str(dislike_count)
+    else:
+        db.comment_vote.update_or_insert((db.comment_vote.comment==vars.id) & (db.comment_vote.created_by==auth.user.id), comment=vars.id, created_by=auth.user.id, vote=0)
+        dislike_count = comment.dislike - 1
+        db(db.comment.id==vars.id).update(dislike=dislike_count)
+        html_output = str(dislike_count) if dislike_count > 0 else ''
+        return html_output
+
+# Upload avatar
+@auth.requires(not auth.has_membership('banned'))
+def update_profile():
+    vars = request.post_vars
+    if vars.image != '':
+        image_base64 = vars.image
+        image_processed = image_base64[image_base64.find(",")+1:]
+        image_processed = image_processed.replace(' ','+')
+        image1 = Image.open(BytesIO(base64.b64decode(image_processed)))
+        output = BytesIO()
+        image1.save(output, format='PNG')  # or another format
+        output.seek(0)
+        db(db.auth_user.id==auth.user.id).update(username=vars.username, description=vars.bio, website=vars.website, ethaddress=vars.ethaddress, avatar = db.auth_user.avatar.store(output, 'avatar.png'))
+    else:
+        db(db.auth_user.id==auth.user.id).update(username=vars.username, description=vars.bio, website=vars.website, ethaddress=vars.ethaddress)
+    session.flash = 'Your profile has been updated successfully'
+    return 'success'
+
+def testing():
+    return locals()
+
+# Load search suggestions
+def search():
+    vars = request.post_vars
+    searchTerm = vars.search_term.strip()
+    list = db((db.master.symbol.startswith(searchTerm))|(db.master.name.startswith(searchTerm))).select(orderby=~db.master.usd_market_cap,limitby=(0, 12))
+    html_string = ''
+    counter = 0
+    for coin in list:
+        if counter==0:
+            html_string = (html_string+'<a class="dropdown-item active first-result" href="/coin/'+coin.custom_slug+'"><img src="/static/_0.0.0/image_thumb/'+str(coin['image_thumb'])+'">  '+coin.name+' ('+coin.symbol+')</a>')
+            counter = 1
+        else:
+            html_string = (html_string+'<a class="dropdown-item" href="/coin/'+coin.custom_slug+'"><img src="/static/_0.0.0/image_thumb/'+str(coin['image_thumb'])+'">  '+coin.name+' ('+coin.symbol+')</a>')
+    return html_string
+
+# Check if username exists in registration form
+def check_username():
+    vars = request.post_vars
+    username_slug = IS_SLUG.urlify(vars.username)
+    if len(username_slug)>3:
+        user = db.auth_user(username_slug=username_slug)
+        if user:
+            if auth.user:
+                if user.id == auth.user.id:
+                    return ''
+                else:
+                    return 'taken'
+            else:
+                return 'taken'
+        else:
+            return 'available'
+
+# Check if email exists in registration form
+def check_email():
+    vars = request.post_vars
+    if db.auth_user(email=vars.email):
+        return '<span style="color:red;">Email has been registered</span>'
+    else:
+        return ''
+
+# Upload comment body and image
+@auth.requires(not auth.has_membership('banned'))
+def upload():
+    vars = request.post_vars
+    if vars and auth.user:
+        db.comment.insert(body=vars.body)
+    return 'success'
+
+# Vote comment
+@auth.requires(not auth.has_membership('banned'))
+def comment_vote():
+    vars = request.post_vars
+    comment = db.comment(vars.id)
+    if comment:
+        if vars.action == "like":
+            db.comment_vote.update_or_insert((db.comment_vote.comment == vars.id) & (db.comment_vote.created_by == auth.user.id),
+                                        comment=vars.id,
+                                        created_by=auth.user.id,
+                                        vote=1)
+            like_count = db((db.comment_vote.comment == vars.id)&(db.comment_vote.vote == 1)).count()
+            db(db.comment.id==vars.id).update(like=like_count)
+            return str(like_count)
+        elif vars.action == "unlike":
+            db.comment_vote.update_or_insert((db.comment_vote.comment == vars.id) & (db.comment_vote.created_by == auth.user.id),
+                                        comment=vars.id,
+                                        created_by=auth.user.id,
+                                        vote=0)
+            like_count = db((db.comment_vote.comment == vars.id)&(db.comment_vote.vote == 1)).count()
+            db(db.comment.id==vars.id).update(like=like_count)
+            html_output = str(like_count) if like_count > 0 else ''
+            return html_output
+        elif vars.action == "dislike":
+            db.comment_vote.update_or_insert((db.comment_vote.comment == vars.id) & (db.comment_vote.created_by == auth.user.id),
+                                        comment=vars.id,
+                                        created_by=auth.user.id,
+                                        vote=-1)
+            dislike_count = db((db.comment_vote.comment == vars.id)&(db.comment_vote.vote == -1)).count()
+            db(db.comment.id==vars.id).update(dislike=dislike_count)
+            return str(dislike_count)
+        elif vars.action == "undislike":
+            db.comment_vote.update_or_insert((db.comment_vote.comment == vars.id) & (db.comment_vote.created_by == auth.user.id),
+                                        comment=vars.id,
+                                        created_by=auth.user.id,
+                                        vote=0)
+            like_count = db((db.comment_vote.comment == vars.id)&(db.comment_vote.vote == 1)).count()
+            db(db.comment.id==vars.id).update(like=like_count)
+            html_output = str(like_count) if like_count > 0 else ''
+            return html_output

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+    <title>{{=coin.name}} | Exchange Wallet Analysis | ViewBase</title>
+    <meta itemprop="name" content="{{=coin.name}} | Exchange Wallet Analysis | ViewBase" />
+    <meta itemprop="description" name="description" content="" />
+    <meta property="og:title" content="{{=coin.name}} | Exchange Wallet Analysis | ViewBase" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:image" name="twitter:image" content="" />
+    <meta itemprop="image" content="" />
+    <link itemprop="url" rel="canonical" href=""/>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ViewBase" />
+    <meta property="fb:admins" content="TBC" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:title" content="{{=coin.name}} | Exchange Wallet Analysis | ViewBase">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta name="twitter:image" content="">
+    {{include 'navbar.html'}}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+
+    google.charts.load('current', {'packages':['corechart', 'controls']});
+    google.charts.setOnLoadCallback(drawVisualization);
+    
+function drawVisualization() {
+  var dashboard = new google.visualization.Dashboard(
+       document.getElementById('dashboard'));
+
+   var control = new google.visualization.ControlWrapper({
+     'controlType': 'ChartRangeFilter',
+     'containerId': 'control',
+     'options': {
+       // Filter by the date axis.
+       'filterColumnIndex': 0,
+       'ui': {
+         'chartType': 'LineChart',
+         'chartOptions': {
+           'chartArea': {'width': '70%'},
+             'hAxis': {'baselineColor': 'none', format: "d MMM yy" }
+         },
+         // Display a single series that shows the closing value of the stock.
+         // Thus, this view has two columns: the date (axis) and the stock value (line series).
+         'chartView': {
+           'columns': [0, 3]
+         }
+       }
+     },
+     // Initial range: 2012-02-09 to 2012-03-20.
+//      'state': {'range': {'start': new Date(2012, 1, 9), 'end': new Date(2012, 2, 20)}}
+   });
+
+    var chart2 = new google.visualization.ChartWrapper({
+        'chartType': 'LineChart',
+        'containerId': 'chart2',
+        'options': {
+            'title':'Token Price',
+            'series': {0:{'targetAxisIndex':0,color:'#f7931a'},1:{'targetAxisIndex':1,color:'#828384'}},
+            // Use the same chart area width as the control for axis alignment.
+            'chartArea': {'height': '80%', 'width': '70%'},
+            'hAxis': {'textPosition':'none','gridlines':{'color': 'none'}},
+            'vAxis': {'textPosition':'none','gridlines':{'color':'transparent'}},
+            'vAxes': {0:{'title':''},1:{'title':''}},
+            'legend': {'position':'in', 'alignment':'center'},
+            'interpolateNulls': true,
+            'crosshair':{'trigger':'both'},
+        },
+        view: {columns: [0, 1, 2]}
+    });
+    
+    var chart1 = new google.visualization.ChartWrapper({
+        'chartType': 'SteppedAreaChart',
+        'containerId': 'chart1',
+        'options': {
+            'isStacked': true,
+            'title':'Percentage of Token Supply on Exchanges',
+            // Use the same chart area width as the control for axis alignment.
+            'chartArea': {'height': '80%', 'width': '70%'},
+            'hAxis': {'gridlines': {'color': 'none'}, format: "d MMM yy"},
+            'vAxis': {format: '#\'%\'','gridlines': {'color': 'transparent'}},
+            'legend': {},
+            'series': {0: {'type': 'line'}},
+            'crosshair':{'trigger':'both'}
+        },
+//         view: {columns: [0, 3, 4, 5]}
+        view: {columns: [0{{=columnString}}]}
+    });
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('date', 'Date');
+    data.addColumn('number', 'BTC');
+    data.addColumn('number', 'ETH');
+    data.addColumn('number', 'Total');
+    {{for exchange in exchangeList:}}data.addColumn('number','{{=exchange}}');{{pass}}
+
+    data.addRows([{{for row in balanceHistory:}}
+        [new {{='Date('+str(row[0].year)+','+str(row[0].month-1)+','+str(row[0].day)+')'}},{{=row[1]}},{{=row[2]}},{{=row[3]/supplyTotal*100}}{{for j in row[4:]:}},{{=j/supplyTotal*100}}{{pass}}],{{pass}}]);
+
+//     data.setColumnProperty(1,'color','#f7931a');
+//     data.setColumnProperty(2,'color','#828384');
+    var priceFormatter = new google.visualization.NumberFormat({fractionDigits: 7});
+    priceFormatter.format(data, 1);
+    priceFormatter.format(data, 2);
+    var percentFormatter = new google.visualization.NumberFormat({fractionDigits: 2,suffix: '%'});
+    {{for col in range(3, columnStart+1):}}percentFormatter.format(data, {{=col}});{{pass}}
+
+    /* Change the format of the date column, used in chart, but not chart range filter */
+    var formatter = new google.visualization.DateFormat({pattern: "MMM dd, yyyy"});
+//     formatter.format(data, 0);
+    dashboard.bind(control, [chart1, chart2]);
+    dashboard.draw(data);
+}
+</script>
+    <style>
+        .container-fluid{background-color:#f2f3f5;}
+        .row{margin:0 auto;padding:20px 0;}
+        .my-col{padding:15px 15px 20px 15px;}
+        .col-main{background-color:white;}
+        .col-side{padding:0 15px 20px 15px;}
+
+        .clickable-row:hover{background-color:#f5f5f5;cursor: pointer;}
+        .table td, .table th {font-size:.8rem;padding:.2rem;vertical-align:middle;white-space: nowrap;}
+        td.right, th.right{text-align:right;}
+        tr.collapse{background-color:#f5f5f5;}
+        td.paddingLeft{padding-left:8px;}
+        a.wallet-link{color:#848484 !important;}
+        a.wallet-link:hover{color:#2cc891 !important;text-decoration:none;}
+
+        .big-table td, .big-table th {font-size: .9rem;padding:.2rem;vertical-align: middle;}
+/*         .big-table th {width:50%;} */
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-4 order-1 order-lg-1 col-side">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <div class="media">
+                                <img class="align-self-center mr-3" src="https://s2.coinmarketcap.com/static/img/coins/32x32/{{=coin.cmc_id}}.png">
+                                <div class="media-body">
+                                    <h3 class="mt-0" style="display:inline;">{{=coin.name}} </h3>
+                                    <span style="display:inline;"><b>({{=coin.symbol}})</b></span>
+                                </div>
+                            </div>
+                        </h5>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text"></p>
+                        <table class="table big-table">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Supply on Exchange (%)</th>
+                                    <td>{{='{0:,.0f}'.format(totalBalanceList[0]) if supplyTotal else ''}} ({{='{0:,.1f}'.format(totalBalanceList[0]/supplyTotal*100)}}%)</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Total Supply</th>
+                                    <td>{{='{0:,.0f}'.format(supplyTotal) if supplyTotal else ''}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Token Supply on Exchange Wallets</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Exchange</th>
+                                    <th scope="col" class="right">Token Balance</th>
+                                    <th scope="col" class="right">% 1d</th>
+                                    <th scope="col" class="right">% 7d</th>
+                                    <th scope="col" class="right">% 30d</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{i = 0}}
+                                {{for group in groups:}}
+                                <tr class='clickable-row' data-toggle="collapse" data-target="#collapse{{=group.id}}">
+                                    <td class="">
+                                        {{=group.group}}
+                                    </td>
+                                    <td class="right">
+                                        {{="{:,.0f}".format(groupBalanceList[0][i])}}
+                                    </td>
+                                    <td class="right">
+                                        {{=XML(getReturns(groupBalanceList[0][i],groupBalanceList[1][i]))}}
+                                    </td>
+                                    <td class="right">
+                                        {{=XML(getReturns(groupBalanceList[0][i],groupBalanceList[2][i]))}}
+                                    </td>
+                                    <td class="right">
+                                        {{=XML(getReturns(groupBalanceList[0][i],groupBalanceList[3][i]))}}
+                                    </td>
+                                </tr>
+                                {{i += 1}}
+                                {{for wallet in wallets:}}
+                                {{if wallet[0]==group.group:}}
+                                <tr id="collapse{{=group.id}}" class="collapse">
+                                    <td class="paddingLeft">
+                                        <a class="wallet-link" target="_blank" href="https://etherscan.io/address/{{=wallet[3]}}">
+                                            {{=wallet[1]}} <i class="fas fa-external-link-square-alt"></i>
+                                        </a>
+                                    </td>
+                                    <td class="right">
+                                        {{="{:,.0f}".format(wallet[2])}}
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                {{pass}}
+                                {{pass}}
+                                {{pass}}
+                            </tbody>
+                            <thead>
+                                <tr>
+                                    <th>Total</th>
+                                    <th class="right">
+                                        {{="{:,.0f}".format(totalBalanceList[0])}} {{=tokenSlug.upper()}}
+                                    </th>
+                                    <th class="right">
+                                        {{=XML(getReturns(totalBalanceList[0],totalBalanceList[1]))}}
+                                    </th>
+                                    <th class="right">
+                                        {{=XML(getReturns(totalBalanceList[0],totalBalanceList[2]))}}
+                                    </th>
+                                    <th class="right">
+                                        {{=XML(getReturns(totalBalanceList[0],totalBalanceList[3]))}}
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-8 order-2 order-lg-2 my-col col-main">
+                <div id="dashboard">
+                    <div id="chart1" style=''></div>
+                    <div id="chart2" style=''></div>
+                    <div id="control" style=''></div>
+                    
+<!--                     <div id="chart1" style='height: 320px;'></div>
+                    <div id="chart2" style='height: 180px;'></div>
+                    <div id="control" style='height: 50px;'></div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+</html>

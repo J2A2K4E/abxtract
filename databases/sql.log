@@ -1,0 +1,3094 @@
+timestamp: 2018-08-21T03:35:48.156094
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:35:48.791866
+CREATE TABLE `comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin` INTEGER,
+    `parent` INTEGER,
+    `parent_author` INTEGER,
+    `root_parent` INTEGER,
+    `secondary_parent` INTEGER,
+    `body` LONGTEXT,
+    `image_url` VARCHAR(512),
+    `score` INTEGER,
+    `reply_count` INTEGER,
+    `seen` CHAR(1),
+    `link_url` VARCHAR(512),
+    `link_title` VARCHAR(512),
+    `link_desc` VARCHAR(512),
+    `link_image` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:35:49.251635
+CREATE TABLE `comment_report`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `comment` INT  , INDEX `comment__idx` (`comment`), FOREIGN KEY (`comment`) REFERENCES `comment` (`id`) ON DELETE CASCADE,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:35:49.815831
+CREATE TABLE `comment_vote`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `comment` INT  , INDEX `comment__idx` (`comment`), FOREIGN KEY (`comment`) REFERENCES `comment` (`id`) ON DELETE CASCADE,
+    `vote` INTEGER,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:35:50.005325
+CREATE TABLE `follow_coin`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin` INTEGER,
+    `status` CHAR(1),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:35:50.103063
+CREATE TABLE `follow_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user` INTEGER,
+    `status` CHAR(1),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:35:50.219751
+CREATE TABLE `blog`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(512),
+    `website_slug` VARCHAR(512),
+    `description` LONGTEXT,
+    `body` LONGTEXT,
+    `image_url` VARCHAR(512),
+    `image_small_url` VARCHAR(512),
+    `hide` CHAR(1),
+    `comment_count` INTEGER,
+    `tag` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:35:50.358381
+CREATE TABLE `blog_comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `blog` INTEGER,
+    `parent` INTEGER,
+    `parent_author` INTEGER,
+    `root_parent` INTEGER,
+    `secondary_parent` INTEGER,
+    `body` LONGTEXT,
+    `report_count` INTEGER,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:37:48.265800
+CREATE TABLE `auth_group`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `role` VARCHAR(512),
+    `description` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:37:48.410435
+CREATE TABLE `auth_membership`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `group_id` INT  , INDEX `group_id__idx` (`group_id`), FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:37:48.532095
+CREATE TABLE `auth_permission`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `group_id` INT  , INDEX `group_id__idx` (`group_id`), FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE,
+    `name` VARCHAR(512),
+    `table_name` VARCHAR(512),
+    `record_id` INTEGER,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:37:48.646789
+CREATE TABLE `auth_event`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `time_stamp` DATETIME,
+    `client_ip` VARCHAR(512),
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `origin` VARCHAR(512),
+    `description` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-21T03:37:48.763488
+CREATE TABLE `auth_cas`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `created_on` DATETIME,
+    `service` VARCHAR(512),
+    `ticket` VARCHAR(512),
+    `renew` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:07:23.648779
+CREATE TABLE `master`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `cmc_id` INTEGER UNIQUE,
+    `name` VARCHAR(100),
+    `symbol` VARCHAR(100),
+    `website_slug` VARCHAR(512),
+    `custom_slug` VARCHAR(512),
+    `type` VARCHAR(512),
+    `sector` VARCHAR(512),
+    `cmc_rank` INTEGER,
+    `circulating_supply` NUMERIC(20,1),
+    `total_supply` NUMERIC(20,1),
+    `max_supply` NUMERIC(20,1),
+    `usd_price` NUMERIC(20,7),
+    `usd_volume_24h` NUMERIC(20,2),
+    `usd_market_cap` NUMERIC(20,1),
+    `usd_percent_change_24h` NUMERIC(20,2),
+    `usd_percent_change_7d` NUMERIC(20,2),
+    `change1d_x_mcap` NUMERIC(20,1),
+    `change7d_x_mcap` NUMERIC(20,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:07:23.900107
+CREATE TABLE `static`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `master_id` INT  , INDEX `master_id__idx` (`master_id`), FOREIGN KEY (`master_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `cmc_id` INTEGER UNIQUE,
+    `token` CHAR(1),
+    `mineable` CHAR(1),
+    `logo` VARCHAR(512),
+    `website` VARCHAR(512),
+    `explorer` VARCHAR(512),
+    `github` VARCHAR(512),
+    `telegram` VARCHAR(512),
+    `discord` VARCHAR(512),
+    `bitcointalk` VARCHAR(512),
+    `twitter` VARCHAR(512),
+    `medium` VARCHAR(512),
+    `reddit` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:07:24.006822
+CREATE TABLE `sectors`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:07:24.123511
+CREATE TABLE `manual`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `master_id` INT  , INDEX `master_id__idx` (`master_id`), FOREIGN KEY (`master_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `source` VARCHAR(512),
+    `token_type` VARCHAR(512),
+    `platform` VARCHAR(512),
+    `country` VARCHAR(512),
+    `tagline` VARCHAR(512),
+    `description` VARCHAR(512),
+    `whitepaper` VARCHAR(512),
+    `ico_price_usd` NUMERIC(30,10),
+    `ico_startdate` DATETIME,
+    `ico_enddate` DATETIME,
+    `ico_raised_usd` NUMERIC(20,1),
+    `token_sale` NUMERIC(40,1),
+    `token_sale_percent` NUMERIC(4,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:55.428341
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:55.669051
+CREATE TABLE `auth_group`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `role` VARCHAR(512),
+    `description` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:55.784713
+CREATE TABLE `auth_membership`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `group_id` INT  , INDEX `group_id__idx` (`group_id`), FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:55.943341
+CREATE TABLE `auth_permission`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `group_id` INT  , INDEX `group_id__idx` (`group_id`), FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE,
+    `name` VARCHAR(512),
+    `table_name` VARCHAR(512),
+    `record_id` INTEGER,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:56.058983
+CREATE TABLE `auth_event`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `time_stamp` DATETIME,
+    `client_ip` VARCHAR(512),
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `origin` VARCHAR(512),
+    `description` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:56.173674
+CREATE TABLE `auth_cas`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `created_on` DATETIME,
+    `service` VARCHAR(512),
+    `ticket` VARCHAR(512),
+    `renew` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:56.290362
+CREATE TABLE `comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin` INTEGER,
+    `parent` INTEGER,
+    `parent_author` INTEGER,
+    `root_parent` INTEGER,
+    `secondary_parent` INTEGER,
+    `body` LONGTEXT,
+    `image_url` VARCHAR(512),
+    `score` INTEGER,
+    `reply_count` INTEGER,
+    `seen` CHAR(1),
+    `link_url` VARCHAR(512),
+    `link_title` VARCHAR(512),
+    `link_desc` VARCHAR(512),
+    `link_image` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:56.402093
+CREATE TABLE `comment_report`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `comment` INT  , INDEX `comment__idx` (`comment`), FOREIGN KEY (`comment`) REFERENCES `comment` (`id`) ON DELETE CASCADE,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:56.510778
+CREATE TABLE `comment_vote`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `comment` INT  , INDEX `comment__idx` (`comment`), FOREIGN KEY (`comment`) REFERENCES `comment` (`id`) ON DELETE CASCADE,
+    `vote` INTEGER,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:56.655388
+CREATE TABLE `follow_coin`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin` INTEGER,
+    `status` CHAR(1),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:56.806983
+CREATE TABLE `follow_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user` INTEGER,
+    `status` CHAR(1),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:56.946610
+CREATE TABLE `blog`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(512),
+    `website_slug` VARCHAR(512),
+    `description` LONGTEXT,
+    `body` LONGTEXT,
+    `image_url` VARCHAR(512),
+    `image_small_url` VARCHAR(512),
+    `hide` CHAR(1),
+    `comment_count` INTEGER,
+    `tag` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:57.067301
+CREATE TABLE `blog_comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `blog` INTEGER,
+    `parent` INTEGER,
+    `parent_author` INTEGER,
+    `root_parent` INTEGER,
+    `secondary_parent` INTEGER,
+    `body` LONGTEXT,
+    `report_count` INTEGER,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:08:57.196967
+CREATE TABLE `master`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `cmc_id` INTEGER UNIQUE,
+    `name` VARCHAR(100),
+    `symbol` VARCHAR(100),
+    `website_slug` VARCHAR(512),
+    `custom_slug` VARCHAR(512),
+    `type` VARCHAR(512),
+    `sector` VARCHAR(512),
+    `cmc_rank` INTEGER,
+    `circulating_supply` NUMERIC(20,1),
+    `total_supply` NUMERIC(20,1),
+    `max_supply` NUMERIC(20,1),
+    `usd_price` NUMERIC(20,7),
+    `usd_volume_24h` NUMERIC(20,2),
+    `usd_market_cap` NUMERIC(20,1),
+    `usd_percent_change_24h` NUMERIC(20,2),
+    `usd_percent_change_7d` NUMERIC(20,2),
+    `change1d_x_mcap` NUMERIC(20,1),
+    `change7d_x_mcap` NUMERIC(20,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2018-08-22T17:10:28.922414
+CREATE TABLE `master`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `cmc_id` INTEGER UNIQUE,
+    `name` VARCHAR(100),
+    `symbol` VARCHAR(100),
+    `website_slug` VARCHAR(512),
+    `custom_slug` VARCHAR(512),
+    `type` VARCHAR(512),
+    `sector` VARCHAR(512),
+    `cmc_rank` INTEGER,
+    `circulating_supply` NUMERIC(20,1),
+    `total_supply` NUMERIC(20,1),
+    `max_supply` NUMERIC(20,1),
+    `usd_price` NUMERIC(20,7),
+    `usd_volume_24h` NUMERIC(20,2),
+    `usd_market_cap` NUMERIC(20,1),
+    `usd_percent_change_24h` NUMERIC(20,2),
+    `usd_percent_change_7d` NUMERIC(20,2),
+    `change1d_x_mcap` NUMERIC(20,1),
+    `change7d_x_mcap` NUMERIC(20,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:10:29.032375
+CREATE TABLE `static`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `master_id` INT  , INDEX `master_id__idx` (`master_id`), FOREIGN KEY (`master_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `cmc_id` INTEGER UNIQUE,
+    `token` CHAR(1),
+    `mineable` CHAR(1),
+    `logo` VARCHAR(512),
+    `website` VARCHAR(512),
+    `explorer` VARCHAR(512),
+    `github` VARCHAR(512),
+    `telegram` VARCHAR(512),
+    `discord` VARCHAR(512),
+    `bitcointalk` VARCHAR(512),
+    `twitter` VARCHAR(512),
+    `medium` VARCHAR(512),
+    `reddit` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:10:29.161031
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:10:29.271735
+CREATE TABLE `manual`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `master_id` INT  , INDEX `master_id__idx` (`master_id`), FOREIGN KEY (`master_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `source` VARCHAR(512),
+    `token_type` VARCHAR(512),
+    `platform` VARCHAR(512),
+    `country` VARCHAR(512),
+    `tagline` VARCHAR(512),
+    `description` VARCHAR(512),
+    `whitepaper` VARCHAR(512),
+    `ico_price_usd` NUMERIC(30,10),
+    `ico_startdate` DATETIME,
+    `ico_enddate` DATETIME,
+    `ico_raised_usd` NUMERIC(20,1),
+    `token_sale` NUMERIC(40,1),
+    `token_sale_percent` NUMERIC(4,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:41.463907
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:41.589570
+CREATE TABLE `auth_group`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `role` VARCHAR(512),
+    `description` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:41.679330
+CREATE TABLE `auth_membership`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `group_id` INT  , INDEX `group_id__idx` (`group_id`), FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:41.821948
+CREATE TABLE `auth_permission`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `group_id` INT  , INDEX `group_id__idx` (`group_id`), FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE,
+    `name` VARCHAR(512),
+    `table_name` VARCHAR(512),
+    `record_id` INTEGER,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:41.913703
+CREATE TABLE `auth_event`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `time_stamp` DATETIME,
+    `client_ip` VARCHAR(512),
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `origin` VARCHAR(512),
+    `description` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:42.019420
+CREATE TABLE `auth_cas`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `created_on` DATETIME,
+    `service` VARCHAR(512),
+    `ticket` VARCHAR(512),
+    `renew` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:42.138104
+CREATE TABLE `comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin` INTEGER,
+    `parent` INTEGER,
+    `parent_author` INTEGER,
+    `root_parent` INTEGER,
+    `secondary_parent` INTEGER,
+    `body` LONGTEXT,
+    `image_url` VARCHAR(512),
+    `score` INTEGER,
+    `reply_count` INTEGER,
+    `seen` CHAR(1),
+    `link_url` VARCHAR(512),
+    `link_title` VARCHAR(512),
+    `link_desc` VARCHAR(512),
+    `link_image` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:42.257784
+CREATE TABLE `comment_report`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `comment` INT  , INDEX `comment__idx` (`comment`), FOREIGN KEY (`comment`) REFERENCES `comment` (`id`) ON DELETE CASCADE,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:42.389431
+CREATE TABLE `comment_vote`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `comment` INT  , INDEX `comment__idx` (`comment`), FOREIGN KEY (`comment`) REFERENCES `comment` (`id`) ON DELETE CASCADE,
+    `vote` INTEGER,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:42.556985
+CREATE TABLE `follow_coin`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin` INTEGER,
+    `status` CHAR(1),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:42.704590
+CREATE TABLE `follow_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user` INTEGER,
+    `status` CHAR(1),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:43.020745
+CREATE TABLE `blog`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(512),
+    `website_slug` VARCHAR(512),
+    `description` LONGTEXT,
+    `body` LONGTEXT,
+    `image_url` VARCHAR(512),
+    `image_small_url` VARCHAR(512),
+    `hide` CHAR(1),
+    `comment_count` INTEGER,
+    `tag` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:43.207246
+CREATE TABLE `blog_comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `blog` INTEGER,
+    `parent` INTEGER,
+    `parent_author` INTEGER,
+    `root_parent` INTEGER,
+    `secondary_parent` INTEGER,
+    `body` LONGTEXT,
+    `report_count` INTEGER,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:43.336900
+CREATE TABLE `master`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `cmc_id` INTEGER UNIQUE,
+    `name` VARCHAR(100),
+    `symbol` VARCHAR(100),
+    `website_slug` VARCHAR(512),
+    `custom_slug` VARCHAR(512),
+    `type` VARCHAR(512),
+    `sector` VARCHAR(512),
+    `cmc_rank` INTEGER,
+    `circulating_supply` NUMERIC(20,1),
+    `total_supply` NUMERIC(20,1),
+    `max_supply` NUMERIC(20,1),
+    `usd_price` NUMERIC(20,7),
+    `usd_volume_24h` NUMERIC(20,2),
+    `usd_market_cap` NUMERIC(20,1),
+    `usd_percent_change_24h` NUMERIC(20,2),
+    `usd_percent_change_7d` NUMERIC(20,2),
+    `change1d_x_mcap` NUMERIC(20,1),
+    `change7d_x_mcap` NUMERIC(20,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:43.444613
+CREATE TABLE `static`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `master_id` INT  , INDEX `master_id__idx` (`master_id`), FOREIGN KEY (`master_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `cmc_id` INTEGER UNIQUE,
+    `token` CHAR(1),
+    `mineable` CHAR(1),
+    `logo` VARCHAR(512),
+    `website` VARCHAR(512),
+    `explorer` VARCHAR(512),
+    `github` VARCHAR(512),
+    `telegram` VARCHAR(512),
+    `discord` VARCHAR(512),
+    `bitcointalk` VARCHAR(512),
+    `twitter` VARCHAR(512),
+    `medium` VARCHAR(512),
+    `reddit` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:43.582245
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T17:11:43.688962
+CREATE TABLE `manual`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `master_id` INT  , INDEX `master_id__idx` (`master_id`), FOREIGN KEY (`master_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `source` VARCHAR(512),
+    `token_type` VARCHAR(512),
+    `platform` VARCHAR(512),
+    `country` VARCHAR(512),
+    `tagline` VARCHAR(512),
+    `description` VARCHAR(512),
+    `whitepaper` VARCHAR(512),
+    `ico_price_usd` NUMERIC(30,10),
+    `ico_startdate` DATETIME,
+    `ico_enddate` DATETIME,
+    `ico_raised_usd` NUMERIC(20,1),
+    `token_sale` NUMERIC(40,1),
+    `token_sale_percent` NUMERIC(4,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T18:48:30.906652
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T18:58:30.713869
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2018-08-22T18:59:04.029795
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2018-08-22T18:59:31.073940
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-22T19:00:23.302634
+CREATE TABLE `sector1`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2018-08-22T19:00:31.014426
+CREATE TABLE `sector1`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2018-08-23T19:58:57.075116
+CREATE TABLE `image`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `avatar` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-08-23T20:20:59.549895
+ALTER TABLE `image` ADD `image` VARCHAR(512);
+success!
+timestamp: 2018-08-23T20:20:59.722919
+ALTER TABLE `image` DROP COLUMN `avatar`;
+success!
+timestamp: 2018-09-03T20:00:10.852000
+ALTER TABLE `blog` DROP COLUMN `image_small_url`;
+success!
+success!
+timestamp: 2018-09-04T10:28:40.730000
+ALTER TABLE `blog` ADD `image_url_small` VARCHAR(512);
+success!
+success!
+timestamp: 2018-09-04T10:35:19.922000
+ALTER TABLE `blog` ADD `description__tmp` VARCHAR(512);
+success!
+UPDATE `blog` SET `description__tmp`=`description`;
+success!
+ALTER TABLE `blog` DROP COLUMN `description`;
+success!
+ALTER TABLE `blog` ADD `description` VARCHAR(512);
+success!
+UPDATE `blog` SET `description`=`description__tmp`;
+success!
+ALTER TABLE `blog` DROP COLUMN `description__tmp`;
+success!
+success!
+timestamp: 2018-09-05T01:29:09.956000
+ALTER TABLE `blog_comment` ADD `blog_author` INTEGER;
+success!
+timestamp: 2018-09-05T01:29:10.213000
+ALTER TABLE `blog_comment` DROP COLUMN `parent`;
+success!
+timestamp: 2018-09-05T01:29:10.499000
+ALTER TABLE `blog_comment` DROP COLUMN `parent_author`;
+success!
+timestamp: 2018-09-05T01:37:26.356000
+ALTER TABLE `blog_comment` ADD `parent` INTEGER;
+success!
+timestamp: 2018-09-05T01:37:26.514000
+ALTER TABLE `blog_comment` ADD `parent_author` INTEGER;
+success!
+timestamp: 2018-09-05T01:37:26.747000
+ALTER TABLE `blog_comment` DROP COLUMN `blog_author`;
+success!
+timestamp: 2018-09-05T02:36:15.799000
+ALTER TABLE `blog_comment` DROP COLUMN `secondary_parent`;
+success!
+timestamp: 2018-09-12T21:07:06.917000
+ALTER TABLE `master` ADD `btc_percent_change_7d` NUMERIC(20,2);
+success!
+timestamp: 2018-09-12T21:07:07.077000
+ALTER TABLE `master` ADD `btc_price` NUMERIC(20,7);
+success!
+timestamp: 2018-09-12T21:07:07.170000
+ALTER TABLE `master` ADD `btc_percent_change_24h` NUMERIC(20,2);
+success!
+success!
+timestamp: 2018-12-27T17:17:08.573166
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.592352
+CREATE TABLE `auth_group`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `role` VARCHAR(512),
+    `description` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.602176
+CREATE TABLE `auth_membership`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `group_id` INT  , INDEX `group_id__idx` (`group_id`), FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.612519
+CREATE TABLE `auth_permission`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `group_id` INT  , INDEX `group_id__idx` (`group_id`), FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`) ON DELETE CASCADE,
+    `name` VARCHAR(512),
+    `table_name` VARCHAR(512),
+    `record_id` INTEGER,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.632430
+CREATE TABLE `auth_event`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `time_stamp` DATETIME,
+    `client_ip` VARCHAR(512),
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `origin` VARCHAR(512),
+    `description` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.646359
+CREATE TABLE `auth_cas`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user_id` INT  , INDEX `user_id__idx` (`user_id`), FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `created_on` DATETIME,
+    `service` VARCHAR(512),
+    `ticket` VARCHAR(512),
+    `renew` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.662276
+CREATE TABLE `hci`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `output_file` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.673118
+CREATE TABLE `comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin` INTEGER,
+    `parent` INTEGER,
+    `parent_author` INTEGER,
+    `root_parent` INTEGER,
+    `secondary_parent` INTEGER,
+    `body` LONGTEXT,
+    `image_url` VARCHAR(512),
+    `score` INTEGER,
+    `reply_count` INTEGER,
+    `seen` CHAR(1),
+    `link_url` VARCHAR(512),
+    `link_title` VARCHAR(512),
+    `link_desc` VARCHAR(512),
+    `link_image` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.695888
+CREATE TABLE `comment_report`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `comment` INT  , INDEX `comment__idx` (`comment`), FOREIGN KEY (`comment`) REFERENCES `comment` (`id`) ON DELETE CASCADE,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.707289
+CREATE TABLE `comment_vote`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `comment` INT  , INDEX `comment__idx` (`comment`), FOREIGN KEY (`comment`) REFERENCES `comment` (`id`) ON DELETE CASCADE,
+    `vote` INTEGER,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.717616
+CREATE TABLE `follow_coin`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin` INTEGER,
+    `status` CHAR(1),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.730261
+CREATE TABLE `follow_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `user` INTEGER,
+    `status` CHAR(1),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.744551
+CREATE TABLE `blog`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(512),
+    `website_slug` VARCHAR(512),
+    `description` VARCHAR(512),
+    `image_url` VARCHAR(512),
+    `image_url_small` VARCHAR(512),
+    `tag` VARCHAR(512),
+    `body` LONGTEXT,
+    `hide` CHAR(1),
+    `comment_count` INTEGER,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.762723
+CREATE TABLE `blog_comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `blog` INTEGER,
+    `parent` INTEGER,
+    `parent_author` INTEGER,
+    `root_parent` INTEGER,
+    `body` LONGTEXT,
+    `report_count` INTEGER,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.780467
+CREATE TABLE `master`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `cmc_id` INTEGER UNIQUE,
+    `name` VARCHAR(100),
+    `symbol` VARCHAR(100),
+    `website_slug` VARCHAR(512),
+    `custom_slug` VARCHAR(512),
+    `type` VARCHAR(512),
+    `sector` VARCHAR(512),
+    `cmc_rank` INTEGER,
+    `circulating_supply` NUMERIC(20,1),
+    `total_supply` NUMERIC(20,1),
+    `max_supply` NUMERIC(20,1),
+    `usd_price` NUMERIC(20,7),
+    `usd_volume_24h` NUMERIC(20,2),
+    `usd_market_cap` NUMERIC(20,1),
+    `usd_percent_change_24h` NUMERIC(20,2),
+    `usd_percent_change_7d` NUMERIC(20,2),
+    `btc_price` NUMERIC(20,7),
+    `btc_percent_change_24h` NUMERIC(20,2),
+    `btc_percent_change_7d` NUMERIC(20,2),
+    `change1d_x_mcap` NUMERIC(20,1),
+    `change7d_x_mcap` NUMERIC(20,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.802818
+CREATE TABLE `static`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `master_id` INT  , INDEX `master_id__idx` (`master_id`), FOREIGN KEY (`master_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `cmc_id` INTEGER UNIQUE,
+    `token` CHAR(1),
+    `mineable` CHAR(1),
+    `logo` VARCHAR(512),
+    `website` VARCHAR(512),
+    `explorer` VARCHAR(512),
+    `github` VARCHAR(512),
+    `telegram` VARCHAR(512),
+    `discord` VARCHAR(512),
+    `bitcointalk` VARCHAR(512),
+    `twitter` VARCHAR(512),
+    `medium` VARCHAR(512),
+    `reddit` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:08.823255
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(512) UNIQUE,
+    `sector_slug` VARCHAR(512) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2018-12-27T17:17:18.190065
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(255) UNIQUE,
+    `sector_slug` VARCHAR(255) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-27T17:17:18.201470
+CREATE TABLE `manual`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `master_id` INT  , INDEX `master_id__idx` (`master_id`), FOREIGN KEY (`master_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `source` VARCHAR(512),
+    `token_type` VARCHAR(512),
+    `platform` VARCHAR(512),
+    `country` VARCHAR(512),
+    `tagline` VARCHAR(512),
+    `description` VARCHAR(512),
+    `whitepaper` VARCHAR(512),
+    `ico_price_usd` NUMERIC(30,10),
+    `ico_startdate` DATETIME,
+    `ico_enddate` DATETIME,
+    `ico_raised_usd` NUMERIC(20,1),
+    `token_sale` NUMERIC(40,1),
+    `token_sale_percent` NUMERIC(4,1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2018-12-28T08:12:18.659772
+ALTER TABLE `static` DROP COLUMN `logo`;
+success!
+timestamp: 2018-12-30T08:14:50.062323
+ALTER TABLE `auth_user` ADD `ethaddress` VARCHAR(512);
+success!
+success!
+timestamp: 2019-01-01T07:07:52.312761
+ALTER TABLE `comment` ADD `like` INTEGER;
+success!
+timestamp: 2019-01-01T07:07:52.541713
+ALTER TABLE `comment` ADD `dislike` INTEGER;
+success!
+timestamp: 2019-01-01T07:07:52.602836
+ALTER TABLE `comment` DROP COLUMN `score`;
+success!
+timestamp: 2019-01-11T23:03:45.719830
+CREATE TABLE `wiki_page`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `slug` VARCHAR(512),
+    `title` VARCHAR(255) UNIQUE,
+    `body` LONGTEXT NOT NULL,
+    `tags` LONGTEXT,
+    `can_read` LONGTEXT,
+    `can_edit` LONGTEXT,
+    `changelog` VARCHAR(512),
+    `html` LONGTEXT,
+    `render` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-11T23:03:45.738284
+CREATE TABLE `wiki_tag`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512),
+    `wiki_page` INT  , INDEX `wiki_page__idx` (`wiki_page`), FOREIGN KEY (`wiki_page`) REFERENCES `wiki_page` (`id`) ON DELETE CASCADE,
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-11T23:03:45.754602
+CREATE TABLE `wiki_media`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `wiki_page` INT  , INDEX `wiki_page__idx` (`wiki_page`), FOREIGN KEY (`wiki_page`) REFERENCES `wiki_page` (`id`) ON DELETE CASCADE,
+    `title` VARCHAR(512),
+    `filename` VARCHAR(512),
+    `is_active` CHAR(1),
+    `created_on` DATETIME,
+    `created_by` INT  , INDEX `created_by__idx` (`created_by`), FOREIGN KEY (`created_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    `modified_on` DATETIME,
+    `modified_by` INT  , INDEX `modified_by__idx` (`modified_by`), FOREIGN KEY (`modified_by`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-14T06:58:58.231998
+ALTER TABLE `blog` ADD `submit` CHAR(1);
+success!
+success!
+timestamp: 2019-01-14T06:59:08.895471
+ALTER TABLE `blog` ADD `show` CHAR(1);
+success!
+timestamp: 2019-01-14T06:59:09.083737
+ALTER TABLE `blog` DROP COLUMN `hide`;
+success!
+timestamp: 2019-01-17T04:34:15.848752
+ALTER TABLE `master` ADD `tokenAddress` VARCHAR(60);
+success!
+success!
+timestamp: 2019-01-17T04:35:15.821474
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512) UNIQUE,
+    `address` VARCHAR(512) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-01-17T04:36:15.882782
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512) UNIQUE,
+    `address` VARCHAR(512) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-01-17T04:37:15.809538
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512) UNIQUE,
+    `address` VARCHAR(512) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-01-17T04:37:39.096356
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512) UNIQUE,
+    `address` VARCHAR(512) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-01-17T04:37:44.536609
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512) UNIQUE,
+    `address` VARCHAR(512) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-01-17T04:37:53.403653
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512) UNIQUE,
+    `address` VARCHAR(512) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-01-17T04:38:15.847633
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512) UNIQUE,
+    `address` VARCHAR(512) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-01-17T04:38:28.515070
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512) UNIQUE,
+    `address` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-01-17T04:39:14.295299
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(60) UNIQUE,
+    `address` VARCHAR(60),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-17T04:45:16.811149
+CREATE TABLE `token_list`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `token_custom_slug` VARCHAR(512),
+    `wallet_name` VARCHAR(60),
+    `current_balance` NUMERIC(20,2),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-17T04:47:33.663165
+ALTER TABLE `token_list` ADD `current_balance__tmp` NUMERIC(30,10);
+success!
+UPDATE `token_list` SET `current_balance__tmp`=`current_balance`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `current_balance`;
+success!
+ALTER TABLE `token_list` ADD `current_balance` NUMERIC(30,10);
+success!
+UPDATE `token_list` SET `current_balance`=`current_balance__tmp`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `current_balance__tmp`;
+success!
+success!
+timestamp: 2019-01-17T04:49:15.845370
+CREATE TABLE `token_history`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `token_custom_slug` VARCHAR(512),
+    `wallet_name` VARCHAR(60),
+    `current_balance` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-17T04:53:15.907785
+ALTER TABLE `token_history` ADD `current_balance__tmp` DATE;
+success!
+UPDATE `token_history` SET `current_balance__tmp`=`current_balance`;
+success!
+ALTER TABLE `token_history` DROP COLUMN `current_balance`;
+success!
+ALTER TABLE `token_history` ADD `current_balance` DATE;
+success!
+UPDATE `token_history` SET `current_balance`=`current_balance__tmp`;
+success!
+ALTER TABLE `token_history` DROP COLUMN `current_balance__tmp`;
+success!
+success!
+timestamp: 2019-01-17T04:54:53.597653
+ALTER TABLE `token_history` ADD `net_transfer` NUMERIC(30,10);
+success!
+timestamp: 2019-01-17T04:54:53.620122
+ALTER TABLE `token_history` ADD `date_transfer` DATE;
+success!
+timestamp: 2019-01-17T04:54:53.654579
+ALTER TABLE `token_history` DROP COLUMN `current_balance`;
+success!
+timestamp: 2019-01-17T05:10:02.646207
+ALTER TABLE `token_list` ADD `token_custom_slug__tmp` LONGTEXT;
+success!
+UPDATE `token_list` SET `token_custom_slug__tmp`=`token_custom_slug`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `token_custom_slug`;
+success!
+ALTER TABLE `token_list` ADD `token_custom_slug` LONGTEXT;
+success!
+UPDATE `token_list` SET `token_custom_slug`=`token_custom_slug__tmp`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `token_custom_slug__tmp`;
+success!
+timestamp: 2019-01-17T05:10:02.727553
+ALTER TABLE `token_list` ADD `wallet_name__tmp` LONGTEXT;
+success!
+UPDATE `token_list` SET `wallet_name__tmp`=`wallet_name`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `wallet_name`;
+success!
+ALTER TABLE `token_list` ADD `wallet_name` LONGTEXT;
+success!
+UPDATE `token_list` SET `wallet_name`=`wallet_name__tmp`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `wallet_name__tmp`;
+success!
+success!
+timestamp: 2019-01-18T07:05:51.974232
+ALTER TABLE `wallet` ADD `name__tmp` VARCHAR(20) UNIQUE;
+success!
+UPDATE `wallet` SET `name__tmp`=`name`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `name`;
+success!
+ALTER TABLE `wallet` ADD `name` VARCHAR(20) UNIQUE;
+success!
+UPDATE `wallet` SET `name`=`name__tmp`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `name__tmp`;
+success!
+timestamp: 2019-01-18T07:05:52.045514
+ALTER TABLE `wallet` ADD `exchange` VARCHAR(20);
+success!
+timestamp: 2019-01-18T07:07:50.159587
+ALTER TABLE `token_list` ADD `token_slug` LONGTEXT;
+success!
+timestamp: 2019-01-18T07:07:50.206875
+ALTER TABLE `token_list` DROP COLUMN `token_custom_slug`;
+success!
+timestamp: 2019-01-18T07:12:23.202211
+ALTER TABLE `wallet` ADD `exchange__tmp` LONGTEXT;
+success!
+UPDATE `wallet` SET `exchange__tmp`=`exchange`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `exchange`;
+success!
+ALTER TABLE `wallet` ADD `exchange` LONGTEXT;
+success!
+UPDATE `wallet` SET `exchange`=`exchange__tmp`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `exchange__tmp`;
+success!
+timestamp: 2019-01-18T07:18:58.664257
+ALTER TABLE `token_list` ADD `token_slug__tmp` VARCHAR(20);
+success!
+UPDATE `token_list` SET `token_slug__tmp`=`token_slug`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `token_slug`;
+success!
+ALTER TABLE `token_list` ADD `token_slug` VARCHAR(20);
+success!
+UPDATE `token_list` SET `token_slug`=`token_slug__tmp`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `token_slug__tmp`;
+success!
+success!
+timestamp: 2019-01-18T07:21:07.162199
+ALTER TABLE `wallet` ADD `exchange__tmp` VARCHAR(20);
+success!
+UPDATE `wallet` SET `exchange__tmp`=`exchange`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `exchange`;
+success!
+ALTER TABLE `wallet` ADD `exchange` VARCHAR(20);
+success!
+UPDATE `wallet` SET `exchange`=`exchange__tmp`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `exchange__tmp`;
+success!
+timestamp: 2019-01-18T07:21:07.240516
+CREATE TABLE `token_transfer`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `token_slug` VARCHAR(20),
+    `wallet_name` VARCHAR(60),
+    `date_transfer` DATE,
+    `net_transfer` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-18T07:21:58.662885
+ALTER TABLE `token_transfer` ADD `transfer_amount` NUMERIC(30,10);
+success!
+timestamp: 2019-01-18T07:21:58.682341
+ALTER TABLE `token_transfer` ADD `transfer_date` DATE;
+success!
+timestamp: 2019-01-18T07:21:58.704957
+ALTER TABLE `token_transfer` ADD `wallet_exchange` VARCHAR(60);
+success!
+timestamp: 2019-01-18T07:21:58.730053
+ALTER TABLE `token_transfer` DROP COLUMN `date_transfer`;
+success!
+timestamp: 2019-01-18T07:21:58.745246
+ALTER TABLE `token_transfer` DROP COLUMN `net_transfer`;
+success!
+timestamp: 2019-01-18T07:22:30.692487
+CREATE TABLE `token_balance`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `token_slug` VARCHAR(20),
+    `wallet_name` VARCHAR(60),
+    `wallet_exchange` VARCHAR(60),
+    `balance_date` DATE,
+    `balance_amount` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-18T07:23:07.184074
+ALTER TABLE `token_list` ADD `exchange_name` VARCHAR(20);
+success!
+success!
+timestamp: 2019-01-18T07:23:07.243344
+CREATE TABLE `token_price`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `token_slug` VARCHAR(20),
+    `wallet_name` VARCHAR(60),
+    `wallet_exchange` VARCHAR(60),
+    `balance_date` DATE,
+    `balance_amount` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-18T07:24:14.270001
+ALTER TABLE `token_price` ADD `price` NUMERIC(30,10);
+success!
+timestamp: 2019-01-18T07:24:14.282442
+ALTER TABLE `token_price` ADD `trade_date` DATE;
+success!
+timestamp: 2019-01-18T07:24:14.311000
+ALTER TABLE `token_price` DROP COLUMN `balance_amount`;
+success!
+timestamp: 2019-01-18T07:24:14.325647
+ALTER TABLE `token_price` DROP COLUMN `balance_date`;
+success!
+timestamp: 2019-01-18T07:33:00.676085
+ALTER TABLE `token_list` ADD `wallet_name__tmp` VARCHAR(20);
+success!
+UPDATE `token_list` SET `wallet_name__tmp`=`wallet_name`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `wallet_name`;
+success!
+ALTER TABLE `token_list` ADD `wallet_name` VARCHAR(20);
+success!
+UPDATE `token_list` SET `wallet_name`=`wallet_name__tmp`;
+success!
+ALTER TABLE `token_list` DROP COLUMN `wallet_name__tmp`;
+success!
+success!
+timestamp: 2019-01-18T08:13:23.772433
+ALTER TABLE `token_list` ADD `wallet_exchange` VARCHAR(20);
+success!
+timestamp: 2019-01-18T08:13:23.810279
+ALTER TABLE `token_list` DROP COLUMN `exchange_name`;
+success!
+timestamp: 2019-01-19T01:25:24.242134
+ALTER TABLE `token_list` ADD `updated_on` DATETIME;
+success!
+success!
+timestamp: 2019-01-19T01:26:24.240119
+ALTER TABLE `token_list` ADD `status` VARCHAR(20);
+success!
+success!
+timestamp: 2019-01-19T04:44:33.598211
+ALTER TABLE `token_transfer` DROP COLUMN `wallet_exchange`;
+success!
+timestamp: 2019-01-20T15:16:11.103023
+ALTER TABLE `token_list` ADD `active` CHAR(1);
+success!
+success!
+timestamp: 2019-01-21T07:41:49.375813
+ALTER TABLE `master` ADD `coingecko_id` VARCHAR(512);
+success!
+success!
+timestamp: 2019-01-21T10:44:03.059097
+ALTER TABLE `token_price` ADD `priceBTC` NUMERIC(20,7);
+success!
+timestamp: 2019-01-21T10:44:03.084088
+ALTER TABLE `token_price` ADD `priceETH` NUMERIC(20,7);
+success!
+timestamp: 2019-01-21T10:44:03.108996
+ALTER TABLE `token_price` ADD `priceUSD` NUMERIC(20,7);
+success!
+timestamp: 2019-01-21T10:44:03.144497
+ALTER TABLE `token_price` DROP COLUMN `wallet_name`;
+success!
+timestamp: 2019-01-21T10:44:03.169933
+ALTER TABLE `token_price` DROP COLUMN `price`;
+success!
+timestamp: 2019-01-21T10:44:03.187908
+ALTER TABLE `token_price` DROP COLUMN `wallet_exchange`;
+success!
+timestamp: 2019-01-21T11:33:01.170964
+ALTER TABLE `token_price` ADD `pricebtc__tmp` NUMERIC(30,10);
+success!
+UPDATE `token_price` SET `pricebtc__tmp`=`priceBTC`;
+success!
+ALTER TABLE `token_price` DROP COLUMN `priceBTC`;
+success!
+ALTER TABLE `token_price` ADD `priceBTC` NUMERIC(30,10);
+success!
+UPDATE `token_price` SET `priceBTC`=`pricebtc__tmp`;
+success!
+ALTER TABLE `token_price` DROP COLUMN `pricebtc__tmp`;
+success!
+timestamp: 2019-01-21T11:33:01.297214
+ALTER TABLE `token_price` ADD `priceeth__tmp` NUMERIC(30,10);
+success!
+UPDATE `token_price` SET `priceeth__tmp`=`priceETH`;
+success!
+ALTER TABLE `token_price` DROP COLUMN `priceETH`;
+success!
+ALTER TABLE `token_price` ADD `priceETH` NUMERIC(30,10);
+success!
+UPDATE `token_price` SET `priceETH`=`priceeth__tmp`;
+success!
+ALTER TABLE `token_price` DROP COLUMN `priceeth__tmp`;
+success!
+timestamp: 2019-01-21T11:33:01.453057
+ALTER TABLE `token_price` ADD `priceusd__tmp` NUMERIC(30,10);
+success!
+UPDATE `token_price` SET `priceusd__tmp`=`priceUSD`;
+success!
+ALTER TABLE `token_price` DROP COLUMN `priceUSD`;
+success!
+ALTER TABLE `token_price` ADD `priceUSD` NUMERIC(30,10);
+success!
+UPDATE `token_price` SET `priceUSD`=`priceusd__tmp`;
+success!
+ALTER TABLE `token_price` DROP COLUMN `priceusd__tmp`;
+success!
+success!
+timestamp: 2019-01-24T02:24:41.332318
+CREATE TABLE `wallet_group`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(20) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-24T02:43:20.823066
+ALTER TABLE `wallet` ADD `group_id` INTEGER;
+success!
+timestamp: 2019-01-24T02:43:20.856351
+ALTER TABLE `wallet` ADD `group_name` VARCHAR(20);
+success!
+timestamp: 2019-01-24T02:43:20.871888
+ALTER TABLE `wallet` DROP COLUMN `exchange`;
+success!
+timestamp: 2019-01-24T02:52:57.982391
+ALTER TABLE `wallet` ADD `address__tmp` VARCHAR(60) UNIQUE;
+success!
+UPDATE `wallet` SET `address__tmp`=`address`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `address`;
+success!
+ALTER TABLE `wallet` ADD `address` VARCHAR(60) UNIQUE;
+success!
+UPDATE `wallet` SET `address`=`address__tmp`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `address__tmp`;
+success!
+success!
+success!
+timestamp: 2019-01-24T03:15:00.536030
+ALTER TABLE `wallet` ADD `grp_id` INTEGER;
+success!
+timestamp: 2019-01-24T03:15:00.574673
+ALTER TABLE `wallet` ADD `grp_name` INT  , ADD INDEX `grp_name__idx` (`grp_name`), ADD FOREIGN KEY (`grp_name`) REFERENCES `wallet_group` (`id`) ON DELETE CASCADE;
+success!
+timestamp: 2019-01-24T03:15:00.604819
+ALTER TABLE `wallet` DROP COLUMN `group_name`;
+timestamp: 2019-01-24T03:15:01.006787
+ALTER TABLE `wallet` DROP COLUMN `group_name`;
+timestamp: 2019-01-24T03:15:45.724012
+ALTER TABLE `wallet` DROP COLUMN `group_name`;
+timestamp: 2019-01-24T03:16:00.540637
+ALTER TABLE `wallet` DROP COLUMN `group_name`;
+success!
+timestamp: 2019-01-24T03:16:00.562494
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+success!
+timestamp: 2019-01-24T03:17:17.856694
+ALTER TABLE `wallet` ADD `group_id` INT  , ADD INDEX `group_id__idx` (`group_id`), ADD FOREIGN KEY (`group_id`) REFERENCES `wallet_group` (`id`) ON DELETE CASCADE;
+success!
+timestamp: 2019-01-24T03:17:17.886394
+ALTER TABLE `wallet` DROP COLUMN `grp_id`;
+success!
+timestamp: 2019-01-24T03:17:17.908030
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:17:30.300615
+ALTER TABLE `wallet` ADD `group` INT  , ADD INDEX `group__idx` (`group`), ADD FOREIGN KEY (`group`) REFERENCES `wallet_group` (`id`) ON DELETE CASCADE;
+success!
+timestamp: 2019-01-24T03:17:30.340924
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:17:51.549891
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:18:00.417376
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:18:07.504076
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:18:24.340373
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:18:33.226307
+ALTER TABLE `wallet` ADD `group_test` INT  , ADD INDEX `group_test__idx` (`group_test`), ADD FOREIGN KEY (`group_test`) REFERENCES `wallet_group` (`id`) ON DELETE CASCADE;
+success!
+timestamp: 2019-01-24T03:18:33.266776
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:19:00.455591
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:19:04.028219
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:19:08.688355
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:19:08.904087
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:21:00.454685
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:22:00.460522
+CREATE TABLE `wallet_test`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(20) UNIQUE,
+    `group_test` INT  , INDEX `group_test__idx` (`group_test`), FOREIGN KEY (`group_test`) REFERENCES `wallet_group` (`id`) ON DELETE CASCADE,
+    `address` VARCHAR(60) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-24T03:23:39.379514
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:24:00.450845
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:25:00.455591
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-24T03:25:45.568809
+ALTER TABLE `wallet_test` ADD `group` INT  , ADD INDEX `group__idx` (`group`), ADD FOREIGN KEY (`group`) REFERENCES `wallet_group` (`id`) ON DELETE CASCADE;
+success!
+timestamp: 2019-01-24T03:25:45.595624
+ALTER TABLE `wallet_test` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:25:50.253275
+ALTER TABLE `wallet_test` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:26:00.421858
+CREATE TABLE `wallet_test1`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(20) UNIQUE,
+    `group` INT  , INDEX `group__idx` (`group`), FOREIGN KEY (`group`) REFERENCES `wallet_group` (`id`) ON DELETE CASCADE,
+    `address` VARCHAR(60) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-24T03:28:00.420604
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:00.549035
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:06.534860
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:26.775019
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:29.223196
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:32.004475
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:35.143881
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:37.134993
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:39.181808
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:39.863961
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:42.075099
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:44.565924
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:46.539154
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:49.318001
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:51.646144
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:54.954181
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:56.956276
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:29:59.322261
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:00.553037
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:01.809267
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:04.336467
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:06.785513
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:09.122405
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:11.548950
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:13.696587
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:14.959880
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:15.998567
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:18.774084
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:21.537685
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:24.723194
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:27.359457
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:29.871647
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:32.566034
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:35.088544
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:37.881875
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:40.155176
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:40.648158
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:42.915649
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:45.369711
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:49.039854
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:51.200970
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:53.606339
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:56.086854
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:30:58.330080
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:00.574805
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:00.641462
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:04.104012
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:06.673616
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:11.491624
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:14.893646
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:17.744071
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:20.993768
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:24.738053
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:26.958599
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:26.966916
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:28.993194
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:29.171313
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:32.658950
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:33.254035
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:34.835956
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:36.402212
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:38.004368
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:39.075680
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:40.420393
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:41.696554
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:43.256282
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:45.549960
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:47.701157
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:48.798407
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:50.077333
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:51.435787
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:53.849068
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:54.707652
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:57.089594
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:58.527596
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:31:59.525650
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:00.562998
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:01.668526
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:01.802174
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:04.869007
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:05.348659
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:07.285818
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:08.316265
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:10.869378
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:11.308026
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:14.631895
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:15.541804
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:16.976451
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:18.516637
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:21.657204
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:22.660983
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:25.043133
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:26.102863
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:27.741628
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:29.424098
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:30.127764
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:32.026744
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:32.539996
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:34.609715
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:35.725835
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:37.723418
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:40.458089
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:40.547753
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:44.180708
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:45.071332
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:46.110480
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:47.654996
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:49.482755
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:51.040300
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:51.696088
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:54.067635
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:54.152201
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:56.584924
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:57.278566
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:32:59.504602
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:00.293354
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:00.581651
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:02.812004
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:03.109378
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:06.112022
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:06.241918
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:09.737409
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:10.778737
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:13.297181
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:13.836641
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:15.961291
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:17.645999
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:18.489020
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:19.624418
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:21.204001
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:23.699503
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:24.169052
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:26.476720
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:28.025497
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:29.284890
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:31.981870
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:32.488776
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:34.939080
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:36.408540
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:37.281281
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:39.559852
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:40.825417
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:42.421412
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:43.667757
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:46.061715
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:46.187861
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:48.320745
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:50.696624
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:52.728924
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:53.598649
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:55.895362
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:56.049639
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:58.107934
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:33:59.133801
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:00.551860
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:01.454067
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:02.163410
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:04.040270
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:06.802785
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:07.549712
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:08.573586
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:09.605028
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:12.337774
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:12.476345
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:14.784736
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:16.220946
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:19.200442
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:19.600385
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:21.746804
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:22.792090
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:24.470732
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:25.954733
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:26.524240
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:27.432721
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:29.779646
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:30.356579
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:32.863222
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:33.777026
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:35.848616
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:36.413654
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:39.022765
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:39.591521
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:41.382652
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:42.829053
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:43.806966
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:45.793380
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:46.252614
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:48.458723
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:49.140416
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:51.592861
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:51.789287
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:53.631126
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:55.097865
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:56.983303
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:57.518845
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+timestamp: 2019-01-24T03:34:59.805284
+ALTER TABLE `wallet` DROP COLUMN `group_test`;
+success!
+timestamp: 2019-01-24T03:34:59.996476
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:00.577808
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:00.722729
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:02.011944
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:04.479574
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:04.997729
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:06.243452
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:07.441943
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:09.010323
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:10.077489
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:12.692344
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:13.229356
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:16.013151
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:18.091789
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:18.310786
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+timestamp: 2019-01-24T03:35:21.714330
+ALTER TABLE `wallet` DROP COLUMN `grp_name`;
+success!
+timestamp: 2019-01-24T03:35:21.724617
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:21.856927
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:24.265234
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:24.458833
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:25.545281
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:28.001653
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:28.575942
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:31.490356
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:31.835312
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:34.422116
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:34.552237
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+timestamp: 2019-01-24T03:35:37.586314
+ALTER TABLE `wallet` DROP COLUMN `group_id`;
+success!
+timestamp: 2019-01-25T02:09:24.934697
+ALTER TABLE `wallet` ADD `has_token` CHAR(1);
+success!
+timestamp: 2019-01-25T02:42:44.222262
+CREATE TABLE `token_group_list`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `token_slug` VARCHAR(20),
+    `wallet_name` VARCHAR(20),
+    `wallet_exchange` VARCHAR(20),
+    `updated_on` DATETIME,
+    `current_balance` NUMERIC(30,10),
+    `status` VARCHAR(20),
+    `active` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-25T05:16:39.599578
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:16:42.583970
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:16:42.905927
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:16:44.531629
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:16:47.125336
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:16:50.042603
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:16:50.228673
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:16:54.100261
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:16:58.316064
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:00.866408
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:02.102963
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:07.039440
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:18.862484
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:24.422714
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:28.786721
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:32.607388
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:35.052444
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:37.271993
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:41.344090
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:52.366822
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:17:58.607171
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:18:01.388628
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:18:16.532388
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:18:16.796260
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:18:21.432297
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:18:24.524148
+ALTER TABLE `wallet` DROP COLUMN `group`;
+success!
+timestamp: 2019-01-25T05:18:54.289991
+ALTER TABLE `wallet` ADD `group__tmp` VARCHAR(20);
+success!
+UPDATE `wallet` SET `group__tmp`=`group`;
+success!
+ALTER TABLE `wallet` DROP COLUMN `group`;
+timestamp: 2019-01-25T05:34:53.905241
+ALTER TABLE `master` ADD `wallet_address` VARCHAR(60);
+success!
+timestamp: 2019-01-25T05:34:54.460158
+ALTER TABLE `master` DROP COLUMN `tokenAddress`;
+success!
+timestamp: 2019-01-25T05:40:00.306935
+ALTER TABLE `master` ADD `is_wallet` CHAR(1);
+success!
+success!
+timestamp: 2019-01-25T05:40:25.680928
+ALTER TABLE `master` ADD `wallet_total` NUMERIC(30,10);
+success!
+success!
+timestamp: 2019-01-25T05:41:27.920521
+ALTER TABLE `master` ADD `wallet_updated_on` DATETIME;
+success!
+success!
+timestamp: 2019-01-25T05:49:00.202179
+ALTER TABLE `token_group_list` ADD `coin_slug` VARCHAR(20);
+success!
+timestamp: 2019-01-25T05:49:00.214856
+ALTER TABLE `token_group_list` ADD `coin_id` INT  , ADD INDEX `coin_id__idx` (`coin_id`), ADD FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE;
+success!
+timestamp: 2019-01-25T05:49:00.268271
+ALTER TABLE `token_group_list` DROP COLUMN `token_slug`;
+success!
+timestamp: 2019-01-25T05:49:00.281615
+ALTER TABLE `token_group_list` DROP COLUMN `wallet_name`;
+success!
+timestamp: 2019-01-25T05:50:00.177609
+ALTER TABLE `token_group_list` ADD `group` VARCHAR(20);
+success!
+timestamp: 2019-01-25T05:50:00.260138
+ALTER TABLE `token_group_list` DROP COLUMN `wallet_exchange`;
+success!
+timestamp: 2019-01-25T05:50:13.923890
+ALTER TABLE `token_group_list` ADD `balance_current` NUMERIC(30,10);
+success!
+timestamp: 2019-01-25T05:50:13.969417
+ALTER TABLE `token_group_list` DROP COLUMN `current_balance`;
+success!
+timestamp: 2019-01-25T05:52:25.443310
+ALTER TABLE `token_group_list` ADD `is_active` CHAR(1);
+success!
+timestamp: 2019-01-25T05:52:25.790149
+ALTER TABLE `token_group_list` DROP COLUMN `active`;
+success!
+timestamp: 2019-01-25T05:54:25.446273
+ALTER TABLE `token_price` ADD `coin_id` INT  , ADD INDEX `coin_id__idx` (`coin_id`), ADD FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE;
+success!
+success!
+timestamp: 2019-01-25T06:04:00.184763
+CREATE TABLE `token_group_balance`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `token_group_id` INT  , INDEX `token_group_id__idx` (`token_group_id`), FOREIGN KEY (`token_group_id`) REFERENCES `token_group_list` (`id`) ON DELETE CASCADE,
+    `coin_slug` VARCHAR(20),
+    `group` VARCHAR(20),
+    `updated_on` DATETIME,
+    `balance_current` NUMERIC(30,10),
+    `status` VARCHAR(20),
+    `is_active` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-25T06:05:00.165447
+ALTER TABLE `token_group_balance` ADD `balance_date` DATE;
+success!
+timestamp: 2019-01-25T06:05:00.197369
+ALTER TABLE `token_group_balance` ADD `balance_amount` NUMERIC(30,10);
+success!
+timestamp: 2019-01-25T06:05:00.220105
+ALTER TABLE `token_group_balance` DROP COLUMN `status`;
+success!
+timestamp: 2019-01-25T06:05:00.235636
+ALTER TABLE `token_group_balance` DROP COLUMN `group`;
+success!
+timestamp: 2019-01-25T06:05:00.247858
+ALTER TABLE `token_group_balance` DROP COLUMN `coin_slug`;
+success!
+timestamp: 2019-01-25T06:05:00.263421
+ALTER TABLE `token_group_balance` DROP COLUMN `is_active`;
+success!
+timestamp: 2019-01-25T06:05:00.279882
+ALTER TABLE `token_group_balance` DROP COLUMN `balance_current`;
+success!
+timestamp: 2019-01-25T06:05:00.289401
+ALTER TABLE `token_group_balance` DROP COLUMN `updated_on`;
+success!
+timestamp: 2019-01-25T06:05:00.301226
+CREATE TABLE `token_total_balance`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin_id` INT  , INDEX `coin_id__idx` (`coin_id`), FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `balance_date` DATE,
+    `balance_amount` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-25T06:40:06.316696
+ALTER TABLE `token_balance` ADD `coin_id` INT  , ADD INDEX `coin_id__idx` (`coin_id`), ADD FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE;
+success!
+success!
+timestamp: 2019-01-25T07:02:29.940819
+ALTER TABLE `token_balance` ADD `wallet_id` INTEGER;
+success!
+success!
+timestamp: 2019-01-25T14:51:14.521026
+ALTER TABLE `token_group_balance` ADD `coin_id` INT  , ADD INDEX `coin_id__idx` (`coin_id`), ADD FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE;
+success!
+success!
+timestamp: 2019-01-25T15:31:08.526428
+ALTER TABLE `master` DROP COLUMN `is_wallet`;
+success!
+timestamp: 2019-01-25T17:14:17.826183
+ALTER TABLE `master` ADD `wallet_status` VARCHAR(50);
+success!
+success!
+timestamp: 2019-01-25T17:14:18.353108
+ALTER TABLE `token_group_list` ADD `status__tmp` VARCHAR(50);
+success!
+UPDATE `token_group_list` SET `status__tmp`=`status`;
+success!
+ALTER TABLE `token_group_list` DROP COLUMN `status`;
+success!
+ALTER TABLE `token_group_list` ADD `status` VARCHAR(50);
+success!
+UPDATE `token_group_list` SET `status`=`status__tmp`;
+success!
+ALTER TABLE `token_group_list` DROP COLUMN `status__tmp`;
+success!
+success!
+timestamp: 2019-01-25T17:17:10.604463
+ALTER TABLE `master` DROP COLUMN `wallet_status`;
+success!
+timestamp: 2019-01-26T13:02:50.444178
+ALTER TABLE `token_price` DROP COLUMN `token_slug`;
+success!
+timestamp: 2019-01-26T13:11:15.054842
+CREATE TABLE `token_wallet_list`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(20) UNIQUE,
+    `group` VARCHAR(20),
+    `has_token` CHAR(1),
+    `address` VARCHAR(60) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-26T13:51:26.338699
+ALTER TABLE `token_wallet_list` ADD `status` VARCHAR(20);
+success!
+timestamp: 2019-01-26T13:51:26.357641
+ALTER TABLE `token_wallet_list` ADD `current_balance` NUMERIC(30,10);
+success!
+timestamp: 2019-01-26T13:51:26.372742
+ALTER TABLE `token_wallet_list` ADD `coin_slug` VARCHAR(20);
+success!
+timestamp: 2019-01-26T13:51:26.388280
+ALTER TABLE `token_wallet_list` ADD `coin_id` INT  , ADD INDEX `coin_id__idx` (`coin_id`), ADD FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE;
+success!
+timestamp: 2019-01-26T13:51:26.403339
+ALTER TABLE `token_wallet_list` ADD `wallet` VARCHAR(20);
+success!
+timestamp: 2019-01-26T13:51:26.423026
+ALTER TABLE `token_wallet_list` ADD `active` CHAR(1);
+success!
+timestamp: 2019-01-26T13:51:26.436142
+ALTER TABLE `token_wallet_list` ADD `updated_on` DATETIME;
+success!
+timestamp: 2019-01-26T13:51:26.467425
+ALTER TABLE `token_wallet_list` DROP COLUMN `has_token`;
+success!
+timestamp: 2019-01-26T13:51:26.485030
+ALTER TABLE `token_wallet_list` DROP COLUMN `name`;
+success!
+timestamp: 2019-01-26T13:51:26.501489
+ALTER TABLE `token_wallet_list` DROP COLUMN `address`;
+success!
+timestamp: 2019-01-26T13:52:15.289430
+ALTER TABLE `token_wallet_list` ADD `status__tmp` VARCHAR(50);
+success!
+UPDATE `token_wallet_list` SET `status__tmp`=`status`;
+success!
+ALTER TABLE `token_wallet_list` DROP COLUMN `status`;
+success!
+ALTER TABLE `token_wallet_list` ADD `status` VARCHAR(50);
+success!
+UPDATE `token_wallet_list` SET `status`=`status__tmp`;
+success!
+ALTER TABLE `token_wallet_list` DROP COLUMN `status__tmp`;
+success!
+success!
+timestamp: 2019-01-26T14:35:35.070413
+CREATE TABLE `token_wallet_balance`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin_id` INT  , INDEX `coin_id__idx` (`coin_id`), FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `wallet` VARCHAR(20),
+    `group` VARCHAR(20),
+    `balance_date` DATE,
+    `balance_amount` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-26T16:03:37.471992
+CREATE TABLE `token_sum_balance`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin_id` INT  , INDEX `coin_id__idx` (`coin_id`), FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `balance_date` DATE,
+    `balance_amount` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-26T16:29:13.584758
+CREATE TABLE `token_price1`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin_id` INT  , INDEX `coin_id__idx` (`coin_id`), FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `trade_date` DATE,
+    `priceBTC` NUMERIC(30,10),
+    `priceETH` NUMERIC(30,10),
+    `priceUSD` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-01-28T08:59:59.486379
+ALTER TABLE `master` DROP COLUMN `wallet_total`;
+success!
+timestamp: 2019-01-28T08:59:59.539941
+ALTER TABLE `master` DROP COLUMN `wallet_updated_on`;
+success!
+timestamp: 2019-01-30T07:29:38.920560
+ALTER TABLE `comment` ADD `blog` INTEGER;
+success!
+success!
+timestamp: 2019-01-30T08:00:05.567976
+ALTER TABLE `comment` DROP COLUMN `blog`;
+success!
+timestamp: 2019-01-31T09:08:15.931749
+ALTER TABLE `auth_user` ADD `notif` CHAR(1);
+success!
+success!
+timestamp: 2019-01-31T09:26:13.358954
+ALTER TABLE `auth_user` DROP COLUMN `notif`;
+success!
+timestamp: 2019-02-01T12:22:41.265821
+ALTER TABLE `comment` DROP COLUMN `reply_count`;
+success!
+timestamp: 2019-02-01T13:49:43.065761
+CREATE TABLE `master`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `cmc_id` INTEGER UNIQUE,
+    `name` VARCHAR(100),
+    `symbol` VARCHAR(100),
+    `website_slug` VARCHAR(512),
+    `custom_slug` VARCHAR(512),
+    `coingecko_id` VARCHAR(512),
+    `type` VARCHAR(512),
+    `sector` VARCHAR(512),
+    `cmc_rank` INTEGER,
+    `circulating_supply` NUMERIC(20,1),
+    `total_supply` NUMERIC(20,1),
+    `max_supply` NUMERIC(20,1),
+    `usd_price` NUMERIC(20,7),
+    `usd_volume_24h` NUMERIC(20,2),
+    `usd_market_cap` NUMERIC(20,1),
+    `usd_percent_change_24h` NUMERIC(20,2),
+    `usd_percent_change_7d` NUMERIC(20,2),
+    `btc_price` NUMERIC(20,7),
+    `btc_percent_change_24h` NUMERIC(20,2),
+    `btc_percent_change_7d` NUMERIC(20,2),
+    `change1d_x_mcap` NUMERIC(20,1),
+    `change7d_x_mcap` NUMERIC(20,1),
+    `wallet_address` VARCHAR(60),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-02-02T08:39:47.524422
+ALTER TABLE `master` ADD `discord` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:47.576095
+ALTER TABLE `master` ADD `telegram` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:47.631450
+ALTER TABLE `master` ADD `twitter` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:47.870728
+ALTER TABLE `master` ADD `website` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:47.930696
+ALTER TABLE `master` ADD `reddit` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:48.004352
+ALTER TABLE `master` ADD `medium` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:48.062719
+ALTER TABLE `master` ADD `explorer` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:48.180076
+ALTER TABLE `master` ADD `bitcointalk` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:48.298226
+ALTER TABLE `master` ADD `github` VARCHAR(512);
+success!
+timestamp: 2019-02-02T08:39:48.529813
+ALTER TABLE `master` ADD `token` CHAR(1);
+success!
+timestamp: 2019-02-02T08:39:48.629621
+ALTER TABLE `master` ADD `mineable` CHAR(1);
+success!
+success!
+timestamp: 2019-02-02T08:48:12.029034
+CREATE TABLE `sector`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `sector` VARCHAR(255) UNIQUE,
+    `sector_slug` VARCHAR(255) UNIQUE,
+    `sector_count` INTEGER,
+    `description` VARCHAR(512),
+    `image_html` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-02-02T08:54:48.307450
+CREATE TABLE `wallet`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(20) UNIQUE,
+    `group` VARCHAR(20),
+    `has_token` CHAR(1),
+    `address` VARCHAR(60) UNIQUE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-02-02T08:57:11.249514
+CREATE TABLE `token_wallet_list`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin_id` INT  , INDEX `coin_id__idx` (`coin_id`), FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `coin_slug` VARCHAR(20),
+    `wallet` VARCHAR(20),
+    `group` VARCHAR(20),
+    `updated_on` DATETIME,
+    `current_balance` NUMERIC(30,10),
+    `status` VARCHAR(50),
+    `active` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-02-02T09:00:12.082417
+CREATE TABLE `token_wallet_balance`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin_id` INT  , INDEX `coin_id__idx` (`coin_id`), FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `wallet` VARCHAR(20),
+    `group` VARCHAR(20),
+    `balance_date` DATE,
+    `balance_amount` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-02-02T09:02:23.701808
+CREATE TABLE `token_price`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin_id` INT  , INDEX `coin_id__idx` (`coin_id`), FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `trade_date` DATE,
+    `priceBTC` NUMERIC(30,10),
+    `priceETH` NUMERIC(30,10),
+    `priceUSD` NUMERIC(30,10),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-02-02T10:32:36.768076
+ALTER TABLE `master` DROP COLUMN `change7d_x_mcap`;
+success!
+timestamp: 2019-02-02T10:32:36.870080
+ALTER TABLE `master` DROP COLUMN `btc_percent_change_7d`;
+success!
+timestamp: 2019-02-02T10:32:36.936070
+ALTER TABLE `master` DROP COLUMN `change1d_x_mcap`;
+success!
+timestamp: 2019-02-02T10:32:37.000163
+ALTER TABLE `master` DROP COLUMN `btc_price`;
+success!
+timestamp: 2019-02-02T10:32:37.066654
+ALTER TABLE `master` DROP COLUMN `btc_percent_change_24h`;
+success!
+timestamp: 2019-02-03T09:21:06.663238
+ALTER TABLE `master` DROP COLUMN `max_supply`;
+success!
+timestamp: 2019-02-03T14:06:57.549241
+ALTER TABLE `master` ADD `market_cap_rank` INTEGER;
+success!
+timestamp: 2019-02-03T14:06:58.202241
+ALTER TABLE `master` DROP COLUMN `cmc_rank`;
+success!
+timestamp: 2019-02-03T14:26:39.724702
+ALTER TABLE `master` ADD `cmc_slug` VARCHAR(512);
+success!
+success!
+timestamp: 2019-02-03T14:32:25.797123
+ALTER TABLE `master` DROP COLUMN `website_slug`;
+success!
+timestamp: 2019-02-03T15:09:28.430263
+ALTER TABLE `master` DROP COLUMN `token`;
+success!
+timestamp: 2019-02-03T15:09:28.570959
+ALTER TABLE `master` DROP COLUMN `mineable`;
+success!
+timestamp: 2019-02-03T15:32:34.544930
+ALTER TABLE `master` ADD `status` VARCHAR(50);
+success!
+success!
+timestamp: 2019-02-05T06:32:35.825492
+ALTER TABLE `token_wallet_list` ADD `historystatus` VARCHAR(50);
+success!
+success!
+timestamp: 2019-02-05T09:15:35.116288
+ALTER TABLE `token_wallet_list` ADD `category` VARCHAR(20);
+success!
+success!
+timestamp: 2019-02-05T14:42:37.221262
+ALTER TABLE `token_wallet_list` ADD `divisor` INTEGER;
+success!
+success!
+timestamp: 2019-02-10T08:23:38.338982
+ALTER TABLE `master` ADD `image_id` INTEGER;
+success!
+success!
+timestamp: 2019-02-10T08:59:16.446723
+CREATE TABLE `test`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `image` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-02-10T11:40:21.449265
+ALTER TABLE `master` ADD `image` VARCHAR(512);
+success!
+success!
+timestamp: 2019-02-10T11:41:18.847988
+ALTER TABLE `master` ADD `image_thumb` VARCHAR(512);
+success!
+timestamp: 2019-02-10T11:41:19.431639
+ALTER TABLE `master` DROP COLUMN `image`;
+success!
+timestamp: 2019-02-10T12:02:43.426991
+ALTER TABLE `master` ADD `image_small` VARCHAR(512);
+success!
+success!
+timestamp: 2019-02-10T12:22:02.030530
+ALTER TABLE `master` ADD `image_url` VARCHAR(512);
+success!
+success!
+timestamp: 2019-02-10T13:07:53.583515
+ALTER TABLE `master` DROP COLUMN `image_id`;
+success!
+timestamp: 2019-02-11T02:39:45.633258
+CREATE TABLE `inflation`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `coin_id` INT  , INDEX `coin_id__idx` (`coin_id`), FOREIGN KEY (`coin_id`) REFERENCES `master` (`id`) ON DELETE CASCADE,
+    `emission_24h` INTEGER,
+    `updated_on` DATETIME,
+    `status` VARCHAR(50),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-02-11T03:31:31.126367
+ALTER TABLE `inflation` ADD `emission_24h__tmp` NUMERIC(30,10);
+success!
+UPDATE `inflation` SET `emission_24h__tmp`=`emission_24h`;
+success!
+ALTER TABLE `inflation` DROP COLUMN `emission_24h`;
+success!
+ALTER TABLE `inflation` ADD `emission_24h` NUMERIC(30,10);
+success!
+UPDATE `inflation` SET `emission_24h`=`emission_24h__tmp`;
+success!
+ALTER TABLE `inflation` DROP COLUMN `emission_24h__tmp`;
+success!
+success!
+timestamp: 2019-02-25T17:06:14.512465
+ALTER TABLE `inflation` ADD `failed_proxy` VARCHAR(50);
+success!
+success!
+timestamp: 2019-02-28T11:15:57.282265
+ALTER TABLE `master` ADD `is_exchange` VARCHAR(1);
+success!
+success!
+success!
+timestamp: 2019-03-01T15:27:53.459907
+ALTER TABLE `comment` ADD `inserted_on` DATETIME;
+success!
+success!
+success!
+timestamp: 2019-03-01T16:12:13.813396
+ALTER TABLE `comment` DROP COLUMN `inserted_on`;
+success!
+timestamp: 2019-03-02T16:38:23.863092
+ALTER TABLE `comment` ADD `bot_body` LONGTEXT;
+success!
+success!
+timestamp: 2019-03-02T17:49:45.562865
+ALTER TABLE `comment` DROP COLUMN `bot_body`;
+success!
+timestamp: 2019-03-14T08:44:03.912317
+ALTER TABLE `master` ADD `is_active_erc20` VARCHAR(1);
+success!
+success!
+timestamp: 2019-03-15T07:26:34.928051
+ALTER TABLE `comment` ADD `isHidden` CHAR(1);
+success!
+success!
+timestamp: 2019-03-15T07:27:14.944614
+ALTER TABLE `comment` DROP COLUMN `isHidden`;
+success!
+timestamp: 2019-03-15T07:29:03.327199
+ALTER TABLE `comment` ADD `is_hidden` CHAR(1);
+success!
+success!
+timestamp: 2019-03-15T13:18:57.371395
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-03-15T13:19:02.422009
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-03-15T13:19:26.671644
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-03-15T13:20:27.428106
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-03-15T13:21:27.445071
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-03-15T13:22:47.868196
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-04-07T06:43:59.264256
+CREATE TABLE `scheduler_task`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `application_name` VARCHAR(512),
+    `task_name` VARCHAR(512),
+    `group_name` VARCHAR(512),
+    `status` VARCHAR(512),
+    `broadcast` CHAR(1),
+    `function_name` VARCHAR(512),
+    `uuid` VARCHAR(255) UNIQUE,
+    `args` LONGTEXT,
+    `vars` LONGTEXT,
+    `enabled` CHAR(1),
+    `start_time` DATETIME,
+    `next_run_time` DATETIME,
+    `stop_time` DATETIME,
+    `repeats` INTEGER,
+    `retry_failed` INTEGER,
+    `period` INTEGER,
+    `prevent_drift` CHAR(1),
+    `cronline` VARCHAR(512),
+    `timeout` INTEGER,
+    `sync_output` INTEGER,
+    `times_run` INTEGER,
+    `times_failed` INTEGER,
+    `last_run_time` DATETIME,
+    `assigned_worker_name` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-04-07T06:43:59.319833
+CREATE TABLE `scheduler_run`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `task_id` INT  , INDEX `task_id__idx` (`task_id`), FOREIGN KEY (`task_id`) REFERENCES `scheduler_task` (`id`) ON DELETE CASCADE,
+    `status` VARCHAR(512),
+    `start_time` DATETIME,
+    `stop_time` DATETIME,
+    `run_output` LONGTEXT,
+    `run_result` LONGTEXT,
+    `traceback` LONGTEXT,
+    `worker_name` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-04-07T06:43:59.341018
+CREATE TABLE `scheduler_worker`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `worker_name` VARCHAR(255) UNIQUE,
+    `first_heartbeat` DATETIME,
+    `last_heartbeat` DATETIME,
+    `status` VARCHAR(512),
+    `is_ticker` CHAR(1),
+    `group_names` LONGTEXT,
+    `worker_stats` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-04-07T06:43:59.366367
+CREATE TABLE `scheduler_task_deps`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `job_name` VARCHAR(512),
+    `task_parent` INTEGER,
+    `task_child` INT  , INDEX `task_child__idx` (`task_child`), FOREIGN KEY (`task_child`) REFERENCES `scheduler_task` (`id`) ON DELETE CASCADE,
+    `can_visit` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2019-04-10T13:20:54.840313
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-04-10T13:21:00.817253
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2019-04-10T13:21:01.999913
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(32) UNIQUE,
+    `username_slug` VARCHAR(255) UNIQUE,
+    `email` VARCHAR(128) UNIQUE,
+    `password` VARCHAR(512),
+    `registration_key` VARCHAR(512),
+    `reset_password_key` VARCHAR(512),
+    `registration_id` VARCHAR(512),
+    `created_on` DATETIME,
+    `description` VARCHAR(512),
+    `avatar` VARCHAR(512),
+    `website` VARCHAR(512),
+    `ethaddress` VARCHAR(512),
+    `newsletter` CHAR(1),
+    `count_comment_publish` INTEGER,
+    `count_comment_vote` INTEGER,
+    `count_follower` INTEGER,
+    `count_following` INTEGER,
+    `count_new_reply` INTEGER,
+    `unsub_key` VARCHAR(512),
+    `verif_key` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;

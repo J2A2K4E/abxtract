@@ -1,0 +1,174 @@
+#Libraries
+from bs4 import BeautifulSoup
+import requests
+from datetime import datetime
+import json
+import time
+import re
+import cfscrape
+
+def get_coingecko_live():
+    pageCount = 1
+    while (pageCount < 18):
+        time.sleep(0.25) # delay
+        url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page="+str(pageCount)+"&sparkline=false&price_change_percentage=24h%2C7d"
+        page = requests.get(url).content
+        page = json.loads(page)
+        if not(page) or len(page) == 0:
+            break
+        for row in page:
+            coingecko_id = row['id']
+            usd_price = row['current_price'] if row['current_price'] else 'NULL'
+            market_cap_rank = row['market_cap_rank'] if row['market_cap_rank'] else 'NULL'
+            circulating_supply = row['circulating_supply'] if row['circulating_supply'] else 'NULL'
+            total_supply = row['total_supply'] if row['total_supply'] else 'NULL'
+            usd_volume_24h = row['total_volume'] if row['total_volume'] else 'NULL'
+            usd_market_cap = row['market_cap'] if row['market_cap'] else 'NULL'
+            usd_percent_change_24h = row['price_change_percentage_24h_in_currency'] if row['price_change_percentage_24h_in_currency'] else 'NULL'
+            usd_percent_change_7d = row['price_change_percentage_7d_in_currency'] if row['price_change_percentage_7d_in_currency'] else 'NULL'
+            status = "livesuccess"
+            sqlQuery = "UPDATE master SET usd_price="+str(usd_price)+", market_cap_rank="+str(market_cap_rank)+", circulating_supply="+str(circulating_supply)+", total_supply="+str(total_supply)+", usd_volume_24h="+str(usd_volume_24h)+", usd_market_cap="+str(usd_market_cap)+", usd_percent_change_24h="+str(usd_percent_change_24h)+", usd_percent_change_7d="+str(usd_percent_change_7d)+", status='"+str(status)+"' WHERE coingecko_id='"+str(coingecko_id)+"';"
+            db.executesql(sqlQuery)
+        pageCount += 1
+    return 'success'
+
+def get_coingecko_wallet_current_price():
+#     tokens = db(db.token_wallet_list.id > 0).select(db.token_wallet_list.coin_id, db.token_wallet_list.coin_slug, groupby=db.token_wallet_list.coin_id)
+#     for row in tokens:
+    row = db(db.token_wallet_list.id > 0).select(db.token_wallet_list.coin_id, db.token_wallet_list.coin_slug, groupby=db.token_wallet_list.coin_id).first()
+    tokenSlug = row.coin_slug
+    coin_id = row.coin_id
+    coingecko_id = db(db.master.id==coin_id).select(db.master.coingecko_id).first().coingecko_id
+    nowDate = datetime.now().date()
+    url = 'https://api.coingecko.com/api/v3/coins/'+coingecko_id+'/history?date='+nowDate.strftime('%d-%m-%Y')
+    time.sleep(0.21)
+    page = requests.get(url).content
+    page = json.loads(page)
+    priceBTC = priceETH = priceUSD = 0
+    if 'market_data' in page and page['market_data']:
+        if 'current_price' in page['market_data'] and page['market_data']['current_price']:
+            priceBTC = page['market_data']['current_price']['btc'] if page['market_data']['current_price']['btc'] else 'NULL'
+            priceETH = page['market_data']['current_price']['eth'] if page['market_data']['current_price']['eth'] else 'NULL'
+            priceUSD = page['market_data']['current_price']['usd'] if page['market_data']['current_price']['usd'] else 'NULL'
+            db.token_price.update_or_insert((db.token_price.coin_id==coin_id)&(db.token_price.trade_date==nowDate), coin_id=coin_id, trade_date=nowDate, priceBTC=priceBTC, priceETH=priceETH, priceUSD=priceUSD)
+            sqlQuery = "INSERT INTO token_price (coin_id, trade_date, priceBTC, priceETH, priceUSD) VALUES (4,5,6) ON DUPLICATE KEY UPDATE coin_id="+str()+", trade_date="+str()+";"
+            db.executesql(sqlQuery)
+    return locals()
+
+def get_coingecko_list():
+    url = 'https://api.coingecko.com/api/v3/coins/list'
+    page = requests.get(url).content
+    page = json.loads(page)
+    for row in page:
+        coin = db(db.master.coingecko_id == row['id']).select().first()
+        if coin:
+            coin.update_record(custom_slug=row['id'], symbol=row['symbol'], name=row['name'])
+        else:
+            db.master.insert(coingecko_id=row['id'], custom_slug=row['id'], symbol=row['symbol'], name=row['name'])
+    return 'success'
+
+def get_coingecko_static():
+    coins = db((db.master.id >= 3820)&(db.master.id < 5000)&(db.master.status!="success")&(db.master.coingecko_id!=None)).select()
+    for coin in coins:
+        try:
+            time.sleep(0.3) # delay
+            url = 'https://api.coingecko.com/api/v3/coins/'+coin.coingecko_id+'?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false'
+            page = requests.get(url).content
+            page = json.loads(page)
+            coin.update_record(website=None,explorer=None,github=None,telegram=None,bitcointalk=None,twitter=None,medium=None,reddit=None)
+            if ((coin.sector==None) or (coin.sector=='')) and page['categories']:
+                coin.update_record(sector=page['categories'][0])
+            if page['links']['homepage'][0]:
+                coin.update_record(website=page['links']['homepage'][0])
+            if page['links']['blockchain_site'][0]:
+                coin.update_record(explorer=page['links']['blockchain_site'][0])
+            if page['links']['repos_url']['github'] and page['links']['repos_url']['github'][0]:
+                coin.update_record(github=page['links']['repos_url']['github'][0])
+            elif page['links']['repos_url']['bitbucket'] and page['links']['repos_url']['bitbucket'][0]:
+                coin.update_record(github=page['links']['repos_url']['bitbucket'][0])
+            if page['links']['telegram_channel_identifier']:
+                coin.update_record(telegram="https://t.me/"+str(page['links']['telegram_channel_identifier']))
+            if page['links']['bitcointalk_thread_identifier']:
+                coin.update_record(bitcointalk="https://bitcointalk.org/index.php?topic="+str(page['links']['bitcointalk_thread_identifier']))
+            if page['links']['twitter_screen_name']:
+                coin.update_record(twitter="https://twitter.com/"+str(page['links']['twitter_screen_name']))
+            if page['links']['announcement_url'][0]:
+                coin.update_record(medium=page['links']['announcement_url'][0])
+            if page['links']['subreddit_url']:
+                coin.update_record(reddit=page['links']['subreddit_url'])
+            coin.update_record(status='success')
+        except:
+            coin.update_record(status='fail')
+    return 'success'
+
+def update_sector_count():
+    for row in db().select(db.master.sector, distinct=True):
+        if row.sector != None:
+            sector_set = db(db.master.sector==row.sector).select()
+            db.sector.update_or_insert(db.sector.sector == row.sector,
+                                         sector=row.sector,
+                                         sector_slug=IS_SLUG.urlify(row.sector),
+                                         sector_count=len(sector_set))
+    # Update sector_count
+    for row in db().select(db.sector.ALL, distinct=True):
+        coins = db(db.master.sector == row.sector).select()
+        row.update_record(sector_count=len(coins))
+    return 'success'
+
+# Find text in between str_a and str_a by finding str_a then str_b
+def find_a_b(soup, str_a, str_b):
+    # Find str_a
+    pos_a = soup.find(str_a)
+    if pos_a == -1: return ""
+    # Find str_b from str_a to end of string
+    pos_b = soup.find(str_b, pos_a+len(str_a), len(soup))
+    if pos_b == -1: return ""
+    # Return middle part.
+    adjusted_pos_a = pos_a + len(str_a)
+    if adjusted_pos_a >= pos_b: return ""
+    return soup[adjusted_pos_a:pos_b]
+
+# Find b then find a
+def find_b_a(soup,str_a,str_b):
+    # Find str_b
+    pos_b = soup.find(str_b)
+    if pos_b == -1: return ""
+    # Find str_a from beginning to pos_b
+    pos_a = soup.rfind(str_a, 0, pos_b)
+    if pos_a == -1: return ""
+    # Return middle part
+    adjusted_pos_a = pos_a + len(str_a)
+    if adjusted_pos_a >= pos_b: return ""
+    return soup[adjusted_pos_a:pos_b]
+
+def get_cmc_static():
+    start_id = 2000
+    end_id = 2080
+    for coin in db((db.master.cmc_id != None)&(db.master.id >= start_id)&(db.master.id < end_id)).select():
+        url = 'https://coinmarketcap.com/currencies/'+coin.cmc_slug
+        scraper = cfscrape.create_scraper()
+        page = scraper.get(url).content
+        soup = BeautifulSoup(page,'html.parser')
+
+        # Get telegram url
+        url_telegram = ''
+        list_url_telegram = soup.select("a[href*=t.me]")
+        for ahref in list_url_telegram:
+            if ahref['href'] != 'https://t.me/CoinMarketCap':
+                url_telegram = ahref['href']
+        if url_telegram != '':
+            url_telegram = soup.select_one("a[href*=telegram.me]")['href'] if soup.select_one("a[href*=telegram.me]") else ''
+
+        # Insert static record
+        db(db.master.cmc_slug==coin.cmc_slug).update(
+            website=soup.find('a',href=True,text='Website')['href'] if soup.find('a', href=True, text='Website') else '',
+            explorer=soup.find('a',href=True,text='Explorer')['href'] if soup.find('a', href=True, text='Explorer') else '',
+            github=soup.find('a',href=True,text='Source Code')['href'] if soup.find('a', href=True, text='Source Code') else '',
+            telegram=url_telegram,
+            discord=soup.select_one("a[href*=discord.gg]")['href'] if soup.select_one("a[href*=discord.gg]") else '',
+            bitcointalk=soup.select_one("a[href*=bitcointalk]")['href'] if soup.select_one("a[href*=bitcointalk]") else '',
+            twitter=soup.select_one("a[class*=twitter-timeline]")['href'] if soup.select_one("a[class*=twitter-timeline]") else '',
+            medium=soup.select_one("a[href*=medium.com]")['href'] if soup.select_one("a[href*=medium.com]") else '',
+            reddit=find_a_b(str(soup),"oScript.src = \"",".embed"))
+        time.sleep(4) #Delay time
+    return "static update successful from "+str(start_id)+" to "+str(end_id)

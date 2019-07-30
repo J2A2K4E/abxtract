@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+    <title>Frequently Asked Questions | ViewBase</title>
+    <meta property="og:title" itemprop="name" content="Frequently Asked Questions | ViewBase">
+    <meta name="twitter:title" content="Frequently Asked Questions | ViewBase">
+    <meta property="og:description" itemprop="description" name="description" content="ViewBase is a community of traders and investors who are passionate about cryptocurrency markets.">
+    <meta name="twitter:description" content="ViewBase is a community of traders and investors who are passionate about cryptocurrency markets.">
+    <meta name="twitter:image:src" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <meta property="og:image" itemprop="image" name="image" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <link property="og:url" itemprop="url" rel="canonical" href="https://www.viewbase.com/faq"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta property="og:site_name" content="ViewBase">
+    <meta property="fb:app_id" content="457354494759406">
+    <meta property="og:type" content="article">
+    {{include 'navbar.html'}}
+    <style>
+        .container-fluid {padding-right: 15px !important;padding-left: 15px !important;}
+        .faq-header{margin:24px 0;width:100%;font-size:27px;font-weight:700;line-height:1.44em;color:#2cc891;}
+        .faq-qn{margin:24px 0;width:100%;font-size:25px;font-weight:700;line-height:1.44em;color:#2cc891;}
+        .faq_body{font-size:1.05rem;font-weight:300;}
+        .faq_link{font-weight:350;color:#2cc891;}
+        .faq-figure{margin:24px 0;width:100%;overflow: hidden;}
+        .faq-figure img{max-width:80%;display:block;margin:0 auto;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid testing">
+        <div class="row">
+            <div class="col-12 col-lg-3 order-2 order-lg-1"></div>
+            <div class="col-12 col-lg-6 order-1 order-lg-2 col-general">
+                <div>
+                    <h1 class="faq-header">Frequently Asked Questions</h1>
+                    <h2 class="faq-qn">What is ViewBase?</h2>
+                    <p class="faq_body">ViewBase is a cryptocurrency market insights and community platform.</p>
+                    <p class="faq_body">From the dankest memes to the geekiest quantitative analyses, we are dedicated to becoming an inclusive community for all passionate crypto traders and investors.</p>
+                    <p class="faq_body">In addition to our community platform, we also maintain the Exchange Deposit Tracker, Inflation Tracker, and Crypto Sector Indices.</p>
+                    <h2 class="faq-qn">What is the Exchange Deposit Tracker?</h2>
+                    <div class="faq-figure">
+                        <a href="/exchange"><img src="https://res.cloudinary.com/dnpe8yafk/image/upload/w_600/v1551532121/blog/exchange-deposit-tracker.jpg"></a>
+                    </div>
+                    <p class="faq_body"><a class="faq_link" href="/exchange">Exchange Deposit Tracker</a> shows the amount of tokens deposited in exchange wallets.</p>
+                    <p class="faq_body">As most crypto projects and investors hold tokens in their own wallets, tokens sent to exchange wallets may indicate the intention to sell. Conversely, the withdrawals of tokens from exchange wallets may indicate the intention to accumulate.</p>
+                    <p class="faq_body">Exchange Deposit Tracker can help you to understand what goes on behind-the-scenes of pumps and dumps.</p>
+                    <p class="faq_body">Currently, data is updated on an hourly basis and only ERC20 tokens are supported.</p>
+                    <h2 class="faq-qn">What is the Inflation Tracker?</h2>
+                    <div class="faq-figure">
+                        <a href="/inflation"><img src="https://res.cloudinary.com/dnpe8yafk/image/upload/w_600/v1552619832/blog/inflation-tracker.jpg"></a>
+                    </div>
+                    <p class="faq_body"><a class="faq_link" href="/inflation">Inflation Tracker</a> shows the amount of coins mined in the past 24 hours.</p>
+                    <p class="faq_body">Many cryptocurrencies offer rewards to miners and the reward leads to an increase in circulating supply. Assuming demand stays constant, a high inflation rate is generally detrimental to the price.</p>
+                    <p class="faq_body">The Inflation Tracker is updated on an hourly basis.</p>
+                    <h2 class="faq-qn">What is the Sector Tracker?</h2>
+                    <div class="faq-figure">
+                        <a href="/sector"><img src="https://res.cloudinary.com/dnpe8yafk/image/upload/w_600/v1552619832/blog/inflation-tracker.jpg"></a>
+                    </div>
+                    <p class="faq_body">
+                        <a class="faq_link" href="/sector">Sector Tracker</a> shows the aggregate market cap, volume and price change for cryptocurrencies grouped together by their sectors. The price change is weighted based on the market capitalization of each component.
+                    </p>
+                    <p class="faq_body">Market data is updated every 30 minutes.</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3 order-3 order-lg-3"></div>
+        </div>
+    </div>
+{{include 'footer.html'}}
+</body>
+</html>

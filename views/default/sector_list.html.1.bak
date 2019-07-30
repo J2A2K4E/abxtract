@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+{{include 'navbar.html'}}
+    <script type="text/javascript" src="{{=URL('static','js/jquery.tablesorter.js')}}"></script>
+    <style>
+        a{color: #333;}
+        a:hover{color: #333;text-decoration:none !important;}
+        .clickable-row:hover{background-color:#f5f5f5;cursor: pointer;}
+        .cell_right{text-align:right;}
+        .sector-icon{display:inline-block;width:40px;text-align:center;}
+        th {padding:.5rem .3rem !important;
+            vertical-align:middle;
+            font-weight: 500;
+            color: #333;
+            font-size: 15px;}
+        td {padding:.3rem !important;
+            font-weight: 400;
+            color: #333;
+            font-size: 14px;}
+        .thead-light th:hover{cursor: pointer;background-color:#ccd3dc; !important}
+        .sort-asc, .sort-dsc{display:none;}
+        .thead-light th.headerSortUp {background-color:#ccd3dc;}
+        .thead-light th.headerSortUp > .sort-dsc {display:inline-block;}
+        .thead-light th.headerSortDown {background-color:#ccd3dc;}
+        .thead-light th.headerSortDown > .sort-asc {display:inline-block;}
+        
+        .footer-link{color: #333;}
+        .footer-link:hover{color: #3373ff;text-decoration:none !important;}
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div style="width:900px;margin:20px auto;">
+            <h1 style="margin:24px 0;text-align:center;font-size:25px;font-weight:700;line-height:1.44em;">Cryptocurrency Sectors</h1>
+            <table class="table tablesorter" id="myTable">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">
+                            Sector <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell_right" scope="col" data-toggle="tooltip" data-placement="top" title="Number of coins in sector">
+                            Components  <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell_right" scope="col" data-toggle="tooltip" data-placement="top" title="Total market capitalization of sector">
+                            Market Cap <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell_right" scope="col" data-toggle="tooltip" data-placement="top" title="Total volume of sector">
+                            Volume (24h) <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell_right" scope="col" data-toggle="tooltip" data-placement="top" title="1-day market-capitalization-weighted price change of coins in sector">% Change (1d) <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell_right" scope="col" data-toggle="tooltip" data-placement="top" title="7-day market-capitalization-weighted price change of coins in sector">% Change (7d) <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{for sector in sectors:}}
+                    {{sector_details = db2(db2.sector.sector==sector.master.sector).select().first()}}
+                    <tr class='clickable-row' data-href="{{=URL('default','sector',args=sector_details.sector_slug)}}">
+                        <td>
+                            <span class="sector-icon">{{=XML(sector_details.image_html)}}</span>
+                            <span><a href="{{=URL('default','sector',args=sector_details.sector_slug)}}">{{=sector.master.sector}}</a></span>
+                        </td>
+                        <td class="cell_right">{{='{0:,.0f}'.format(sector[count])}}</td>
+                        <td class="cell_right">${{='{0:,.0f}'.format(sector[sum_mcap])}}</td>
+                        <td class="cell_right">${{='{0:,.0f}'.format(sector[sum_vol])}}</td>
+                        {{returns_color = 'green' if sector[sum_change1d_x_mcap] > 0 else 'red'}}
+                        <td class="cell_right" style="color:{{=returns_color}};">{{='{0:,.2f}'.format(sector[sum_change1d_x_mcap]/sector[sum_mcap])}}%</td>
+                        {{returns_color = 'green' if sector[sum_change7d_x_mcap] > 0 else 'red'}}
+                        <td class="cell_right" style="color:{{=returns_color}};">{{='{0:,.2f}'.format(sector[sum_change7d_x_mcap]/sector[sum_mcap])}}%</td>
+                    </tr>
+                    {{pass}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <div class="container-fluid" style="border-top: 1px solid #ccd3dc;padding:40px 0 0 0!important;">
+        <div class="row" style="margin:0 auto;max-width:1000px;">
+            <div class="col-3">
+                <h4 style="color:#ccd3dc;font-size:14px;font-weight: 500;letter-spacing: 0.5px;color:#9fa1a7;">RESOURCES</h4>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Blog
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Coins
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Top Movers
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Sectors
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Decentralization Index
+                </a>
+            </div>
+            <div class="col-3 list-group">
+                <h4 style="color:#ccd3dc;font-size: 12px;font-weight: 500;letter-spacing: 0.5px;color:#9fa1a7;">CONTACT</h4>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Advertise
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Feedback
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Partner with us
+                </a>
+            </div>
+            <div class="col-3 list-group">
+                <h4 style="color:#ccd3dc;font-size: 12px;font-weight: 500;letter-spacing: 0.5px;color:#9fa1a7;">ABOUT</h4>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    About ViewBase
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Disclaimer
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Privacy
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Terms
+                </a>
+            </div>
+            <div class="col-3">
+                <h4 style="color:#ccd3dc;font-size: 12px;font-weight: 500;letter-spacing: 0.5px;color:#9fa1a7;">FOLLOW US</h4>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Twitter
+                </a>
+                <a class="footer-link" href="#" style="width:auto;display:block;font-size:14px;font-weight: 400;line-height: 2.6;height:36px;">
+                    Telegram
+                </a>
+            </div>
+        </div>
+        <div class="row" style="margin:0 auto;max-width:1000px;">
+            <h4 style="padding:20px 15px;color:#ccd3dc;font-size: 12px;font-weight:400;letter-spacing: 0.5px;color:#9fa1a7;">© 2018 ViewBase</h4>
+        </div>
+    </div>
+</body>
+
+<script>
+    $.tablesorter.addParser({
+        id: "commaDelimited",
+        is: function(s) {return /^[0-9]?[0-9,\.]*$/.test(s);},
+        format: function(s) {return jQuery.tablesorter.formatFloat( s.replace(/,/g,'').replace(/\$/g,'') );},
+        type: "numeric"
+    });
+    $(document).ready(function(){
+        $("#myTable").tablesorter({
+            sortList:[[5,1]],
+            headers: {2:{sorter:'commaDelimited'},3:{sorter:'commaDelimited'}}
+        });
+    });
+
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+    $(function () {$('[data-toggle="tooltip"]').tooltip()})
+</script>
+</html>

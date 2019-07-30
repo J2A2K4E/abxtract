@@ -1,0 +1,4 @@
+User-agent: * 
+Disallow:
+
+Sitemap: http://www.viewbase.com/viewbase/static/_2.17.2/sitemap.xml

@@ -1,0 +1,54 @@
+import requests
+import json
+import cfscrape
+from fake_useragent import UserAgent
+import lxml.html
+from datetime import datetime
+from decimal import Decimal
+API_KEY = '15CXMHT3FGQ4KU6ZRFPR9UICFJAFWD73X5'
+
+def getBTC():
+    coin_id = 1
+    nowDatetime = datetime.now()
+    try:
+        url = "https://api.blockchain.info/stats?cors=true"
+        page = requests.get(url).content
+        page = json.loads(page)
+        db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                    coin_id = coin_id,
+                    emission_24h = Decimal(page['n_btc_mined']) / 10**8,
+                    updated_on = nowDatetime,
+                    status = 'success')
+    except:
+        db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                    coin_id = coin_id,
+                    updated_on = nowDatetime,
+                    status = 'fail')
+    return 'success'
+
+def getETH():
+    coin_id = 243
+    nowDatetime = datetime.now()
+    try:
+        url = 'https://bitinfocharts.com/ethereum/'
+        user_agent = UserAgent().random;
+        token, agent = cfscrape.get_tokens(url, user_agent)
+        headers = {'user-agent': agent}
+        page = requests.get(url, headers=headers, cookies=token).content
+        doc = lxml.html.fromstring(page)
+
+        block_reward = doc.xpath("//abbr[@title='static block reward']")[1].text_content()
+        uncle_inclusion_reward = doc.xpath("//abbr[@title='uncle inclusion rewards']")[1].text_content()
+        uncle_reward = doc.xpath("//abbr[@title='uncle rewards']")[1].text_content()
+        total = float(block_reward.replace(',','')) + float(uncle_inclusion_reward.replace(',','')) + float(uncle_reward.replace(',',''))
+        db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                    coin_id = coin_id,
+                    emission_24h = total,
+                    updated_on = nowDatetime,
+                    status = 'success')
+    except:
+        db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                    coin_id = coin_id,
+                    updated_on = nowDatetime,
+                    status = 'fail')
+    return locals()

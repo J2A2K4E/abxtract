@@ -1,0 +1,309 @@
+#Libraries
+from bs4 import BeautifulSoup
+import requests
+from datetime import datetime
+import json
+import time
+import re
+
+def initialize_manual():
+    for row in db2(db2.master.id > 0).select():
+        db2.manual.update_or_insert(db2.manual.master_id == row.id, master_id=row.id)
+    return 'success'
+
+def icobench_to_manual():
+    for row in db2(db2.manual.master_id > 0).select():
+        match_row = db2(db2.icobench.master_id == row.master_id).select().first()
+        if not(row.source) and match_row:
+            price_usd = None
+            if match_row.ico_price_currency == 'USD':
+                price_usd = match_row.ico_price
+            row.update_record(source='icobench',
+                              token_type=match_row.token_type,
+                              platform=match_row.platform,
+                              sector=match_row.sector,
+                              country=match_row.country,
+                              tagline=match_row.tagline,
+                              description=match_row.description,
+                              whitepaper=match_row.whitepaper,
+                              ico_price_usd=price_usd,
+                              ico_startdate=match_row.ico_startdate,
+                              ico_enddate=match_row.ico_enddate,
+                              ico_raised_usd=match_row.ico_raised_usd,
+                              token_sale=match_row.token_sale,
+                              token_sale_percent=match_row.token_sale_percent)
+    return 'success'
+
+def initialize_icolink():
+    for row in db2(db2.master.id > 0).select():
+        icodrops = None
+        icobench = None
+        if db2(db2.icodrops.master_id == row.id).select().first():
+            icodrops = db2(db2.icodrops.master_id == row.id).select().first().id
+        if db2(db2.icobench.master_id == row.id).select().first():
+            icobench = db2(db2.icobench.master_id == row.id).select().first().id
+        db2.icolink.update_or_insert(db2.icolink.master == row.id,
+                                     master=row.id,
+                                     icodrops=icodrops,
+                                     icobench=icobench)
+    return 'success'
+
+def update_manual_with_ico():
+    for row in db2(db2.manual.id > 0).select():
+        icolink_row = db2(db2.icolink.master == row.master_id).select().first()
+        if icolink_row.icobench:
+            icobench_row = db2(db2.icobench.id == icolink_row.icobench).select().first()
+            price = None
+            if icobench_row.ico_price_currency=='USD':
+                price = icobench_row.ico_price
+            row.update_record(source='icobench',
+                              token_type=icobench_row.token_type,
+                              platform=icobench_row.platform,
+                              sector=icobench_row.sector,
+                              country=icobench_row.country,
+                              tagline=icobench_row.tagline,
+                              description=icobench_row.description,
+                              whitepaper=icobench_row.whitepaper,
+                              ico_price_usd=price,
+                              ico_startdate=icobench_row.ico_startdate,
+                              ico_enddate=icobench_row.ico_enddate,
+                              ico_raised_usd=icobench_row.ico_raised_usd,
+                              token_sale=icobench_row.token_sale,
+                              token_sale_percent=icobench_row.token_sale_percent)
+        elif icolink_row.icodrops:
+            icodrops_row = db2(db2.icodrops.id == icolink_row.icodrops).select().first()
+            row.update_record(source='icodrops',
+                              token_type=icodrops_row.token_type,
+                              sector=icodrops_row.sector,
+                              description=icodrops_row.description,
+                              whitepaper=icodrops_row.whitepaper,
+                              ico_price_usd=icodrops_row.ico_price_usd,
+                              ico_startdate=icodrops_row.ico_startdate,
+                              ico_enddate=icodrops_row.ico_enddate,
+                              ico_raised_usd=icodrops_row.ico_raised_usd,
+                              token_sale=icodrops_row.token_sale,
+                              token_sale_percent=icodrops_row.token_sale_percent)
+    return 'success'
+
+def get_manual():
+    for row in db2(db2.master.id > 0).select():
+        if db2(db2.icodrops.master_id == row.id).select():
+            row_icodrops = db2(db2.icodrops.master_id == row.id).select().first()
+            sector = row_icodrops.sector
+            token_sale_percent = row_icodrops.token_sale_percent
+            ico_price_usd = row_icodrops.ico_price_usd
+        else:
+            sector = None
+            token_sale_percent = None
+            ico_price_usd = None
+        db2.manual.update_or_insert(db2.manual.master_id == row.id,
+                             master_id=row.id,
+                             sector=sector,
+                             token_sale_percent=token_sale_percent,
+                             ico_price_usd=ico_price_usd)
+    return 'success'
+
+def link_icodrops_master():
+    for row in db2(db2.icodrops.symbol != None).select():
+        if db2(db2.master.symbol == row.symbol).select().first():
+            master_row = db2((db2.master.cmc_id == db2.live.cmc_id) & (db2.master.symbol==row.symbol)).select(orderby=~db2.live.usd_market_cap).first()
+            row.update_record(master_id = master_row.master.id)
+    return 'success'
+
+def link_icobench_master():
+    for row in db2(db2.icobench.symbol != None).select():
+        if db2(db2.master.symbol == row.symbol).select().first():
+            master_row = db2((db2.master.cmc_id == db2.live.cmc_id) & (db2.master.symbol==row.symbol)).select(orderby=~db2.live.usd_market_cap).first()
+            row.update_record(master_id = master_row.master.id)
+    return 'success'
+
+def get_icodrops_subfunction(url):
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content,'html.parser')
+    symbol = find_a_b(str(soup),'<span class="grey">Ticker: </span>','</li>')
+    try:
+        IcoStartDate = find_a_b(str(soup),'Token Sale: \r\n',' – ').replace("\t","") if find_a_b(str(soup),'Token Sale: \r\n',' – ') else None
+        IcoStartDate = datetime.strptime(IcoStartDate + ' 2017', '%d %b %Y')
+    except:
+        IcoStartDate = None
+        pass
+    try:
+        IcoEndDate = find_b_a(str(soup),' – ','\r\n\t\t\t</h4>').replace("\t","") if find_b_a(str(soup),' – ','\r\n\t\t\t</h4>') else None
+        IcoEndDate = datetime.strptime(IcoEndDate + ' 2017', '%d %b %Y')
+    except:
+        IcoEndDate = None
+        pass
+    try:
+        ico_raised_usd = float(find_a_b(str(soup),'<div class="blue money-goal">\r\n','</div>').replace(",","").replace("\t","").replace("$",""))
+    except:
+        ico_raised_usd = None
+        pass
+    try:
+        ico_goal_usd = float(find_a_b(str(soup),'Fundraising Goal:</span> ','\xa0USD</li>').replace(",",""))
+    except:
+        ico_goal_usd = None
+        pass
+    try:
+        token_total = float(find_a_b(str(soup),'Total Tokens: </span>','</li>').replace(",",""))
+    except:
+        token_total = None
+        pass
+    try:
+        token_sale_percent = float(find_a_b(str(soup),'Token Sale: </span>','%</li>').replace(",",""))
+    except:
+        token_sale_percent = None
+        pass
+    db2.icodrops.update_or_insert(
+        db2.icodrops.website_slug == url.rstrip('/').split('/')[-1],
+        website_slug=url.rstrip('/').split('/')[-1],
+        name=find_a_b(str(soup),'<h3>','</h3>') if find_a_b(str(soup),'<h3>','</h3>') else None,
+        symbol=symbol,
+        token_type=find_a_b(str(soup),'Token type: </span>','</li>'),
+        sector=find_b_a(str(soup),'<span class="ico-category-name">(',')<span>') if find_b_a(str(soup),'<span class="ico-category-name">(',')<span>') else None,
+        description=soup.find("meta",property="og:description")["content"] if soup.find("meta",property="og:description") else None,
+        whitepaper=soup.find('a', href=True, text='WHITEPAPER')['href'] if soup.find('a', href=True, text='WHITEPAPER') else None,
+        ico_price_usd=float(find_a_b(str(soup),'ICO Token Price:</span> 1 '+symbol+' = ','\xa0USD').replace(',','')) if find_a_b(str(soup),'ICO Token Price:</span> 1 '+symbol+' = ','\xa0USD') else None,
+        ico_price_eth=float(find_b_a(str(soup),'(',' ETH)</li>').replace(',','')) if find_b_a(str(soup),'(',' ETH)</li>') else None,
+        ico_startdate=IcoStartDate,
+        ico_enddate=IcoEndDate,
+        ico_raised_usd=ico_raised_usd,
+        ico_goal_usd=ico_goal_usd,
+        token_total=token_total,
+        token_sale_percent=token_sale_percent)
+    return None
+
+def get_icodrops():
+    url_ended_icos = 'https://icodrops.com/category/ended-ico/'
+    page = ''
+    while page == '':
+        try:
+            page = requests.get(url_ended_icos)
+            break
+        except:
+            print("Connection refused by the server. Wait 10 seconds")
+            time.sleep(10)
+            continue
+
+    soup = BeautifulSoup(page.content,'html.parser')
+    for i in range(0, 5):
+#     for i in range(300, len(soup.findAll("a", {"id": "ccc"}))):
+        url = soup.findAll("a", {"id": "ccc"})[i]['href']
+        get_icodrops_subfunction(url)
+        print(i)
+        time.sleep(3) #Delay time for 3 seconds
+    return "icodrops update successful"
+
+def get_icobench():
+    for page_count in range(1, 2):
+        print('Page '+str(page_count))
+        list_url = 'https://icobench.com/icos?filterStatus=ended&page='+str(page_count)
+        list_page = ''
+        while list_page == '':
+            try:
+                list_page = requests.get(list_url)
+                break
+            except:
+                print("Connection refused by the server. Wait 10 seconds")
+                time.sleep(10)
+                continue
+        list_soup = BeautifulSoup(list_page.content,'html.parser')
+
+        for i in range(0, len(list_soup.find_all("a",{"class":"name"}))):
+    #     for i in range(1, 2):
+            website_slug = list_soup.find_all("a",{"class":"name"})[i]['href'].rsplit('/', 1)[-1]
+            page = requests.get('https://icobench.com/ico/'+website_slug)
+            soup = BeautifulSoup(page.content,'html.parser')
+
+            # Get category of coin
+            sector = soup.findAll("div", {"class": "categories"})[0].find('a')['title']
+            if sector=='Cryptocurrency':
+                try:
+                    sector = soup.findAll("div", {"class": "categories"})[0].findAll('a')[1]['title']
+                except:
+                    sector = 'Cryptocurrency'
+
+            # Get ICO data
+            comment = None
+            ico_price = find_a_b(str(soup),'Price in ICO</div> <div class="value">','</div>')
+            try:
+                ico_price = ico_price.split("= ",1)[1].strip()
+            except:
+                ico_price = ico_price.strip()
+            try:
+                ico_price = ico_price.split("- ",1)[1].strip()
+            except:
+                ico_price = ico_price
+            try:
+                ico_price_currency = ico_price.split(" ",1)[1].strip()
+            except:
+                ico_price_currency = None
+            try:
+                ico_price = float(re.sub('[^0-9.]', '', ico_price))
+            except:
+                ico_price = None
+                comment = 'Price error'
+            ico_startdate = find_a_b(str(soup),'ICO start\n','</b>').replace('\t','').replace('</div>\n<div class="col_2">\n<b>','').replace('st','').replace('nd','').replace('rd','').replace('th','')
+            ico_enddate = find_a_b(str(soup),'ICO end\n','</b>').replace('\t','').replace('</div>\n<div class="col_2">\n<b>','').replace('st','').replace('nd','').replace('rd','').replace('th','')
+            try:
+                ico_startdate = datetime.strptime(ico_startdate, '%d %b %Y')
+                ico_enddate = datetime.strptime(ico_enddate, '%d %b %Y')
+            except:
+                ico_startdate = None
+                ico_enddate = None
+            try:
+                token_sale_percent=float(find_a_b(str(soup),'Distributed in ICO</div> <div class="value">','%').replace(',',''))
+            except:
+                token_sale_percent = None
+                pass
+
+            # Update icobench table
+            db2.icobench.update_or_insert(
+                db2.icobench.website_slug == website_slug,
+                website_slug=website_slug,
+                name=find_a_b(str(soup),'<h1>','</h1>'),
+                symbol=BeautifulSoup(find_a_b(str(soup),'Token\n','</b>').replace("</div>","").replace("\t","").replace("\n","").replace('<div class="col_2"><b>',''), "html.parser").get_text(),
+                token_type=find_a_b(str(soup),'Type</div> <div class="value">','</div>'),
+                platform=find_a_b(str(soup),'Platform</div> <div class="value">','</div>'),
+                sector=sector,
+                country=find_a_b(str(soup),'ICOs from ','">') if find_a_b(str(soup),'ICOs from ','">') else None,
+                tagline=find_a_b(str(soup),'<h2>','</h2>'),
+                description=find_a_b(str(soup),'</div>\n<p>','</p>'),
+                whitepaper=soup.find('a', href=True, text='White paper')['href'] if soup.find('a', href=True, text='White paper') else '',
+                ico_price_currency=ico_price_currency,
+                ico_price=ico_price,
+                ico_startdate=ico_startdate,
+                ico_enddate=ico_enddate,
+                ico_raised_usd=float(find_a_b(str(soup),'<div class="label">Raised</div> <div class="value">\t$','<').replace(',','')) if find_a_b(str(soup),'<div class="label">Raised</div> <div class="value">\t$','<') else None,
+                token_sale=float(find_a_b(str(soup),'Tokens for sale</div> <div class="value">','<').replace(',','')) if find_a_b(str(soup),'Tokens for sale</div> <div class="value">','<') else None,
+                token_sale_percent=token_sale_percent,
+                comment=comment
+            )
+            print(str(i)+ ' ' + website_slug)
+            time.sleep(4.5) #Delay time for 4 seconds
+    return 'Success. Last coin: '+website_slug
+
+def get_live_subfunction(start, limit):
+    url2 = 'https://api.coinmarketcap.com/v2/ticker/?start='+str(start)+'&limit='+str(limit)+'&convert=BTC&sort=id&structure=array'
+    response = requests.get(url2)
+    data = response.text
+    parsed = json.loads(data)
+    for i in range(0, len(parsed['data'])):
+        db2.live.update_or_insert(db2.live.cmc_id == parsed['data'][i]['id'],
+                                      cmc_id=parsed['data'][i]['id'],
+                                      cmc_rank=parsed['data'][i]['rank'],
+                                      circulating_supply=parsed['data'][i]['circulating_supply'],
+                                      total_supply=parsed['data'][i]['total_supply'],
+                                      max_supply=parsed['data'][i]['max_supply'],
+                                      usd_price=parsed['data'][i]['quotes']['USD']['price'],
+                                      usd_volume_24h=parsed['data'][i]['quotes']['USD']['volume_24h'],
+                                      usd_market_cap=parsed['data'][i]['quotes']['USD']['market_cap'],
+                                      usd_percent_change_1h=parsed['data'][i]['quotes']['USD']['percent_change_1h'],
+                                      usd_percent_change_24h=parsed['data'][i]['quotes']['USD']['percent_change_24h'],
+                                      usd_percent_change_7d=parsed['data'][i]['quotes']['USD']['percent_change_7d'],
+                                      btc_price=parsed['data'][i]['quotes']['BTC']['price'],
+                                      btc_volume_24h=parsed['data'][i]['quotes']['BTC']['volume_24h'],
+                                      btc_market_cap=parsed['data'][i]['quotes']['BTC']['market_cap'],
+                                      btc_percent_change_1h=parsed['data'][i]['quotes']['BTC']['percent_change_1h'],
+                                      btc_percent_change_24h=parsed['data'][i]['quotes']['BTC']['percent_change_24h'],
+                                      btc_percent_change_7d=parsed['data'][i]['quotes']['BTC']['percent_change_7d'])
+    return str(start)+' to '+str(start+limit-1)+' updated successfully. '

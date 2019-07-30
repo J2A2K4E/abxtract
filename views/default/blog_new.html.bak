@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+    <title>{{=blog.title}} | ViewBase</title>
+    <meta itemprop="name" content="{{=blog.title}} - ViewBase" />
+    <meta itemprop="description" name="description" content="{{=blog.description}}" />
+    <meta property="og:title" content="{{=blog.title}} - ViewBase" />
+    <meta property="og:description" content="{{=blog.description}}" />
+    <meta property="og:image" content="{{=blog.image_url_small}}" />
+    <meta property="og:image" name="twitter:image" content="{{=blog.image_url_small}}" />
+    <meta itemprop="image" content="{{=blog.image_url_small}}" />
+    <link itemprop="url" rel="canonical" href="{{=URL('default','blog',args=blog.website_slug,host=True)}}"/>
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="ViewBase" />
+    <meta property="fb:admins" content="TBC" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:title" content="{{=blog.title}}">
+    <meta name="twitter:description" content="{{=blog.description}}">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta name="twitter:image" content="{{=blog.image_url_small}}">
+
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static','css/blog.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/spinner.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/comment.css')}}"/>
+</head>
+<body>
+<!--     <div class="btn-group-vertical" style="left:0;top:35%;position:fixed;z-index:99;">
+        <a class="btn btn-light btn-lg" href="#" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(window.location.href),'facebook-share-dialog','width=626,height=436');return false;"><i class="fab fa-facebook"></i></a>
+        <a class="btn btn-light btn-lg" href="#" onclick="window.open('https://twitter.com/share?text={{=quote_plus(cleanhtml(str(XML(blog.title))))[:210]}}&amp;url='+encodeURIComponent(window.location.href),'Twitter-dialog','width=626,height=436');return false;"><i class="fab fa-twitter-square"></i></a>
+        <a class="btn btn-light btn-lg" href="#" onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url='+encodeURIComponent(window.location.href)+'&title={{=quote_plus(blog.title)}}&summary={{=quote_plus(blog.description)}}&source=ViewBase','Linkedin-dialog','width=626,height=436');return false;"><i class="fab fa-linkedin"></i></a>
+        <a class="btn btn-light btn-lg" href="#" onclick="window.open('https://telegram.me/share/url?url='+encodeURIComponent(window.location.href),'Telegram-dialog','width=626,height=436');return false;"><i class="fab fa-telegram"></i></a>
+    </div> -->
+    <div class="jumbo-container">
+        <div class="jumbo-image jumbo-item" style="background-image:url({{=blog.image_url}});"></div>
+        <div class="jumbo-overlay jumbo-item">
+            <div class="jumbo-text">
+                <div class="jumbo-tag">{{=blog.tag}}</div>
+                <h1 class="jumbo-header">{{=blog.title}}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg order-2 order-lg-1 blog-col"></div>
+            <div class="col-12 col-lg-7 order-1 order-lg-2 blog-col">
+                <div class="author-container">
+                    <div class="col-avatar">
+                        <a href="{{=URL('profile',args=[db.auth_user(blog.created_by).username_slug],host=True)}}">
+                            <img class="avatar-container rounded-circle" src="{{=get_avatar_url(blog.created_by)}}">
+                        </a>
+                    </div>
+                    <div class="col-message">
+                        <div class="message-header">
+                            <span class="message-header-text">
+                                {{user = db.auth_user(blog.created_by)}}
+                                <a href="{{=URL('profile',args=[user.username_slug],host=True)}}"><b>{{=user.username}}</b></a> · 
+                                <span class="message-header-desc">{{=user.description}}</span>
+                                <span class="message-header-date text-grey">
+                                    <br>{{=prettydate(blog.modified_on)}}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-body">
+                    {{=XML(blog.body)}}
+                </div>
+                <div class="blog-section-header">
+                    Comments
+                </div>
+                <div class="container-submit">
+                    <div class="col-avatar">
+                        {{if auth.user:}}
+                        <a href="{{=URL('profile',args=[db.auth_user(auth.user.id).username_slug],host=True)}}">
+                            <img class="avatar rounded-circle" src="{{=get_avatar_url(auth.user.id)}}">
+                        </a>
+                        {{else:}}
+                        <div class="avatar-container">
+                            <i style="" class="fas fa-user avatar-icon"></i>
+                        </div>
+                        {{pass}}
+                    </div>
+                    <div class="col-message">
+                        <textarea class="form-control main-form" onkeyup="textAreaAdjust(this)" rows="2" name="body" id="body" minlength="4" maxlength="999"  placeholder="{{='Write a comment...' if auth.user else 'Please login to comment'}}"  data-toggle="modal" data-target="{{=registerModal}}"/></textarea>
+                        <div id="link-preview" class="link-preview">
+                            <a class="link-preview-close" href="#"><i class="fas fa-times-circle"></i></a>
+                            <div class="link-image-container">
+                                <img id="link-image" class="link-image" src="">
+                            </div>
+                            <a target="_blank" href="#" class="link-nohover">
+                                <span class="link-text-container">
+                                    <span id="link-title" class="link-title"></span>
+                                    <span id="link-desc" class="link-desc"></span>
+                                    <span id="link-url" class="link-url"></span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="preview-wrapper">
+                            <div class="preview-text"><b>Attached Image:</b></div>
+                            <img class="preview-image" src="#" alt="your image"/>
+                            <i  class="preview-close fas fa-times-circle"></i>
+                        </div>
+                        <div class="loader">
+                            <div class="lds-spinner">
+                                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                            </div>
+                        </div>
+                        <div class="preview-buttons">
+                            {{if auth.user:}}
+                            <button type="submit" class="btn btn-success" id="my-submit">Submit</button>
+                            {{else:}}
+                            <button class="btn btn-success" data-toggle="modal" data-target="{{=registerModal}}">Submit</button>
+                            {{pass}}
+                            <button type="button" class="btn btn-light btn-border">
+                                <label class="upload-btn" for="file" style=""><i class="fas fa-image"></i> Upload Image</label>
+                            </button>
+                            <input class="preview-file" id="file" type="file"/>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-12 col-lg order-3 order-lg-3 blog-col"></div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+{{include 'comment.html'}}
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+    {{include 'navbar.html'}}
+</head>
+<body>
+    <div class="container-fluid" style="background-color:#f2f3f5;">
+        <div class="row my-container">
+            <div class="col-3 my-col">
+            </div>
+            <div class="col-6 my-col">
+                <form id="myform">
+                    <textarea class="form-control" rows="2" name="body" id="body" minlength="4" maxlength="999" /></textarea>
+                    <div class="linkPreview"></div>
+                </form>
+                <input type="text" name="url" size="64" id="url" value=""/>
+                <input type="button" name="attach" value="Attach" id="attach"/>
+            </div>
+            <div class="col-3 my-col">
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    $(function(){
+        $('#body').keypress(function(event){
+            if(event.which==32) {
+                var post = $('#body').val();
+                var match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(post);
+                var url_record = ''
+                // Check if there is url in post
+                if (match[0]){
+                    var url_current = match[0];
+                    // Check if current url is same as url in record
+                    if (url_current != url_record){
+                        url_record = url_current;
+                        $.ajax({
+                            method:'post',
+                            url:'{{=URL('link_preview')}}',
+                            data:{'url':url_current},
+                            success:function(data){$('.linkPreview').html(data);}
+                    });
+                    };
+                };
+            }
+        });
+    });
+
+</script>
+</html>

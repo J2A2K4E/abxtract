@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head itemscope itemtype="http://schema.org/Organization" lang="en">
+    <title>{{=member.username}} | Abxtract</title>
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/profile.css')}}"/>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-3">
+                <div class="profile-container">
+                    <img class="profile-avatar rounded-circle" src="{{=get_avatar_url(member.avatar)}}">
+                    <div class="profile-section">
+                        <div class="profile-name">{{=member.username}}</div>
+                        <div>{{=member.description}}</div>
+                    </div>
+                    <div class="profile-section">
+                        {{if member.website:}}
+                        <div class="profile-field"><i class="profile-icon fas fa-link"></i><a href="{{=member.website}}" rel="nofollow">{{=member.website}}</a></div>
+                        {{pass}}
+                        {{if member.ethaddress:}}
+                        <div class="profile-field"><i class="profile-icon fab fa-ethereum"></i><span class="ethaddress" id="ethaddress" data-toggle="tooltip" data-placement="top" title="Ethereum wallet address">{{=member.ethaddress}}</span></div>
+                        {{pass}}
+                        <div class="profile-field">
+                            <i class="profile-icon far fa-calendar-alt"></i>Joined {{=prettydate(member.created_on)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 my-col col-main">
+                <h1 class="section-header">
+                    Recent Posts <i class="fas fa-comment-alt"></i>
+                </h1>
+                {{for comment in comments:}}
+                {{comment_url=num_encode(comment['id']+10000)}}
+            <div class="container-post">
+                <div class="post-header">
+                    <div class="col-avatar">
+                        <a href="{{=URL('profile',args=comment['username_slug'],host=True)}}">
+                            <img class="avatar-container rounded-circle" src="{{=get_avatar_url(comment['avatar'])}}">
+                        </a>
+                    </div>
+                    <div class="col-message">
+                        <div class="message-header">
+                            <span class="message-header-text">
+                                <a href="{{=URL('profile',args=comment['username_slug'],host=True)}}"><b>{{=comment['username']}}</b></a> · 
+                                <span class="message-header-desc">{{=comment['description']}}</span>
+                                <span class="message-header-date text-grey">
+                                    <br>Posted 
+                                    {{if comment['coin'] != None and comment['coin'] != '':}}
+                                    in <a class="link-grey" href="{{=URL('default','coin',args=comment['custom_slug'])}}">{{=comment['name']}}</a> 
+                                    {{pass}}
+                                    <a class="link-grey" href="{{=URL('comment',args=comment_url)}}">{{=prettydate(comment['created_on'])}}</a>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-body" id="{{=comment['id']}}">
+                    {{if comment['created_by']==4:}}
+                    {{=XML(comment['body'].replace('\n','<br/>'), sanitize=False)}}
+                    {{else:}}
+                    {{=XML(comment['body'].replace('\n','<br/>'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES)}}
+                    {{pass}}
+                </div>
+                </div>
+                {{pass}}
+            </div>
+            <!-- End of collapsed dropdown -->
+        </div>
+{{pass}}
+<div style="text-align:center;margin-top:10px;">
+    {{if int(page)>0:}}
+    <a href="{{=URL('index',vars=dict(page=int(page)-1),host=True)}}" class="btn btn-success round-btn">
+        <i class="fas fa-caret-left"></i> Previous
+    </a>
+    {{pass}}
+    {{if comment_count > last_comment_on_page:}}
+    <a href="{{=URL('index',vars=dict(page=int(page)+1),host=True)}}" class="btn btn-success round-btn btn-page">Next <i class="fas fa-caret-right"></i></a>
+    {{pass}}
+</div>
+        </div>
+        <div class="col-12 col-lg-3 my-col">
+        </div>
+    </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+{{include 'comment.html'}}
+</html>

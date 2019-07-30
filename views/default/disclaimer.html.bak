@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+    <title>Disclaimer | ViewBase</title>
+    <meta itemprop="name" content="Disclaimer | ViewBase" />
+    <meta itemprop="description" name="description" content="Disclaimer" />
+    <link itemprop="url" rel="canonical" href="https://www.viewbase.com/disclaimer"/>
+    {{include 'navbar.html'}}
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-3 order-2 order-lg-1 my-col"></div>
+            <div class="col-12 col-lg-6 order-1 order-lg-2 my-col col-main">
+                <h1 style="margin:24px 0;width:100%;font-size:25px;font-weight:700;line-height:1.44em;">
+                    Disclaimer
+                </h1>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    No Investment Advice
+                </h3>
+                <p>The information provided on this website does not constitute investment advice, financial advice, trading advice, or any other sort of advice and you should not treat any of the website's content as such. ViewBase does not recommend that any cryptocurrency should be bought, sold, or held by you. Do conduct your own due diligence and consult your financial advisor before making any investment decisions.</p>
+                <h3 style="margin:24px 0;width:100%;font-size:20px;font-weight:700;line-height:1.44em;">
+                    Accuracy of Information
+                </h3>
+                <p>ViewBase will strive to ensure accuracy of information listed on this website although it will not hold any responsibility for any missing or wrong information. ViewBase provides all information as is. You understand that you are using any and all information available here at your own risk.</p>
+            </div>
+            <div class="col-12 col-lg-3 order-3 order-lg-3 my-col"></div>
+        </div>
+    </div>
+{{include 'footer.html'}}
+</body>
+</html>

@@ -1,0 +1,29 @@
+<html>
+<head>
+  <title>ViewBase Title</title>
+  <meta property="og:url"           content="https://www.viewbase.com/facebook" />
+  <meta property="og:type"          content="ViewBase OG Type" />
+  <meta property="og:title"         content="ViewBase OG Title" />
+  <meta property="og:description"   content="ViewBase OG description" />
+  <meta property="og:image"         content="https://images.pexels.com/photos/207962/pexels-photo-207962.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+</head>
+<body>
+
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  <!-- Your share button code -->
+  <div class="fb-share-button" 
+    data-href="https://www.viewbase.com/facebook" 
+    data-layout="button_count">
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+from bs4 import BeautifulSoup
+import re
+import cfscrape
+from fake_useragent import UserAgent
+import lxml.html
+from random import randint, shuffle
+from io import BytesIO
+from PIL import Image
+import base64
+import requests
+import json
+from datetime import datetime, date, timedelta
+import numpy as np
+import pandas as pd
+import time
+from decimal import Decimal
+PROXIES = ['207.180.207.12:3128', '51.38.147.254:3128', '80.29.169.189:3128', '147.135.98.85:80', '24.177.187.101:36330', '78.40.87.18:808']
+removed = ['85.187.60.30:8080', '47.254.41.168:9999', '91.206.4.175:50870', '178.213.130.159:59945', '142.93.120.180:80', '212.205.112.162:46675', '188.114.68.149:34041', '128.127.1.101:45833', '37.145.118.34:40874', '89.132.192.211:54858', '91.222.27.31:39285', '78.156.243.146:59730', '62.158.83.87:3128']
+API_KEY = '15CXMHT3FGQ4KU6ZRFPR9UICFJAFWD73X5'
+
+
+def updateBalanceDecimal():
+    balances = db(db.token_wallet_balance.coin_id==305).select()
+#     for row in balances:
+#         row.update_record(balance_amount=row.balance_amount/10**9)
+    return locals()
+
+def getCurrentBalance():
+    sqlQuery = "SELECT a.id, a.coin_id, a.wallet, a.group, a.category, a.divisor, b.wallet_address AS token_address, c.address AS wallet_address FROM token_wallet_list a LEFT JOIN master b ON a.coin_id=b.id LEFT JOIN wallet c ON a.wallet=c.name WHERE a.active='T'"
+    db.executesql("UNLOCK TABLES;")
+    tokenWalletList = db.executesql(sqlQuery, as_dict=True)
+    for row in tokenWalletList:
+        try:
+            status = 'done'
+            walletBalance = 0
+            nowDatetime = datetime.now()
+            nowDate = nowDatetime.date()
+            divisor = 10**row['divisor']
+            time.sleep(0.3)
+            url = 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=' +row['token_address'].lower()+ '&address=' +row['wallet_address'].lower()+ '&tag=latest&apikey=' + API_KEY
+            page = requests.get(url).content
+            page = json.loads(page)
+            if 'status' in page and page['status']:
+                if page['status'] == '1':
+                    walletBalance = Decimal(page['result'])/divisor
+                else:
+                    status = page['status']
+            else:
+                status = page['status']
+            sqlQuery = "UPDATE token_wallet_list SET updated_on='"+nowDatetime.strftime('%Y-%m-%d %H:%M:%S')+"', current_balance="+str(walletBalance)+", status='"+str(status)+"' WHERE id="+str(row['id'])+";"
+            db.executesql("UNLOCK TABLES;")
+            db.executesql(sqlQuery)
+            sqlQuery = "INSERT INTO token_wallet_balance (coin_id, wallet, balance_date, `group`, balance_amount) VALUES ("+str(row['coin_id'])+", '"+str(row['wallet'])+"', '"+nowDate.strftime('%Y-%m-%d')+"', '"+str(row['group'])+"', "+str(walletBalance)+") ON DUPLICATE KEY UPDATE balance_amount="+ str(walletBalance) +";"
+            db.executesql("UNLOCK TABLES;")
+            db.executesql(sqlQuery)
+        except:
+            sqlQuery = "UPDATE token_wallet_list SET updated_on='"+nowDatetime.strftime('%Y-%m-%d %H:%M:%S')+"', status='fail' WHERE id="+str(row['id'])+";"
+            db.executesql("UNLOCK TABLES;")
+            db.executesql(sqlQuery)
+    return locals()
+
+def getBalanceHistory():
+    tokenWalletList = db((db.token_wallet_list.id>=489)).select()
+#     tokenWalletList = db((db.token_wallet_list.id >= 302)).select()
+    for tokenWallet in tokenWalletList:
+        try:
+            coinId = tokenWallet.coin_id
+            tokenContract = db(db.master.id==coinId).select(db.master.wallet_address).first().wallet_address.lower()
+            walletName = tokenWallet.wallet
+            wallet = db(db.wallet.name == walletName).select(db.wallet.address, db.wallet.group).first()
+            walletAddress = wallet.address.lower()
+            group = wallet.group
+            divisor = 10**tokenWallet.divisor
+            status = ""
+
+            # Initialize vars
+            page_count = 1
+            page_limit = 999999
+            goNextPage = True
+            masterDf = pd.DataFrame()
+
+            while(goNextPage):
+                time.sleep(0.35) # delay for 1 second
+                url = 'https://api.etherscan.io/api?module=account&action=tokentx&contractaddress='+tokenContract+'&address='+walletAddress+'&page='+str(page_count)+'&offset=25&sort=asc&apikey='+API_KEY
+                page = requests.get(url).content
+                page = json.loads(page)
+
+                # Decide if break loop
+                if page['status'] != '1':
+                    status = page['status']
+                    break
+                elif page_count >= page_limit:
+                    goNextPage = False
+
+                dateList = []
+                transferList = []
+                for transfer in page['result']:
+                    # Get flow of tokens
+                    tokenFlow = Decimal(transfer['value'])/divisor
+                    if transfer['from']==walletAddress:
+                        tokenFlow = -tokenFlow
+
+                    transferList.append(tokenFlow)
+                    dateList.append(datetime.fromtimestamp(int(transfer['timeStamp'])).date())
+
+                # Convert to dataframe, sum by dates, sort in ascending order
+                df = pd.DataFrame(np.column_stack((dateList, transferList)))
+                df = df.groupby(0, as_index=False).sum()
+                masterDf = masterDf.append(df)
+                page_count += 1
+
+            # End function if no tokens found in wallet
+            if len(masterDf.index) <= 0:
+                if status != '1':
+                    tokenWallet.update_record(historystatus='fail')
+                else:
+                    tokenWallet.update_record(historystatus='empty')
+                continue
+
+            # Get current token balance from API for comparison purposes
+            url = 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress='+tokenContract+'&address='+walletAddress+'&tag=latest&apikey='+API_KEY
+            page = requests.get(url).content
+            page = json.loads(page)
+            apiBalance = Decimal(page['result'])/divisor
+
+            # Sum using group by date
+            masterDf = masterDf.groupby(0, as_index=False).sum()
+            masterDf = masterDf.sort_values(by=0, ascending=True)
+
+            # Create list with all consecutive dates
+            startDate = masterDf.iloc[0][0]
+            endDate = masterDf.iloc[-1][0]
+            endDate = datetime.now().date()
+            delta = endDate - startDate
+            completeDateList = []
+            completeTransferList = []
+            row = 0
+            maxRow = len(masterDf)
+            for i in range(delta.days+1):
+                current_date = startDate + timedelta(i)
+                completeDateList.append(current_date)
+                if (row < maxRow) and (current_date == masterDf.iloc[row][0]):
+                    completeTransferList.append(masterDf.iloc[row][1])
+                    row += 1
+                else:
+                    completeTransferList.append(0)
+
+            # Convert to dataframe, sum by dates, sort in ascending order, calculate cumulative sum
+            df = pd.DataFrame(np.column_stack((completeDateList, completeTransferList)))
+            df = df.groupby(0, as_index=False).sum()
+            df = df.sort_values(by=0, ascending=True)
+            df['Balance'] = df[1].cumsum()
+            currentBalance = df.iloc[-1]['Balance']
+
+            # If API balance and calculated balance are different, then compute historical balance using API balance
+            if int(apiBalance)-int(currentBalance) > 100:
+                df = df.sort_values(by=0, ascending=False)
+                nextRowBalance = apiBalance
+                apiBalanceList = []
+                for index, row in df.iterrows():
+                    apiBalanceList.append(nextRowBalance)
+                    nextRowBalance -= row[1]
+                apiBalanceList = apiBalanceList[::-1]
+                df['Balance'] = pd.Series(apiBalanceList)
+                df = df.sort_values(by=0, ascending=True)
+
+            # Update or insert into database
+            for index, row in df.iterrows():
+                sqlQuery = "INSERT INTO token_wallet_balance (coin_id, wallet, balance_date, `group`, balance_amount) VALUES ("+str(coinId)+", '"+str(walletName)+"', '"+row[0].strftime('%Y-%m-%d')+"', '"+str(group)+"', "+str(row['Balance'])+") ON DUPLICATE KEY UPDATE balance_amount="+ str(row['Balance']) +";"
+                db.executesql(sqlQuery)
+                db.commit()
+            tokenWallet.update_record(historystatus='success')
+            db.commit()
+        except:
+            tokenWallet.update_record(historystatus='fail')
+            db.commit()
+    return locals()
+
+
+def getPartialBalanceHistory():
+    tokenWalletList = db(db.token_wallet_list.id > 0).select()
+    for tokenWallet in tokenWalletList:
+        coinId = tokenWallet.coin_id
+        tokenContract = db(db.master.id==coinId).select(db.master.wallet_address).first().wallet_address.lower()
+        walletName = tokenWallet.wallet
+        getPartialBalanceHistory(coinId, tokenContract, walletName)
+
+        wallet = db(db.wallet.name == walletName).select(db.wallet.address, db.wallet.group).first()
+        walletAddress = wallet.address.lower()
+        group = wallet.group
+        divisor = 10**tokenWallet.divisor
+
+        # Initialize vars
+        page_count = 1
+        page_limit = 5
+        goNextPage = True
+        masterDf = pd.DataFrame()
+
+        while(goNextPage):
+            time.sleep(0.21) # delay for 1 second
+            url = 'https://api.etherscan.io/api?module=account&action=tokentx&contractaddress='+tokenContract+'&address='+walletAddress+'&page='+str(page_count)+'&offset=100&sort=desc&apikey='+API_KEY
+            page = requests.get(url).content
+            page = json.loads(page)
+
+            # Decide if break loop
+            if page['status'] != '1':
+                break
+            elif page_count >= page_limit:
+                goNextPage = False
+
+            dateList = []
+            transferList = []
+            for transfer in page['result']:
+                # Get flow of tokens
+                tokenFlow = Decimal(transfer['value'])/divisor
+                if transfer['from']==walletAddress:
+                    tokenFlow = -tokenFlow
+
+                transferList.append(tokenFlow)
+                dateList.append(datetime.fromtimestamp(int(transfer['timeStamp'])).date())
+
+            # Convert to dataframe, sum by dates, sort in ascending order
+            df = pd.DataFrame(np.column_stack((dateList, transferList)))
+            df = df.groupby(0, as_index=False).sum()
+            df = df.sort_values(by=0, ascending=True)
+
+            masterDf = masterDf.append(df)
+            page_count += 1
+
+    #     End function if no tokens found in wallet
+        if len(masterDf.index) <= 0:
+            return locals()
+
+        # Get current token balance from API for comparison purposes
+        url = 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress='+tokenContract+'&address='+walletAddress+'&tag=latest&apikey='+API_KEY
+        page = requests.get(url).content
+        page = json.loads(page)
+        apiBalance = Decimal(page['result'])/divisor
+
+        # Sum using group by date and sort by most recent
+        masterDf = masterDf.groupby(0, as_index=False).sum()
+        masterDf = masterDf.sort_values(by=0, ascending=False)
+        masterDf = masterDf.reset_index(drop=True)
+        masterDf['Balance'] = apiBalance - masterDf[1].cumsum().shift(1)
+        masterDf.loc[0]['Balance'] = apiBalance
+
+        # Drop last row to avoid any possible incomplete transfers for last date
+        masterDf = masterDf.iloc[:-1]
+
+        # Sort by oldest first
+        masterDf = masterDf.sort_values(by=0, ascending=True)
+        masterDf = masterDf.reset_index(drop=True)
+
+        # Create list with all consecutive dates
+        startDate = masterDf.iloc[0][0]
+        endDate = datetime.now().date()
+        delta = endDate - startDate
+        dateList = []
+        balanceList = []
+        row = 0
+        maxRow = len(masterDf)
+        currentBalance = masterDf.iloc[0]['Balance']
+        for i in range(delta.days+1):
+            currentDate = startDate + timedelta(i)
+            if (row < maxRow) and (currentDate == masterDf.iloc[row][0]):
+                currentBalance = masterDf.iloc[row]['Balance']
+                row += 1
+            dateList.append(currentDate)
+            balanceList.append(currentBalance)
+
+        # Update or insert into database
+        i = 0
+        for balance in balanceList:
+            db.token_wallet_balance.update_or_insert((db.token_wallet_balance.coin_id==coinId) & (db.token_wallet_balance.wallet==walletName) & (db.token_wallet_balance.balance_date==dateList[i]),
+                coin_id = coinId,
+                wallet = walletName,
+                group = group,
+                balance_date = dateList[i],
+                balance_amount = balance)
+            i += 1
+    return locals()
+
+def getAllHistoryPrice():
+    coinList = db(db.token_wallet_list.id < 58).select(groupby=db.token_wallet_list.coin_id)
+    for coin in coinList:
+        getCustomPrice(coin.coin_id)
+    return 'success'
+
+def getCustomPrice(coin_id):
+    # BNB
+#     coin_id = 596
+    coingecko_id = db(db.master.id==coin_id).select(db.master.coingecko_id).first().coingecko_id
+
+    if db(db.token_price.coin_id==coin_id).select(db.token_price.id, limitby=(0, 1)):
+        startDate = db(db.token_price.coin_id==coin_id).select(db.token_price.trade_date, orderby=~db.token_price.trade_date).first().trade_date
+    else:
+        startDate = db.executesql("SELECT balance_date FROM token_wallet_balance WHERE coin_id="+str(coin_id)+" ORDER BY balance_date ASC LIMIT 1;")[0][0]
+    endDate = db.executesql("SELECT balance_date FROM token_wallet_balance WHERE coin_id="+str(coin_id)+" ORDER BY balance_date DESC LIMIT 1;")[0][0]
+#     startDate = date(2018, 1, 1)
+#     endDate = date(2019, 1, 1)
+
+    delta = endDate - startDate
+    dateList, btcList, ethList, usdList = [],[],[],[]
+    for i in range(delta.days+1):
+        currentDate = startDate + timedelta(i)
+        currentDateString = currentDate.strftime('%d-%m-%Y')
+        url = 'https://api.coingecko.com/api/v3/coins/'+coingecko_id+'/history?date='+currentDateString
+        time.sleep(0.4)
+        page = requests.get(url).content
+        page = json.loads(page)
+        if 'market_data' in page and page['market_data']:
+            if 'current_price' in page['market_data'] and page['market_data']['current_price']:
+                dateList.append(currentDate)
+                priceBTC = page['market_data']['current_price']['btc'] if page['market_data']['current_price']['btc'] else 'NULL'
+                priceETH = page['market_data']['current_price']['eth'] if page['market_data']['current_price']['eth'] else 'NULL'
+                priceUSD = page['market_data']['current_price']['usd'] if page['market_data']['current_price']['usd'] else 'NULL'
+                btcList.append(priceBTC)
+                ethList.append(priceETH)
+                usdList.append(priceUSD)
+    for i in range(len(dateList)):
+        sqlQuery = "INSERT INTO token_price (coin_id, trade_date, priceBTC, priceETH, priceUSD) VALUES ("+str(coin_id)+", '"+dateList[i].strftime('%Y-%m-%d')+"', "+str(btcList[i])+", "+str(ethList[i])+", "+str(usdList[i])+") ON DUPLICATE KEY UPDATE priceBTC="+str(btcList[i])+", priceETH="+str(ethList[i])+", priceUSD="+str(usdList[i])+";"
+        db.executesql(sqlQuery)
+    return locals()

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>ERC20 Token Deposits on Exchange | ViewBase</title>
+    <meta property="og:title" itemprop="name" content="ERC20 Token Deposits on Exchange | ViewBase">
+    <meta name="twitter:title" content="ERC20 Token Deposits on Exchange | ViewBase">
+    <meta property="og:description" itemprop="description" name="description" content="Track live changes in tokens deposited in exchange wallets. Increases in token deposits could indicate intention to sell by holders.">
+    <meta name="twitter:description" content="Track live changes in tokens deposited in exchange wallets. Increases in token deposits could indicate intention to sell by holders.">
+    <meta name="twitter:image:src" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <meta property="og:image" itemprop="image" name="image" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <link property="og:url" itemprop="url" rel="canonical" href="https://www.viewbase.com/exchange"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta property="og:site_name" content="ViewBase">
+    <meta property="fb:app_id" content="457354494759406">
+    <meta property="og:type" content="article">
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/table.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/inflation.css')}}"/>
+    <script type="text/javascript" src="{{=URL('static',STATIC_VERSION,'js/jquery.tablesorter.js')}}"></script>
+    <style>
+        td{white-space: nowrap;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-2 order-2 order-lg-1 my-col">
+            </div>
+            <div class="col-12 col-lg-7 order-1 order-lg-2 my-col col-main">
+                <h1 class="list-header">ERC20 Token Deposits on Exchange</h1>
+                <p class="list-desc">
+                    Increases in tokens deposited on exchanges could indicate intention to sell by holders.
+                </p>
+                <table class="table table-responsive-lg tablesorter" id="myTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">
+                                Token  <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="Total tokens deposited in exchange wallets">
+                                Exchange Deposit <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="Percentage of total supply deposited in exchange wallets">
+                                % Supply <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="1-day change in tokens deposited in exchange wallets">
+                                % 1D <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="1-week change in tokens deposited in exchange wallets">
+                                % 1W <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="1-month change in tokens deposited in exchange wallets">
+                                % 1M <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{row_idx = 1}}
+                        {{for row in tokens:}}
+                        <tr class='clickable-row' data-href="{{=URL('default','coin',args=row['custom_slug'])}}">
+                            <td>{{=row_idx}}{{row_idx += 1}}</td>
+                            <td>
+                                <a href="{{=URL('default','coin',args=row['custom_slug'])}}">
+                                    <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/{{=row['image_thumb']}}">&nbsp; {{=row['name']}}
+                                </a>
+                            </td>
+                            <td class="cell-right cell-small">{{='{0:,.0f}'.format(row['current_balance'])}} {{=row['symbol']}}</td>
+                            <td class="cell-right">{{='{0:,.1f}'.format(row['current_balance']/row['total_supply']*100)}}%</td>
+                            <td class="cell-right">{{=XML(getReturns(row['current_balance'], row['d1_balance']))}}</td>
+                            <td class="cell-right">{{=XML(getReturns(row['current_balance'], row['d7_balance']))}}</td>
+                            <td class="cell-right">{{=XML(getReturns(row['current_balance'], row['d30_balance']))}}</td>
+                        </tr>
+                        {{pass}}
+                    </tbody>
+                </table>
+                <h2 class="list-header">Discontinued ERC20 Tokens</h2>
+                <p class="list-desc">
+                    Former ERC20 tokens that have completed mainnet swaps
+                </p>
+                <table class="table table-responsive-lg">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">
+                                Token  <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th scope="col">
+                                Symbol
+                            </th>
+                            <th scope="col">
+                                Discontinued Date
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class='clickable-row' data-href="https://www.viewbase.com/coin/aion">
+                            <td>1</td>
+                            <td>
+                                <a href="https://www.viewbase.com/coin/aion">
+                                    <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.aec0fd97c19bee67.61696f6e2e706e67.png">&nbsp;
+                                    AION
+                                </a>
+                            </td>
+                            <td>AION</td>
+                            <td>23-Oct-2018</td>
+                        </tr>
+                        <tr class='clickable-row' data-href="https://www.viewbase.com/coin/bytom">
+                            <td>2</td>
+                            <td>
+                                <a href="https://www.viewbase.com/coin/bytom">
+                                    <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.8b7e6daf87d1b7ee.6279746f6d2e706e67.png">&nbsp;
+                                    Bytom
+                                </a>
+                            </td>
+                            <td>BTM</td>
+                            <td>24-Apr-2018</td>
+                        </tr>
+                        <tr class='clickable-row' data-href="https://www.viewbase.com/coin/cybermiles">
+                            <td>3</td>
+                            <td>
+                                <a href="https://www.viewbase.com/coin/cybermiles">
+                                    <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.ae19ca227f21b4d8.63796265726d696c65732e706e67.png">
+                                    &nbsp;CyberMiles
+                                </a>
+                            </td>
+                            <td>CMT</td>
+                            <td>24-Oct-2018</td>
+                        </tr>
+                        <tr class='clickable-row' data-href="https://www.viewbase.com/coin/iostoken">
+                            <td>4</td>
+                            <td>
+                                <a href="https://www.viewbase.com/coin/iostoken">
+                                    <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.ae4636a64555f7fb.696f73746f6b656e2e706e67.png">
+                                    &nbsp;IOST
+                                </a>
+                            </td>
+                            <td>IOST</td>
+                            <td>8-Mar-2019</td>
+                        </tr>
+                        <tr class='clickable-row' data-href="https://www.viewbase.com/coin/theta-token">
+                            <td>5</td>
+                            <td>
+                                <a href="https://www.viewbase.com/coin/theta-token">
+                                    <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.8c4ac2888da6f490.74686574612d746f6b656e2e706e67.png">
+                                    &nbsp;Theta
+                                </a>
+                            </td>
+                            <td>THETA</td>
+                            <td>12-Mar-2019</td>
+                        </tr>
+                        <tr class='clickable-row' data-href="https://www.viewbase.com/coin/tron">
+                            <td>6</td>
+                            <td>
+                                <a href="https://www.viewbase.com/coin/tron">
+                                    <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.8f21f6ddb2fda2b8.74726f6e2e706e67.png">
+                                    &nbsp;Tron
+                                </a>
+                            </td>
+                            <td>TRX</td>
+                            <td>10-Jul-2018</td>
+                        </tr>
+                        <tr class='clickable-row' data-href="https://www.viewbase.com/coin/yoyow">
+                            <td>7</td>
+                            <td>
+                                <a href="https://www.viewbase.com/coin/yoyow">
+                                    <img src="https://www.viewbase.com/static/_0.0.0/image_thumb/master.image_thumb.b155aa488a32b61b.796f796f772e706e67.png">
+                                    &nbsp;YOYOW
+                                </a>
+                            </td>
+                            <td>YOYOW</td>
+                            <td>10-Aug-2018</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="powered-by">Powered by <a href="https://etherscan.io/apis" target="_blank"><img src="https://www.viewbase.com/viewbase/static/_0.0.0/images/etherscan.png" alt="Powered by Etherscan"></a></div>
+            </div>
+            <div class="col-12 col-lg-3 order-3 order-lg-3 my-col">
+                <h1 class="section-header">
+                    <a class="section-header" href="{{=URL('default','blog')}}">Related Posts</a>
+                </h1>
+                {{for blog in blogs:}}
+                <a class="blog-container" href="{{=URL('default','blog',args=blog['website_slug'])}}">
+                    <div class="blog-image blog-item" style="background-image:url({{=blog['image_url_small']}});"></div>
+                    <div class="blog-overlay blog-item">
+                        <span class="blog-header">{{=blog['title']}}</span>
+                    </div>
+                </a>
+                {{pass}}
+            </div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+
+<script>
+    $.tablesorter.addParser({
+        id: "commaDelimited",
+        is: function(s) {return /^[0-9]?[0-9,\.]*$/.test(s);},
+        format: function(s) {return jQuery.tablesorter.formatFloat( s.replace(/,/g,'').replace(/\$/g,'') );},
+        type: "numeric"
+    });
+    $(document).ready(function(){
+        $("#myTable").tablesorter({
+            sortList:[[0,0]],
+            headers: {3:{sorter:'commaDelimited'},4:{sorter:'commaDelimited'},5:{sorter:'commaDelimited'}}
+        });
+    });
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
+</html>

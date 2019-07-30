@@ -1,0 +1,1147 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.NameError'> name 'max_user_followers_tweet' is not defined"
+p3
+sS'layer'
+p4
+S'/opt/web2py_apps/web2py/applications/abxtract/views/default/coin.html'
+p5
+sS'code'
+p6
+S'response.write(\'<!DOCTYPE html>\\n<html class="no-js" lang="en">\\n<head>\\n    <title>Coin | Abxtract</title>\\n    \', escape=False)\nresponse.write(\'<meta name="viewport" content="width=device-width, initial-scale=1.0">\\n<link rel="shortcut icon" type="image/png" href="/static/_0.0.1/images/favicon.png"/>\\n<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">\\n<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">\\n<script\\n  src="https://code.jquery.com/jquery-3.3.1.min.js"\\n  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="\\n  crossorigin="anonymous"></script>\\n<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>\\n<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>\\n<link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'css/lity.min.css\'))\nresponse.write(\'"/>\\n<script src="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'js/lity.min.js\'))\nresponse.write(\'"></script>\\n<script src="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'js/main.js\'))\nresponse.write(\'"></script>\\n<link rel="stylesheet" type="text/css" href="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'css/main.css\'))\nresponse.write(\'"/>\\n<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">\\n\\n    <a class="navbar-brand" href="/" style="position: absolute; top: 0; left: 0; margin: 7px 20px; font-weight: bold;">\\n        Abxtract\\n    </a>\\n    <div class="d-lg-none" style="width: 100%;">\\n        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="float: right">\\n            <span class="navbar-toggler-icon"></span>\\n        </button> \\n    </div>\\n    <div class="collapse navbar-collapse" id="navbarSupportedContent">\\n        <ul class="col-md-3 navbar-nav">\\n        </ul>\\n        <ul class="col-md-5 navbar-nav">\\n            <ul class="col-sm-12">\\n                <form class="form-inline dropdown nav-item nav-search mobile-hide">\\n                    <div class="input-group" style="width: 100%;">\\n                        <input class="form-control form-control-sm" id="coin-search-form" type="search" placeholder="Search insights for cryptocurrency" id="menu1" data-toggle="dropdown" autocomplete="off">\\n                        <div class="input-group-append"><span class="input-group-text" id="basic-addon2" style="border-radius: 0px;"><i class="fas fa-search"></i></span></div>\\n                    </div>\\n                    <div class="dropdown-menu" id="coin-search-menu"></div>\\n                </form>\\n            </ul>\\n        </ul>\\n\\n        <ul class="col-md-4 navbar-nav" style="display: flex; justify-content: flex-end;">\\n            <ul class="navbar-nav">\\n                <li class="nav-item nav-margin-right">\\n                    <a class="nav-link" href="/dashboard" style="color: #ffffff;">Dashboard</a>\\n                </li>\\n                <li class="nav-item nav-margin-right">\\n                    <a class="nav-link" href="/insights" style="color: #ffffff;">Insight of the Month</a>\\n                </li>\\n            </ul>\\n\\n            <ul class="navbar-nav">\\n                \', escape=False)\nif auth.user:\n    response.write(\'\\n                <li class="nav-item dropdown">\\n                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #ffffff;">\\n                        <!--                             <i class="fas fa-user"></i> \', escape=False)\n    response.write(auth.user.username)\n    response.write(\' -->\\n                        <img class="avatar rounded-circle" src="\', escape=False)\n    response.write(get_avatar_url(auth.user.avatar))\n    response.write(\'" style="height: 24px; width: 24px; transform: translate(-1px,-1px); border: 1px solid #ffffff;"> \', escape=False)\n    response.write(auth.user.username)\n    response.write(\'\\n                    </a>\\n                    <div class="dropdown-menu dropdown-menu-right">\\n                        <a class="dropdown-item" href="\', escape=False)\n    response.write(URL(\'default\',\'profile\',args=auth.user.username_slug,host=True))\n    response.write(\'">View Profile</a>\\n                        <a class="dropdown-item" href="/edit_profile">Edit Profile</a>\\n                        <a class="dropdown-item" href="\', escape=False)\n    response.write(URL(\'user\',args=\'change_password\',vars=dict(_next=URL(args=request.args, vars=request.vars)),host=True))\n    response.write(\'">Change Password</a>\\n                        <a class="dropdown-item" href="\', escape=False)\n    response.write(URL(\'default\',\'user/logout\',args=\'logout\',vars=dict(_next=URL(args=request.args,vars=request.vars)), host=True))\n    response.write(\'">Logout</a>\\n                    </div>\\n                </li>\\n                \', escape=False)\nelse:\n    response.write(\'\\n                <li class="nav-item" style="margin-right: 10px;">\\n                    <button class="btn btn-dark btn-border" type="button" data-toggle="modal" data-target="#registerModal">Sign Up</button>\\n                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#loginModal">Log In</button>\\n                </li>\\n                \', escape=False)\n    pass\nresponse.write(\'\\n            </ul>\\n        </ul>\\n    </div>\\n</nav>\\n<div class="alert_placeholder">\\n    \', escape=False)\nif response.flash:\n    response.write(\'\\n        <div class="flash alert alert-success alert-dismissible fade show" role="alert">\\n            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>\\n            \', escape=False)\n    response.write(response.flash)\n    response.write(\'\\n        </div>\\n    \', escape=False)\n    pass\nresponse.write(\'\\n</div>\\n\\n<style>\\n.btn, input, textarea, .modal-content {\\n    border-radius: 0 !important;\\n}\\n\\n#coin-search-menu {\\n    width: 100%;\\n    border-radius: 0px;\\n}\\n</style>\\n\', escape=False)\nresponse.write(\'\\n    <link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'css/comment.css\'))\nresponse.write(\'"/>\\n    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>\\n    <style>\\n        .row-container{\\n            display:flex;\\n            flex-direction:row;\\n            justify-content: space-around;\\n        }\\n        .twitter-tweet{\\n            display:flex;\\n            flex-direction:column;\\n        }\\n        .sentiment-col{\\n            display:flex;\\n            flex-direction:column;\\n            color: #ffffff;\\n            font-size: 20px;\\n            font-weight: bold;\\n            justify-content: center;\\n            height:100%;\\n            margin:10px 0;\\n            flex: 1;\\n        }\\n        .sentiment-col{\\n            display:flex;\\n            flex-direction:column;\\n            color: #ffffff;\\n            font-size: 20px;\\n            font-weight: bold;\\n            justify-content: center;\\n            height:100%;\\n            margin:10px 0;\\n            width:0;\\n        }\\n        .sentiment-box-small {\\n            width: 60px;\\n            text-align:center;\\n            padding: 1px 10px;\\n            border-radius: 1px;\\n            height:100%;\\n            font-size: .7rem;\\n            transform: translate(-125px, 20px);\\n            pointer-events: none;\\n            visibility: hidden;\\n        }\\n        .setVisible {\\n            visibility: visible;\\n        }\\n    </style>\\n    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>\\n    <script type="text/javascript">\\n        google.charts.load("current", {packages:["corechart"]});\\n        google.charts.setOnLoadCallback(drawChart);\\n        function drawChart() {\\n            var data = google.visualization.arrayToDataTable([\\n                [\\\'Sentiment\\\', \\\'Tweets Count\\\'],\\n                [\\\'Bullish\\\', \', escape=False)\nresponse.write(positiveCount)\nresponse.write("],\\n                [\'Neutral\', ", escape=False)\nresponse.write(negativeCount)\nresponse.write("],\\n                [\'Bearish\', ", escape=False)\nresponse.write(neutralCount)\nresponse.write(\']\\n            ]);\\n\\n            var options = {\\n                pieSliceTextStyle: {\\n                    color: \\\'black\\\',\\n                },\\n                pieHole: 0.6,\\n                slices: {\\n                    0: { color:\\\'#8bc34a\\\'},\\n                    1: { color:\\\'#bdbdbd\\\'},\\n                    2: { color:\\\'#ef5350\\\'}\\n                },\\n                \\\'height\\\': 250,\\n                legend: {position: \\\'none\\\'},\\n            };\\n\\n            var chart = new google.visualization.PieChart(document.getElementById(\\\'donutchart\\\'));\\n            chart.draw(data, options);\\n        }\\n    </script>\\n</head>\\n<body style="background-color: #f2f3f5;">\\n    <div class="container-fluid">\\n        <div class="row" style="margin: 0; max-width: inherit;">\\n            <div class="col-md-3">\\n                <div style="display: flex; justify-content: flex-end;">\\n                    <div class="d-none d-md-block" style="position: fixed; width: 250px;">\\n                        <div style="border: 1px solid #eeeeee; border-radius: 0px; background-color: #ffffff;">\\n                            <div style="background-color: #2cc891; height: 80px;"></div>\\n                            \', escape=False)\nif auth.user:\n    response.write(\'\\n                            <div style="text-align: center; margin-top: -40px;">\\n                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">\\n                                    <img class="avatar rounded-circle" src="\', escape=False)\n    response.write(get_avatar_url(auth.user.avatar))\n    response.write(\'" style="height: 100%; width: 100%;">\\n                                </div>\\n                                <div style="padding: 20px 0; padding-bottom: 40px;">\\n                                    Welcome, \', escape=False)\n    response.write(auth.user.username)\n    response.write(\'!\\n                                </div>\\n                             </div>\\n                            \', escape=False)\nelse:\n    response.write(\'\\n                            <div style="text-align: center; margin-top: -40px;">\\n                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">\\n                                    <i class="fas fa-user avatar-icon" style="font-size: 40px; margin-top: 14px;"></i>\\n                                </div>\\n                                <div style="padding: 20px 0;">\\n                                    You are not \\n                                    <span data-toggle="modal" data-target="#loginModal" style="font-weight: bold; color: #2cc891; cursor: pointer;">logged in</span>.\\n                                    <br>\\n                                    Don\\\'t have an account?<br>\\n                                    <button class="btn btn-success" data-toggle="modal" data-target="\', escape=False)\n    response.write(registerModal)\n    response.write(\'" style="font-weight: bold; margin: 10px 0;">\\n                                        Sign Up\\n                                    </button>\\n                                </div>\\n                             </div>\\n                            \', escape=False)\n    pass\nresponse.write(\'\\n                         </div>\\n                    </div>\\n                </div>\\n            </div>\\n            <div class="col-md-4">\\n                <div class="card" style="padding: 20px; border-radius: 0px;">\\n                    <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">\\n                       Latest Tweets and Their Sentiment\\n                    </div>\\n                    <hr>\\n                    <div style="font-size: 30px; font-weight: bold;">\\n                       \', escape=False)\nresponse.write(coin.name)\nresponse.write(\' ($\', escape=False)\nresponse.write(coin.symbol)\nresponse.write(\')\\n                    </div>\\n                    <div id="volume">\\n                        <br>\\n                        <div id="test" style="">\\n                            \', escape=False)\nmax_user_followers_count = 0\nresponse.write(\'\\n                            \', escape=False)\nfor tweet_obj in tweets:\n    response.write(\'\\n                            \', escape=False)\n    if tweet_obj[\'user\'][\'followers_count\'] > max_user_followers_count:\n        response.write(\'\\n                            \', escape=False)\n        max_user_followers_count = tweet_obj[\'user\'][\'followers_count\']\n        response.write(\'\\n                            \', escape=False)\n        max_user_followers_tweet = tweet_obj\n        response.write(\'\\n                            \', escape=False)\n        pass\n    response.write(\'\\n                            <div class="row-container">\\n                                <blockquote class="twitter-tweet" data-cards="hidden"><a href="https://twitter.com/test/status/\', escape=False)\n    response.write(str(tweet_obj[\'id\']))\n    response.write(\'"></a></blockquote>\\n                                <div class="sentiment-col">\\n                                    \', escape=False)\n    if tweet_obj[\'sentiment_analysis\'][\'prediction\'] == \'Positive\':\n        response.write(\'\\n                                    <div class="sentiment-box-small" style="background-color: #8bc34a;">\\n                                        Bullish\\n                                    </div>\\n                                    \', escape=False)\n    elif tweet_obj[\'sentiment_analysis\'][\'prediction\'] == \'Negative\':\n        response.write(\'\\n                                    <div class="sentiment-box-small" style="background-color: #ef5350;">\\n                                        Bearish\\n                                    </div>\\n                                    \', escape=False)\n    else:\n        response.write(\'\\n                                    <div class="sentiment-box-small" style="background-color: #bdbdbd;">\\n                                        Neutral\\n                                    </div>\\n                                    \', escape=False)\n        pass\n    response.write(\'\\n                                </div>\\n                            </div>\\n                            \', escape=False)\n    pass\nresponse.write(\'\\n                        </div>\\n                    </div>\\n                </div>\\n            </div>\\n             <div class="col-md-2">\\n                <div class="card" style="position: fixed; width:220px;">\\n                    <div class="d-sm-none d-md-block" style="padding: 10px 0; text-align: center; background-color: #ffffff; padding: 20px;">\\n                        <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">\\n                           Sentiment Now\\n                        </div>\\n                        <hr>\\n                        <div>\\n                            <div id="donutchart" style=""></div>\\n                        </div>\\n                        <div style="color: #ffffff; font-size: 20px; font-weight: bold; display: flex; justify-content: center;">\\n                            \', escape=False)\nif isBullish:\n    response.write(\'\\n                            <div style="background-color: #8bc34a; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Bullish\\n                            </div>\\n                            \', escape=False)\nelse:\n    response.write(\'\\n                            <div style="background-color: #ef5350; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Bearish\\n                            </div>\\n                            \', escape=False)\n    pass\nresponse.write(\'\\n                        </div>\\n                    </div>\\n                </div>\\n            </div>\\n            <div class="col-md-3">\\n                <div class="card" style="position: fixed; width: 350px;">\\n                    <div class="d-sm-none d-md-block" style="padding: 10px 0; text-align: center; background-color: #ffffff; padding: 20px;">\\n                        <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">\\n                           Tweet by Most Influential User\\n                        </div>\\n                        <hr>\\n                        <div style="color: #ffffff; font-size: 20px; font-weight: bold; display: flex; justify-content: center;">\\n                            \', escape=False)\nif max_user_followers_tweet[\'sentiment_analysis\'][\'prediction\'] == \'Positive\':\n    response.write(\'\\n                            <div style="background-color: #8bc34a; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Bullish\\n                            </div>\\n                            \', escape=False)\nelif max_user_followers_tweet[\'sentiment_analysis\'][\'prediction\'] == \'Negative\':\n    response.write(\'\\n                            <div style="background-color: #ef5350; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Bearish\\n                            </div>\\n                            \', escape=False)\nelse:\n    response.write(\'\\n                            <div style="background-color: #bdbdbd; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Neutral\\n                            </div>\\n                            \', escape=False)\n    pass\nresponse.write(\'\\n                        </div>\\n                        <blockquote class="twitter-tweet" data-cards="hidden"><a href="https://twitter.com/test/status/\', escape=False)\nresponse.write(max_user_followers_tweet[\'id\'])\nresponse.write(\'"></a></blockquote>\\n                    </div>\\n                </div>\\n            </div>\\n        </div>\\n    </div>\\n</body>\\n<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>\\n<script>\\njQuery(document).ready(function() {\\n    setTimeout(() => {\\n        let elements = document.getElementsByClassName(\\\'sentiment-box-small\\\');\\n        for (element of elements) {\\n            element.classList.add(\\\'setVisible\\\');\\n        }\\n    }, 2000);\\n    \\n    var ctx = document.getElementById(\\\'myChart\\\').getContext(\\\'2d\\\');\\n    var myRadarChart = new Chart(ctx, {\\n        type: \\\'radar\\\',\\n        data: {\\n            labels: [\\\'Bullish\\\', \\\'Bearish\\\'],\\n            datasets: [{\\n                label: \\\'\\\',\\n                \', escape=False)\nif isBullish:\n    response.write("\\n                backgroundColor: \'rgb(139, 195, 74, 0.1)\',\\n                borderColor: \'rgb(139, 195, 74)\',\\n                ", escape=False)\nelse:\n    response.write("\\n                backgroundColor: \'rgb(239, 83, 80, 0.1)\',\\n                borderColor: \'rgb(239, 83, 80)\',\\n                ", escape=False)\n    pass\nresponse.write(\'\\n                data: [\', escape=False)\nresponse.write(len(allPositiveTweets))\nresponse.write(\', \', escape=False)\nresponse.write(len(allNegativeTweets))\nresponse.write(\']\\n            }]\\n        },\\n        options: {\\n            scale: {\\n                // Hides the scale\\n                display: true,\\n                ticks: {\\n                    display: false,\\n                }\\n            },\\n            legend: {\\n                display: false\\n            },\\n            tooltips: {\\n                enabled: false\\n            }\\n        }\\n    });\\n//       const elements = document.getElementsByClassName(\\\'tweet\\\');\\n//       var tweetsArray = jQuery.makeArray(elements);\\n//       for (var i=0; i<tweetsArray.length; i++) {\\n//           const tweet = tweetsArray[i].textContent;\\n//           tweetArray = tweet.split(" ");\\n//           console.log(tweetArray[0]);\\n//       }\\n//       //console.log(array.map((element) => element.outerText));\\n});\\n</script>\\n\', escape=False)'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__getslice__'
+p12
+S"<method-wrapper '__getslice__' of exceptions.NameError object>"
+p13
+sS'__str__'
+p14
+S"<method-wrapper '__str__' of exceptions.NameError object>"
+p15
+sS'__reduce__'
+p16
+S'<built-in method __reduce__ of exceptions.NameError object>'
+p17
+sS'__dict__'
+p18
+S'{}'
+p19
+sS'message'
+p20
+S'"name \'max_user_followers_tweet\' is not defined"'
+p21
+sS'__sizeof__'
+p22
+S'<built-in method __sizeof__ of exceptions.NameError object>'
+p23
+sS'__init__'
+p24
+S"<method-wrapper '__init__' of exceptions.NameError object>"
+p25
+sS'__setattr__'
+p26
+S"<method-wrapper '__setattr__' of exceptions.NameError object>"
+p27
+sS'__reduce_ex__'
+p28
+S'<built-in method __reduce_ex__ of exceptions.NameError object>'
+p29
+sS'__new__'
+p30
+S'<built-in method __new__ of type object>'
+p31
+sS'__format__'
+p32
+S'<built-in method __format__ of exceptions.NameError object>'
+p33
+sS'__class__'
+p34
+S"<type 'exceptions.NameError'>"
+p35
+sS'__doc__'
+p36
+S"'Name not found globally.'"
+p37
+sS'__getitem__'
+p38
+S"<method-wrapper '__getitem__' of exceptions.NameError object>"
+p39
+sS'__setstate__'
+p40
+S'<built-in method __setstate__ of exceptions.NameError object>'
+p41
+sS'__getattribute__'
+p42
+S"<method-wrapper '__getattribute__' of exceptions.NameError object>"
+p43
+sS'args'
+p44
+S'("name \'max_user_followers_tweet\' is not defined",)'
+p45
+sS'__subclasshook__'
+p46
+S'<built-in method __subclasshook__ of type object>'
+p47
+sS'__unicode__'
+p48
+S'<built-in method __unicode__ of exceptions.NameError object>'
+p49
+sS'__delattr__'
+p50
+S"<method-wrapper '__delattr__' of exceptions.NameError object>"
+p51
+sS'__repr__'
+p52
+S"<method-wrapper '__repr__' of exceptions.NameError object>"
+p53
+sS'__hash__'
+p54
+S"<method-wrapper '__hash__' of exceptions.NameError object>"
+p55
+ssS'evalue'
+p56
+S"name 'max_user_followers_tweet' is not defined"
+p57
+sS'request'
+p58
+cgluon.html
+XML_unpickle
+p59
+(S's\xf4D\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>wide-energy</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>66.249.65.219</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>default</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_LENGTH</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_TYPE</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">DOCUMENT_ROOT</td><td style="vertical-align:top;">:</td><td><div>/usr/share/nginx/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTPS</td><td style="vertical-align:top;">:</td><td><div>on</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8,text/html,application/xhtml+xml,application/signed-exchange;v=b3,application/xml;q=0.9,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip,deflate,br</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_AMP_CACHE_TRANSFORM</td><td style="vertical-align:top;">:</td><td><div>google;v=&quot;1&quot;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_FROM</td><td style="vertical-align:top;">:</td><td><div>googlebot(at)googlebot.com</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>talk.savant.studio</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/coin/wide-energy</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>66.249.65.219</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>47767</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_SCHEME</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_URI</td><td style="vertical-align:top;">:</td><td><div>/coin/wide-energy</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>abxtract.com</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/opt/web2py_apps/web2py/applications/admin/&#x27;, &#x27;/opt/web2py_apps/web2py/applications/abxtract/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_length</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_type</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">document_root</td><td style="vertical-align:top;">:</td><td><div>/usr/share/nginx/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8,text/html,application/xhtml+xml,application/signed-exchange;v=b3,application/xml;q=0.9,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip,deflate,br</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_amp_cache_transform</td><td style="vertical-align:top;">:</td><td><div>google;v=&quot;1&quot;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_from</td><td style="vertical-align:top;">:</td><td><div>googlebot(at)googlebot.com</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>talk.savant.studio</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">https</td><td style="vertical-align:top;">:</td><td><div>on</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_py2</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>45.55.52.237</div></td></tr><tr><td><div>abxtract.com</div></td></tr><tr><td><div>127.0.0.1</div></td></tr><tr><td><div>abxtract</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/coin/wide-energy</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>66.249.65.219</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>47767</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/abxtract/default/coin/wide-energy</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>abxtract.com</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.core</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.node</td><td style="vertical-align:top;">:</td><td><div>abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.version</td><td style="vertical-align:top;">:</td><td><div>2.0.17.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_core</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_node</td><td style="vertical-align:top;">:</td><td><div>abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_version</td><td style="vertical-align:top;">:</td><td><div>2.0.17.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_original_uri</td><td style="vertical-align:top;">:</td><td><div>/coin/wide-energy</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.17.2-stable+timestamp.2018.10.06.18.54.02</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;wsgi_errors&#x27;, mode &#x27;w&#x27; at 0x7f1bd24b5c90&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;built-in function uwsgi_sendfile&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;uwsgi._Input object at 0x7f1be4293d98&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;wsgi_errors&#x27;, mode &#x27;w&#x27; at 0x7f1bd24b5c90&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;built-in function uwsgi_sendfile&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;uwsgi._Input object at 0x7f1be4293d98&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py/applications/abxtract/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>coin</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/opt/web2py_apps/web2py/applications/admin/&#x27;, &#x27;/opt/web2py_apps/web2py/applications/abxtract/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_py2</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>45.55.52.237</div></td></tr><tr><td><div>abxtract.com</div></td></tr><tr><td><div>127.0.0.1</div></td></tr><tr><td><div>abxtract</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.17.2-stable+timestamp.2018.10.06.18.54.02</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_scheduler</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2019, 4, 16, 0, 42, 45, 10534)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/coin/wide-energy</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2019, 4, 16, 0, 42, 45, 10577)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x7f1ba881aa10&gt;</div></td></tr></table></div>'
+tRp60
+sS'frames'
+p61
+(lp62
+(dp63
+S'file'
+p64
+S'/opt/web2py_apps/web2py/gluon/restricted.py'
+p65
+sS'dump'
+p66
+(dp67
+S'environment'
+p68
+S"{'A': <class 'gluon.html.A'>, 'ACCESS_KEY': 'Z0ITlc1Fp5fAjZmX1ks8OzM2j', 'ACCESS_SECRET': 'aLqR5uoV2vLLHCkIFmej3R43WGrqrfluZAguHuRRq0Xk8ScDBa', 'ALLOWED_ATTRIBUTES': {'blockquote': ['type'], 'img': ['src', 'alt']}, 'ALPHABET': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_', 'ALPHABET_REVERSE': {'-': 62, '0': 52, '1': 53, '2': 54, '3': 55, '4': 56, '5': 57, '6': 58, '7': 59, '8': 60, ...}, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, ...}"
+p69
+sS'ccode'
+p70
+S'<code object <module> at 0x7f1bb6eeb0b0, file "/...ations/abxtract/views/default/coin.html", line 1>'
+p71
+ssS'lnum'
+p72
+I219
+sS'lines'
+p73
+(dp74
+I214
+S'    if environment is None:'
+p75
+sI215
+S'        environment = {}'
+p76
+sI216
+S"    environment['__file__'] = layer"
+p77
+sI217
+S"    environment['__name__'] = '__restricted__'"
+p78
+sI218
+S'    try:'
+p79
+sI219
+S'        exec(ccode, environment)'
+p80
+sI220
+S'    except HTTP:'
+p81
+sI221
+S'        raise'
+p82
+sI222
+S'    except RestrictedError:'
+p83
+sI223
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p84
+ssS'call'
+p85
+S'(ccode=<code object <module> at 0x7f1bb6eeb0b0, file "/...ations/abxtract/views/default/coin.html", line 1>, environment={\'A\': <class \'gluon.html.A\'>, \'ACCESS_KEY\': \'Z0ITlc1Fp5fAjZmX1ks8OzM2j\', \'ACCESS_SECRET\': \'aLqR5uoV2vLLHCkIFmej3R43WGrqrfluZAguHuRRq0Xk8ScDBa\', \'ALLOWED_ATTRIBUTES\': {\'blockquote\': [\'type\'], \'img\': [\'src\', \'alt\']}, \'ALPHABET\': \'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_\', \'ALPHABET_REVERSE\': {\'-\': 62, \'0\': 52, \'1\': 53, \'2\': 54, \'3\': 55, \'4\': 56, \'5\': 57, \'6\': 58, \'7\': 59, \'8\': 60, ...}, \'ANY_OF\': <class \'gluon.validators.ANY_OF\'>, \'ASSIGNJS\': <function ASSIGNJS>, \'AppConfig\': <function AppConfig>, \'Auth\': <class \'gluon.tools.Auth\'>, ...}, layer=\'/opt/web2py_apps/web2py/applications/abxtract/views/default/coin.html\', scode=\'response.write(\\\'<!DOCTYPE html>\\\\n<html class="no...nt.outerText));\\\\n});\\\\n</script>\\\\n\\\', escape=False)\')'
+p86
+sS'func'
+p87
+S'restricted'
+p88
+sa(dp89
+g64
+S'/opt/web2py_apps/web2py/applications/abxtract/views/default/coin.html'
+p90
+sg66
+(dp91
+S'div'
+p92
+S'undefined'
+p93
+sS'style'
+p94
+g93
+ssg72
+I90
+sg73
+(dp95
+I96
+S'    pass'
+p96
+sI97
+S'response.write(\'\\n                        </div>\\n                        <blockquote class="twitter-tweet" data-cards="hidden"><a href="https://twitter.com/test/status/\', escape=False)'
+p97
+sI98
+S"response.write(max_user_followers_tweet['id'])"
+p98
+sI99
+S'response.write(\'"></a></blockquote>\\n                    </div>\\n                </div>\\n            </div>\\n        </div>\\n    </div>\\n</body>\\n<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>\\n<script>\\njQuery(document).ready(function() {\\n    setTimeout(() => {\\n        let elements = document.getElementsByClassName(\\\'sentiment-box-small\\\');\\n        for (element of elements) {\\n            element.classList.add(\\\'setVisible\\\');\\n        }\\n    }, 2000);\\n    \\n    var ctx = document.getElementById(\\\'myChart\\\').getContext(\\\'2d\\\');\\n    var myRadarChart = new Chart(ctx, {\\n        type: \\\'radar\\\',\\n        data: {\\n            labels: [\\\'Bullish\\\', \\\'Bearish\\\'],\\n            datasets: [{\\n                label: \\\'\\\',\\n                \', escape=False)'
+p99
+sI100
+S'if isBullish:'
+p100
+sI81
+S"    response.write('\\n                                </div>\\n                            </div>\\n                            ', escape=False)"
+p101
+sI82
+S'    pass'
+p102
+sI83
+S'response.write(\'\\n                        </div>\\n                    </div>\\n                </div>\\n            </div>\\n             <div class="col-md-2">\\n                <div class="card" style="position: fixed; width:220px;">\\n                    <div class="d-sm-none d-md-block" style="padding: 10px 0; text-align: center; background-color: #ffffff; padding: 20px;">\\n                        <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">\\n                           Sentiment Now\\n                        </div>\\n                        <hr>\\n                        <div>\\n                            <div id="donutchart" style=""></div>\\n                        </div>\\n                        <div style="color: #ffffff; font-size: 20px; font-weight: bold; display: flex; justify-content: center;">\\n                            \', escape=False)'
+p103
+sI84
+S'if isBullish:'
+p104
+sI85
+S'    response.write(\'\\n                            <div style="background-color: #8bc34a; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Bullish\\n                            </div>\\n                            \', escape=False)'
+p105
+sI86
+S'else:'
+p106
+sI87
+S'    response.write(\'\\n                            <div style="background-color: #ef5350; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Bearish\\n                            </div>\\n                            \', escape=False)'
+p107
+sI88
+S'    pass'
+p108
+sI89
+S'response.write(\'\\n                        </div>\\n                    </div>\\n                </div>\\n            </div>\\n            <div class="col-md-3">\\n                <div class="card" style="position: fixed; width: 350px;">\\n                    <div class="d-sm-none d-md-block" style="padding: 10px 0; text-align: center; background-color: #ffffff; padding: 20px;">\\n                        <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">\\n                           Tweet by Most Influential User\\n                        </div>\\n                        <hr>\\n                        <div style="color: #ffffff; font-size: 20px; font-weight: bold; display: flex; justify-content: center;">\\n                            \', escape=False)'
+p109
+sI90
+S"if max_user_followers_tweet['sentiment_analysis']['prediction'] == 'Positive':"
+p110
+sI91
+S'    response.write(\'\\n                            <div style="background-color: #8bc34a; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Bullish\\n                            </div>\\n                            \', escape=False)'
+p111
+sI92
+S"elif max_user_followers_tweet['sentiment_analysis']['prediction'] == 'Negative':"
+p112
+sI93
+S'    response.write(\'\\n                            <div style="background-color: #ef5350; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Bearish\\n                            </div>\\n                            \', escape=False)'
+p113
+sI94
+S'else:'
+p114
+sI95
+S'    response.write(\'\\n                            <div style="background-color: #bdbdbd; padding: 4px 10px; border-radius: 1px; width: 120px;">\\n                              Neutral\\n                            </div>\\n                            \', escape=False)'
+p115
+ssg85
+S'()'
+p116
+sg87
+S'<module>'
+p117
+sasS'pyver'
+p118
+S'Python 2.7.5: /usr/bin/uwsgi (prefix: /usr)'
+p119
+sS'session'
+p120
+g59
+(S's\x1a\x00\x00\x00<div><table></table></div>'
+tRp121
+sS'etype'
+p122
+S"<type 'exceptions.NameError'>"
+p123
+sS'date'
+p124
+S'Tue Apr 16 00:42:45 2019'
+p125
+sS'response'
+p126
+g59
+(S'so<\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x7f1ba8823b20&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_abxtract</td><td style="vertical-align:top;">:</td><td><div>66.249.65.219-68aa84e0-26c2-4be9-ba66-84f041642354<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">samesite</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>bootstrap4_inline</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">google_analytics_id</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div><table><tr><td><div>Home</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>My Sites</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/site</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>This App</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Design</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/design/abxtract</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Controller</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/controllers/default.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>View</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/views/default/coin.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>DB Model</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/models/db.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Menu Model</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/models/menu.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Config.ini</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/private/appconfig.ini</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Layout</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/views/layout.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Stylesheet</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/static/css/web2py-bootstrap3.css</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Database</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/appadmin</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Errors</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/errors/abxtract</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>About</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/about/abxtract</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>web2py.com</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Download</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/download</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Support</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/support</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Demo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/demo_admin</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Quick Examples</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/examples/default/examples</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>FAQ</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/AlterEgo</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Videos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/videos/</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Free Applications</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/appliances</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/plugins</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recipes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2pyslices.com/</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Documentation</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Online book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Preface</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/00</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Introduction</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/01</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Python</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/02</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Overview</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/03</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>The Core</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/04</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>The Views</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/05</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Database</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/06</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Forms and Validators</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/07</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Email and SMS</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/08</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Access Control</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/09</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Services</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/10</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Ajax Recipes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/11</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Components and Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/12</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Deployment Recipes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/13</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Other Recipes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/14</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Helping web2py</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/15</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Buy web2py\'s book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://stores.lulu.com/web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Community</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>None</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Groups</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/usergroups</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Twitter</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://twitter.com/web2py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Live Chat</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://webchat.freenode.net/?channels=web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">author</td><td style="vertical-align:top;">:</td><td><div>Your Name &lt;you@example.com&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">description</td><td style="vertical-align:top;">:</td><td><div>a cool new app</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generator</td><td style="vertical-align:top;">:</td><td><div>Web2py Web Framework</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">keywords</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>web2py</div></td></tr><tr><td><div>python</div></td></tr><tr><td><div>framework</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^default/\\w+\\.py$</div></td></tr><tr><td><div>^default/coin/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>66.249.65.219</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py/applications/abxtract/sessions/66.249.65.219-68aa84e0-26c2-4be9-ba66-84f041642354</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>c0762cbf4baf7f9af97c051e7fcb8083</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>66.249.65.219-68aa84e0-26c2-4be9-ba66-84f041642354</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">static_version</td><td style="vertical-align:top;">:</td><td><div>0.0.7</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>default/coin.html</div></td></tr></table></div>'
+tRp127
+sS'locals'
+p128
+(dp129
+S'Service'
+p130
+S"<class 'gluon.tools.Service'>"
+p131
+sS'rm_html_tags'
+p132
+S'<function rm_html_tags>'
+p133
+sS'PY2'
+p134
+S'True'
+p135
+sS'OBJECT'
+p136
+S"<class 'gluon.html.OBJECT'>"
+p137
+sS'datetime'
+p138
+S"<type 'datetime.datetime'>"
+p139
+sg120
+S"<Storage {'_secure': True}>"
+p140
+sS'LINK'
+p141
+S"<class 'gluon.html.LINK'>"
+p142
+sS'BR'
+p143
+S"<class 'gluon.html.BR'>"
+p144
+sS'local_import'
+p145
+S'<function <lambda>>'
+p146
+sS'OPTGROUP'
+p147
+S"<class 'gluon.html.OPTGROUP'>"
+p148
+sS'rm_html_escape_characters'
+p149
+S'<function rm_html_escape_characters>'
+p150
+sS'num_encode'
+p151
+S'<function num_encode>'
+p152
+sS'positiveTweets'
+p153
+S'<function positiveTweets>'
+p154
+sS'redirect'
+p155
+S'<function redirect>'
+p156
+sS'IS_INT_IN_RANGE'
+p157
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p158
+sS'to_bytes'
+p159
+S'<function to_bytes>'
+p160
+sS'IS_LOWER'
+p161
+S"<class 'gluon.validators.IS_LOWER'>"
+p162
+sS'IS_STRONG'
+p163
+S"<class 'gluon.validators.IS_STRONG'>"
+p164
+sS'cache'
+p165
+S'<gluon.cache.Cache object>'
+p166
+sS'IS_IN_DB'
+p167
+S"<class 'gluon.validators.IS_IN_DB'>"
+p168
+sS'IS_NOT_IN_DB'
+p169
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p170
+sS'TAG'
+p171
+S'<gluon.html.__TAG__ object>'
+p172
+sS'Scheduler'
+p173
+S"<class 'gluon.scheduler.Scheduler'>"
+p174
+sS'SQLField'
+p175
+S"<class 'pydal.objects.Field'>"
+p176
+sS'resp'
+p177
+S"{'content-length': '324', 'x-rate-limit-reset': ...'content-type': 'application/json;charset=utf-8'}"
+p178
+sS'BODY'
+p179
+S"<class 'gluon.html.BODY'>"
+p180
+sS'IS_DATE_IN_RANGE'
+p181
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p182
+sS'string'
+p183
+S"<module 'string' from '/usr/lib64/python2.7/string.pyc'>"
+p184
+sS'ON'
+p185
+g135
+sS'URL'
+p186
+S'<function URL>'
+p187
+sS'__file__'
+p188
+S"'/opt/web2py_apps/web2py/applications/abxtract/views/default/coin.html'"
+p189
+sS'db'
+p190
+S'<DAL uri="mysql:******@localhost/main?set_encoding=utf8mb4">'
+p191
+sS'auth'
+p192
+S'<gluon.tools.Auth object>'
+p193
+sS'P'
+S"<class 'gluon.html.P'>"
+p194
+sS'BASE'
+p195
+S'64'
+p196
+sS'T'
+S'<gluon.languages.translator object>'
+p197
+sS'scheduler'
+p198
+S'<Scheduler(Thread-127, initial daemon)>'
+p199
+sS'iteritems'
+p200
+S'<function <lambda>>'
+p201
+sS'ACCESS_SECRET'
+p202
+S"'aLqR5uoV2vLLHCkIFmej3R43WGrqrfluZAguHuRRq0Xk8ScDBa'"
+p203
+sS'XHTML'
+p204
+S"<class 'gluon.html.XHTML'>"
+p205
+sS'SQLDB'
+p206
+S"<class 'pydal.base.DAL'>"
+p207
+sS'allNeutralTweets'
+p208
+S'[]'
+p209
+sS'markmin2html'
+p210
+S'<function markmin2html>'
+p211
+sS'get_tweet_counts'
+p212
+S'<function get_tweet_counts>'
+p213
+sS'OL'
+p214
+S"<class 'gluon.html.OL'>"
+p215
+sS'TEXTAREA'
+p216
+S"<class 'gluon.html.TEXTAREA'>"
+p217
+sS'MENU'
+p218
+S"<class 'gluon.html.MENU'>"
+p219
+sS'STYLE'
+p220
+S"<class 'gluon.html.STYLE'>"
+p221
+sS'token'
+p222
+S'<oauth2.Token object>'
+p223
+sS'__package__'
+p224
+S'None'
+p225
+sS'ACCESS_KEY'
+p226
+S"'Z0ITlc1Fp5fAjZmX1ks8OzM2j'"
+p227
+sS'CODE'
+p228
+S"<class 'gluon.html.CODE'>"
+p229
+sS'HTTP'
+p230
+S"<class 'gluon.http.HTTP'>"
+p231
+sS'sentiment_analyzer'
+p232
+S"<module 'applications.abxtract.modules.sentiment...cations/abxtract/modules/sentiment_analyzer.pyc'>"
+p233
+sS'HR'
+p234
+S"<class 'gluon.html.HR'>"
+p235
+sS'IFRAME'
+p236
+S"<class 'gluon.html.IFRAME'>"
+p237
+sS'IS_DATETIME'
+p238
+S"<class 'gluon.validators.IS_DATETIME'>"
+p239
+sS'reduce'
+p240
+S'<built-in function reduce>'
+p241
+sg58
+S"<Storage {'_vars': <Storage {}>, 'function': 'co...web2py/applications/abxtract/', 'method': 'GET'}>"
+p242
+sS'LABEL'
+p243
+S"<class 'gluon.html.LABEL'>"
+p244
+sS'CLEANUP'
+p245
+S"<class 'gluon.validators.CLEANUP'>"
+p246
+sS'rm_at_user'
+p247
+S'<function rm_at_user>'
+p248
+sS'SELECT'
+p249
+S"<class 'gluon.html.SELECT'>"
+p250
+sS'stop_words'
+p251
+S'[\'a\', \'about\', \'above\', \'after\', \'again\', \'against\', \'ain\', \'all\', \'am\', \'an\', \'and\', \'any\', \'are\', \'aren\', "aren\'t", \'as\', \'at\', \'be\', \'because\', \'been\', ...]'
+p252
+sS'timedelta'
+p253
+S"<type 'datetime.timedelta'>"
+p254
+sS'prettydate'
+p255
+S'<function prettydate>'
+p256
+sS'custom_auth_table'
+p257
+S'<Table auth_user (id, username, username_slug, e...ollowing, count_new_reply, unsub_key, verif_key)>'
+p258
+sS'Crud'
+p259
+S"<class 'gluon.tools.Crud'>"
+p260
+sS'cleanhtml'
+p261
+S'<function cleanhtml>'
+p262
+sS'Auth'
+p263
+S"<class 'gluon.tools.Auth'>"
+p264
+sS'content'
+p265
+S'\'{"statuses":[],"search_metadata":{"completed_in"...=1","count":100,"since_id":0,"since_id_str":"0"}}\''
+p266
+sS'__builtins__'
+p267
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'BufferError': <type 'exceptions.BufferError'>, 'BytesWarning': <type 'exceptions.BytesWarning'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, ...}"
+p268
+sS'HTML'
+p269
+S"<class 'gluon.html.HTML'>"
+p270
+sS'SQLFORM'
+p271
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p272
+sS'get_current_price'
+p273
+S'<function get_current_price>'
+p274
+sS'LOAD'
+p275
+S'<function LOAD>'
+p276
+sS'PRE'
+p277
+S"<class 'gluon.html.PRE'>"
+p278
+sS'FIELDSET'
+p279
+S"<class 'gluon.html.FIELDSET'>"
+p280
+sS'IS_EQUAL_TO'
+p281
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p282
+sS'positiveCount'
+p283
+S'0'
+sS'rm_hashtag_symbol'
+p284
+S'<function rm_hashtag_symbol>'
+p285
+sS'embed64'
+p286
+S'<function embed64>'
+p287
+sS'IS_LIST_OF'
+p288
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p289
+sS'ALPHABET_REVERSE'
+p290
+S"{'-': 62, '0': 52, '1': 53, '2': 54, '3': 55, '4': 56, '5': 57, '6': 58, '7': 59, '8': 60, ...}"
+p291
+sS'num_decode'
+p292
+S'<function num_decode>'
+p293
+sS're'
+p294
+S"<module 're' from '/usr/lib64/python2.7/re.pyc'>"
+p295
+sS'EMBED'
+p296
+S"<class 'gluon.html.EMBED'>"
+p297
+sS'configuration'
+p298
+S"{'host': {'names': 'localhost:*, 127.0.0.1:*, *:...': 'sqlite://storage.sqlite', 'pool_size': '10'}}"
+p299
+sS'placeholder'
+p300
+S"'Please login or register'"
+p301
+sS'FORM'
+p302
+S"<class 'gluon.html.FORM'>"
+p303
+sS'ALLOWED_ATTRIBUTES'
+p304
+S"{'blockquote': ['type'], 'img': ['src', 'alt']}"
+p305
+sS'tweets'
+p306
+S'[]'
+p307
+sS'H2'
+p308
+S"<class 'gluon.html.H2'>"
+p309
+sS'H3'
+p310
+S"<class 'gluon.html.H3'>"
+p311
+sS'AppConfig'
+p312
+S'<function AppConfig>'
+p313
+sS'getReturns'
+p314
+S'<function getReturns>'
+p315
+sS'H6'
+p316
+S"<class 'gluon.html.H6'>"
+p317
+sS'H4'
+p318
+S"<class 'gluon.html.H4'>"
+p319
+sS'H5'
+p320
+S"<class 'gluon.html.H5'>"
+p321
+sS'UL'
+p322
+S"<class 'gluon.html.UL'>"
+p323
+sS'get_tweet_analysis'
+p324
+S'<function get_tweet_analysis>'
+p325
+sS'xmlescape'
+p326
+S'<function xmlescape>'
+p327
+sS'requests'
+p328
+S"<module 'requests' from '/usr/lib/python2.7/site-packages/requests/__init__.pyc'>"
+p329
+sS'allNegativeTweets'
+p330
+S'[]'
+p331
+sS'rm_punctuation'
+p332
+S'<function rm_punctuation>'
+p333
+sS'max_user_followers_count'
+p334
+S'0'
+sS'OPTION'
+p335
+S"<class 'gluon.html.OPTION'>"
+p336
+sS'tweets_list'
+p337
+S'[]'
+p338
+sS'TITLE'
+p339
+S"<class 'gluon.html.TITLE'>"
+p340
+sS'CRYPT'
+p341
+S"<class 'gluon.validators.CRYPT'>"
+p342
+sS'empty_to_none'
+p343
+S'<function empty_to_none>'
+p344
+sS'IS_EMPTY_OR'
+p345
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p346
+sS'MARKMIN'
+p347
+S"<class 'gluon.html.MARKMIN'>"
+p348
+sS'COLGROUP'
+p349
+S"<class 'gluon.html.COLGROUP'>"
+p350
+sS'isBullish'
+p351
+g135
+sS'INPUT'
+p352
+S"<class 'gluon.html.INPUT'>"
+p353
+sS'get_avatar_url'
+p354
+S'<function get_avatar_url>'
+p355
+sS'STRONG'
+p356
+S"<class 'gluon.html.STRONG'>"
+p357
+sS'EM'
+p358
+S"<class 'gluon.html.EM'>"
+p359
+sS'COL'
+p360
+S"<class 'gluon.html.COL'>"
+p361
+sS'custom_slug'
+p362
+S"'wide-energy'"
+p363
+sS'SCRIPT'
+p364
+S"<class 'gluon.html.SCRIPT'>"
+p365
+sS'ALPHABET'
+p366
+S"'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'"
+p367
+sS'json'
+p368
+S"<module 'gluon.contrib.simplejson' from '/opt/web2py_apps/web2py/gluon/contrib/simplejson.pyc'>"
+p369
+sS'TABLE'
+p370
+S"<class 'gluon.html.TABLE'>"
+p371
+sS'THEAD'
+p372
+S"<class 'gluon.html.THEAD'>"
+p373
+sS'IS_IPV4'
+p374
+S"<class 'gluon.validators.IS_IPV4'>"
+p375
+sS'IS_LENGTH'
+p376
+S"<class 'gluon.validators.IS_LENGTH'>"
+p377
+sS'IS_IPV6'
+p378
+S"<class 'gluon.validators.IS_IPV6'>"
+p379
+sS'XML'
+p380
+S"<class 'gluon.html.XML'>"
+p381
+sS'B'
+S"<class 'gluon.html.B'>"
+p382
+sS'IMG'
+p383
+S"<class 'gluon.html.IMG'>"
+p384
+sS'rm_url'
+p385
+S'<function rm_url>'
+p386
+sS'SQLTABLE'
+p387
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p388
+sS'STATIC_VERSION'
+p389
+S"'_0.0.7'"
+p390
+sS'IS_MATCH'
+p391
+S"<class 'gluon.validators.IS_MATCH'>"
+p392
+sS'comment_voted'
+p393
+S'<function comment_voted>'
+p394
+sS'IS_ALPHANUMERIC'
+p395
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p396
+sS'preprocess'
+p397
+S'<function preprocess>'
+p398
+sS'PERMITTED_TAGS'
+p399
+S"['b', 'blockquote', 'br/', 'i', 'li', 'ol', 'ul', 'p', 'cite', 'code', 'pre', 'img/']"
+p400
+sS'allPositiveTweets'
+p401
+S'[]'
+p402
+sS'oauth2'
+p403
+S"<module 'oauth2' from '/usr/lib/python2.7/site-packages/oauth2/__init__.pyc'>"
+p404
+sS'SPAN'
+p405
+S"<class 'gluon.html.SPAN'>"
+p406
+sS'IS_JSON'
+p407
+S"<class 'gluon.validators.IS_JSON'>"
+p408
+sS'replace_emoticon'
+p409
+S'<function replace_emoticon>'
+p410
+sS'IS_IPADDRESS'
+p411
+S"<class 'gluon.validators.IS_IPADDRESS'>"
+p412
+sS'_app'
+p413
+S"'abxtract'"
+p414
+sS'IS_SLUG'
+p415
+S"<class 'gluon.validators.IS_SLUG'>"
+p416
+sS'humanReadableDate'
+p417
+S"'16 April, 2019'"
+p418
+sS'TFOOT'
+p419
+S"<class 'gluon.html.TFOOT'>"
+p420
+sS'BEAUTIFY'
+p421
+S"<class 'gluon.html.BEAUTIFY'>"
+p422
+sS'META'
+p423
+S"<class 'gluon.html.META'>"
+p424
+sS'neutralCount'
+p425
+S'0'
+sS'get_tweet_sentiment'
+p426
+S'<function get_tweet_sentiment>'
+p427
+sS'BUTTON'
+p428
+S"<class 'gluon.html.BUTTON'>"
+p429
+sS'rm_repeat_chars'
+p430
+S'<function rm_repeat_chars>'
+p431
+sS'H1'
+p432
+S"<class 'gluon.html.H1'>"
+p433
+sS'IS_DATE'
+p434
+S"<class 'gluon.validators.IS_DATE'>"
+p435
+sS'IS_EMAIL'
+p436
+S"<class 'gluon.validators.IS_EMAIL'>"
+p437
+sS'IS_NOT_EMPTY'
+p438
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p439
+sS'xrange'
+p440
+S"<type 'xrange'>"
+p441
+sS'TBODY'
+p442
+S"<class 'gluon.html.TBODY'>"
+p443
+sS'CAT'
+p444
+S"<class 'gluon.html.CAT'>"
+p445
+sS'CONSUMER_SECRET'
+p446
+S"'FLqXC5f1UGUX4AwaKURWNDSUrB2FkRDajZemus9TKWhwY'"
+p447
+sS'Field'
+p448
+S"<class 'pydal.objects.Field'>"
+p449
+sS'registerModal'
+p450
+S"'#registerModal'"
+p451
+sS'IS_LIST_OF_EMAILS'
+p452
+S"<class 'gluon.validators.IS_LIST_OF_EMAILS'>"
+p453
+sS'searchTerm'
+p454
+S"'$WIDE'"
+p455
+sS'DIV'
+p456
+S"<class 'gluon.html.DIV'>"
+p457
+sS'LEGEND'
+p458
+S"<class 'gluon.html.LEGEND'>"
+p459
+sS'negativeTweets'
+p460
+S'<function negativeTweets>'
+p461
+sS'IS_FLOAT_IN_RANGE'
+p462
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p463
+sS'form'
+p464
+S'<gluon.html.A object>'
+p465
+sS'to_native'
+p466
+S'<function to_native>'
+p467
+sS'randint'
+p468
+S'<bound method Random.randint of <random.Random object>>'
+p469
+sS'DAL'
+p470
+S"<class 'pydal.base.DAL'>"
+p471
+sS'TT'
+p472
+S"<class 'gluon.html.TT'>"
+p473
+sS'TR'
+p474
+S"<class 'gluon.html.TR'>"
+p475
+sS'LI'
+p476
+S"<class 'gluon.html.LI'>"
+p477
+sS'negativeCount'
+p478
+S'0'
+sS'TH'
+p479
+S"<class 'gluon.html.TH'>"
+p480
+sS'TD'
+p481
+S"<class 'gluon.html.TD'>"
+p482
+sS'PluginManager'
+p483
+S"<class 'gluon.tools.PluginManager'>"
+p484
+sS'IS_URL'
+p485
+S"<class 'gluon.validators.IS_URL'>"
+p486
+sS'Decimal'
+p487
+S"<class 'decimal.Decimal'>"
+p488
+sS'IS_UPPER'
+p489
+S"<class 'gluon.validators.IS_UPPER'>"
+p490
+sS'A'
+S"<class 'gluon.html.A'>"
+p491
+sS'HEAD'
+p492
+S"<class 'gluon.html.HEAD'>"
+p493
+sS'IS_DATETIME_IN_RANGE'
+p494
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p495
+sS'IS_IMAGE'
+p496
+S"<class 'gluon.validators.IS_IMAGE'>"
+p497
+sS'I'
+S"<class 'gluon.html.I'>"
+p498
+sS'quote_plus'
+p499
+S'<function quote_plus>'
+p500
+sS'neutralTweets'
+p501
+S'<function neutralTweets>'
+p502
+sg124
+S"<type 'datetime.date'>"
+p503
+sS'get_sentiment_results'
+p504
+S'<function get_sentiment_results>'
+p505
+sS'coin'
+p506
+S"<Row {'sector': 'Energy', 'website': 'https://wi... 'usd_percent_change_24h': None, 'cmc_id': None}>"
+p507
+sS'CONSUMER_KEY'
+p508
+S"'2972187968-JmUT3zeu2UyVIw315arct0tFjFO0J92r5ozwE1W'"
+p509
+sg126
+S"<Storage {'body': <cStringIO.StringO object at 0...at 0x7f1baa027c80>, 'view': 'default/coin.html'}>"
+p510
+sS'rm_time'
+p511
+S'<function rm_time>'
+p512
+sS'CENTER'
+p513
+S"<class 'gluon.html.CENTER'>"
+p514
+sS'ANY_OF'
+p515
+S"<class 'gluon.validators.ANY_OF'>"
+p516
+sS'IS_NULL_OR'
+p517
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p518
+sS'IS_TIME'
+p519
+S"<class 'gluon.validators.IS_TIME'>"
+p520
+sS'url'
+p521
+S"'https://api.twitter.com/1.1/search/tweets.json?q...lt_type=recent&count=100&lang=en&until=2019-04-17'"
+p522
+sS'os'
+p523
+S"<module 'os' from '/usr/lib64/python2.7/os.pyc'>"
+p524
+sS'__name__'
+p525
+S"'__restricted__'"
+p526
+sS'author'
+p527
+S'<function author>'
+p528
+sS'todaysDate'
+p529
+S"'2019-04-17'"
+p530
+sS'IS_EXPR'
+p531
+S"<class 'gluon.validators.IS_EXPR'>"
+p532
+sS'get_old_tweets'
+p533
+S'<function get_old_tweets>'
+p534
+sS'IS_IN_SET'
+p535
+S"<class 'gluon.validators.IS_IN_SET'>"
+p536
+sS'client'
+p537
+S'<oauth2.Client object>'
+p538
+sS'IS_UPLOAD_FILENAME'
+p539
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p540
+sS'time'
+p541
+S"<module 'time' from '/usr/lib64/python2.7/lib-dynload/timemodule.so'>"
+p542
+sS'consumer'
+p543
+S'<oauth2.Consumer object>'
+p544
+sS'ASSIGNJS'
+p545
+S'<function ASSIGNJS>'
+p546
+sS'IS_DECIMAL_IN_RANGE'
+p547
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p548
+sssS'traceback'
+p549
+S'Traceback (most recent call last):\n  File "/opt/web2py_apps/web2py/gluon/restricted.py", line 219, in restricted\n    exec(ccode, environment)\n  File "/opt/web2py_apps/web2py/applications/abxtract/views/default/coin.html", line 90, in <module>\n    <div style="display: flex; justify-content: flex-end;">\nNameError: name \'max_user_followers_tweet\' is not defined\n'
+p550
+s.

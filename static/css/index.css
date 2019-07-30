@@ -1,0 +1,9 @@
+@media (max-device-width: 600px){
+    .col-main {padding: 15px 0 20px 0 !important;}
+}
+
+.tabs-container{border-top:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;}
+.tabs-tab{margin:0 .2rem;}
+.tabs-active{border-bottom:4px solid #2cc891;}
+.tabs-tab:hover{background-color:#aec0d140;border-bottom:4px solid #2cc891;}
+.tabs-link{font-size:18px;font-weight:700;color:#929292 !important;}

@@ -1,0 +1,296 @@
+#Libraries
+from bs4 import BeautifulSoup
+import requests
+from datetime import datetime
+import json
+import time
+import re
+import cfscrape
+from fake_useragent import UserAgent
+import lxml.html
+from random import randint, shuffle
+from io import BytesIO
+from PIL import Image
+import base64
+PROXIES = ['207.180.207.12:3128', '51.38.147.254:3128', '80.29.169.189:3128', '147.135.98.85:80', '24.177.187.101:36330', '78.40.87.18:808']
+removed = ['85.187.60.30:8080', '47.254.41.168:9999', '91.206.4.175:50870', '178.213.130.159:59945', '142.93.120.180:80', '212.205.112.162:46675', '188.114.68.149:34041', '128.127.1.101:45833', '37.145.118.34:40874', '89.132.192.211:54858', '91.222.27.31:39285', '78.156.243.146:59730', '62.158.83.87:3128']
+
+def upload_image_small():
+    coins = db(db.master.image_small == None).select()
+    for row in coins:
+        url = row.image_url
+        try:
+            url = url.replace("/large/", "/small/")
+            image_base64 = base64.b64encode(requests.get(url).content)
+            image_processed = image_base64[image_base64.find(",")+1:].replace(' ','+')
+            image1 = Image.open(BytesIO(base64.b64decode(image_processed)))
+            output = BytesIO()
+            image1.save(output, format='PNG')  # or another format
+            output.seek(0)
+            row.update_record(image_thumb=db.master.image_thumb.store(output, str(row.coingecko_id)+'.png'))
+        except:
+            donothing = 1
+    return locals()
+
+def upload_image_thumb():
+    coins = db(db.master.image_thumb == None).select()
+    for row in coins:
+        url = row.image_url
+        try:
+            url = url.replace("/large/", "/thumb/")
+            image_base64 = base64.b64encode(requests.get(url).content)
+            image_processed = image_base64[image_base64.find(",")+1:].replace(' ','+')
+            image1 = Image.open(BytesIO(base64.b64decode(image_processed)))
+            image1 = image1.resize((16,16),Image.ANTIALIAS)
+            output = BytesIO()
+            image1.save(output, format='PNG')  # or another format
+            output.seek(0)
+            row.update_record(image_thumb=db.master.image_thumb.store(output, str(row.coingecko_id)+'.png'))
+        except:
+            donothing = 1
+    return locals()
+
+def find_between(s, first, last):
+    try:
+        start = s.index( first ) + len( first )
+        end = s.index( last, start )
+        return s[start:end]
+    except ValueError:
+        return ""
+
+def getAllInflation():
+    try:
+        getBTC()
+        getBitinfo(243, 'https://bitinfocharts.com/ethereum/')
+        getBitinfo(2, 'https://bitinfocharts.com/litecoin/')
+        getBitinfo(589, 'https://bitinfocharts.com/bitcoin%20cash/')
+        getBitinfo(2027, 'https://bitinfocharts.com/bitcoin%20sv/')
+        getBitinfo(110, 'https://bitinfocharts.com/monero/')
+        getBitinfo(62, 'https://bitinfocharts.com/dash/')
+        getBitinfo(344, 'https://bitinfocharts.com/ethereum%20classic/')
+        getBitinfo(383, 'https://bitinfocharts.com/zcash/')
+        getBitinfo(39, 'https://bitinfocharts.com/dogecoin/')
+        return 'success'
+    except:
+        return 'fail'
+
+def getBTC():
+    coin_id = 1
+    nowDatetime = datetime.now()
+    url = "https://api.blockchain.info/stats?cors=true"
+    shuffle(PROXIES)
+    for proxy in PROXIES[:4]:
+        try:
+            myProxies = {"http": proxy,"https": proxy}
+            user_agent = UserAgent().random
+            token, agent = cfscrape.get_tokens(url, user_agent=user_agent, proxies=myProxies)
+            headers = {'user-agent': agent}
+            page = requests.get(url, headers=headers, cookies=token, proxies=myProxies, timeout=10).content
+            page = json.loads(page)
+            db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                        coin_id = coin_id,
+                        emission_24h = float(page['n_btc_mined']) / 10**8,
+                        updated_on = nowDatetime,
+                        status = 'success')
+            return 'success'
+        except:
+            db.inflation.update_or_insert((db.inflation.coin_id==coin_id), coin_id = coin_id, updated_on = nowDatetime, failed_proxy=proxy)
+            time.sleep(0.5)
+    db.inflation.update_or_insert((db.inflation.coin_id==coin_id), coin_id = coin_id, updated_on = nowDatetime, status = 'fail')
+    return 'fail'
+
+def getBitinfo(coin_id, url):
+    nowDatetime = datetime.now()
+    shuffle(PROXIES)
+    for proxy in PROXIES[:4]:
+        try:
+            myProxies = {
+              "http": proxy,
+              "https": proxy,
+            }
+            user_agent = UserAgent().random
+            token, agent = cfscrape.get_tokens(url, user_agent=user_agent, proxies=myProxies)
+            headers = {'user-agent': agent}
+            page = requests.get(url, headers=headers, cookies=token, proxies=myProxies, timeout=10).content
+            doc = lxml.html.fromstring(page)
+            block_reward = doc.xpath("//abbr[@title='block reward']")[1].text_content() if doc.xpath("//abbr[@title='block reward']") else '0'
+            static_block_reward = doc.xpath("//abbr[@title='static block reward']")[1].text_content() if doc.xpath("//abbr[@title='static block reward']") else '0'
+            uncle_inclusion_reward = doc.xpath("//abbr[@title='uncle inclusion rewards']")[1].text_content() if doc.xpath("//abbr[@title='uncle inclusion rewards']") else '0'
+            uncle_reward = doc.xpath("//abbr[@title='uncle rewards']")[1].text_content() if doc.xpath("//abbr[@title='uncle rewards']") else '0'
+            total = float(block_reward.replace(',','')) +float(static_block_reward.replace(',','')) + float(uncle_inclusion_reward.replace(',','')) + float(uncle_reward.replace(',',''))
+            db.inflation.update_or_insert((db.inflation.coin_id==coin_id), coin_id = coin_id, emission_24h = total, updated_on = nowDatetime, status = 'success')
+            return 'success'
+        except:
+            db.inflation.update_or_insert((db.inflation.coin_id==coin_id), coin_id = coin_id, updated_on = nowDatetime, failed_proxy=proxy)
+            time.sleep(randint(1,5))
+    db.inflation.update_or_insert((db.inflation.coin_id==coin_id), coin_id = coin_id, updated_on = nowDatetime, status = 'fail')
+    return "fail"
+
+def get_coingecko_live():
+    pageCount = 1
+    while (pageCount < 18):
+        time.sleep(0.25) # delay
+        url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page="+str(pageCount)+"&sparkline=false&price_change_percentage=24h%2C7d"
+        page = requests.get(url).content
+        page = json.loads(page)
+        if not(page) or len(page) == 0:
+            break
+
+        for row in page:
+            coingecko_id = row['id']
+            usd_price = row['current_price'] if row['current_price'] else 'NULL'
+            market_cap_rank = row['market_cap_rank'] if row['market_cap_rank'] else 'NULL'
+            circulating_supply = row['circulating_supply'] if row['circulating_supply'] else 'NULL'
+            total_supply = row['total_supply'] if row['total_supply'] else 'NULL'
+            usd_volume_24h = row['total_volume'] if row['total_volume'] else 'NULL'
+            usd_market_cap = row['market_cap'] if row['market_cap'] else 'NULL'
+            usd_percent_change_24h = row['price_change_percentage_24h_in_currency'] if row['price_change_percentage_24h_in_currency'] else 'NULL'
+            usd_percent_change_7d = row['price_change_percentage_7d_in_currency'] if row['price_change_percentage_7d_in_currency'] else 'NULL'
+            image_url = row['image'] if row['image'] else 'NULL'
+            status = "livesuccess"
+            sqlQuery = "UPDATE master SET usd_price="+str(usd_price)+", market_cap_rank="+str(market_cap_rank)+", circulating_supply="+str(circulating_supply)+", total_supply="+str(total_supply)+", usd_volume_24h="+str(usd_volume_24h)+", usd_market_cap="+str(usd_market_cap)+", usd_percent_change_24h="+str(usd_percent_change_24h)+", usd_percent_change_7d="+str(usd_percent_change_7d)+", image_url='"+str(image_url)+"', status='"+str(status)+"' WHERE coingecko_id='"+str(coingecko_id)+"';"
+            shorterQuery = "UPDATE master SET usd_price="+str(usd_price)+", market_cap_rank="+str(market_cap_rank)+", circulating_supply="+str(circulating_supply)+", total_supply="+str(total_supply)+", usd_volume_24h="+str(usd_volume_24h)+", usd_market_cap="+str(usd_market_cap)+", usd_percent_change_24h="+str(usd_percent_change_24h)+", usd_percent_change_7d="+str(usd_percent_change_7d)+", status='"+str(status)+"' WHERE coingecko_id='"+str(coingecko_id)+"';"
+            db.executesql(shorterQuery)
+        pageCount += 1
+    return 'success'
+
+def get_coingecko_wallet_current_price():
+    tokens = db(db.token_wallet_list.id > 0).select(db.token_wallet_list.coin_id, db.token_wallet_list.coin_slug, groupby=db.token_wallet_list.coin_id)
+    for row in tokens:
+        tokenSlug = row.coin_slug
+        coin_id = row.coin_id
+        coingecko_id = db(db.master.id==coin_id).select(db.master.coingecko_id).first().coingecko_id
+        nowDate = datetime.now().date()
+        url = 'https://api.coingecko.com/api/v3/coins/'+coingecko_id+'/history?date='+nowDate.strftime('%d-%m-%Y')
+        time.sleep(0.21)
+        page = requests.get(url).content
+        page = json.loads(page)
+        priceBTC = priceETH = priceUSD = 0
+        if 'market_data' in page and page['market_data']:
+            if 'current_price' in page['market_data'] and page['market_data']['current_price']:
+                priceBTC = page['market_data']['current_price']['btc'] if page['market_data']['current_price']['btc'] else 'NULL'
+                priceETH = page['market_data']['current_price']['eth'] if page['market_data']['current_price']['eth'] else 'NULL'
+                priceUSD = page['market_data']['current_price']['usd'] if page['market_data']['current_price']['usd'] else 'NULL'
+                sqlQuery = "INSERT INTO token_price (coin_id, trade_date, priceBTC, priceETH, priceUSD) VALUES ("+str(coin_id)+", '"+nowDate.strftime('%Y-%m-%d')+"', "+str(priceBTC)+", "+str(priceETH)+", "+str(priceUSD)+") ON DUPLICATE KEY UPDATE priceBTC="+str(priceBTC)+", priceETH="+str(priceETH)+", priceUSD="+str(priceUSD)+";"
+                db.executesql(sqlQuery)
+    return locals()
+
+def get_coingecko_list():
+    url = 'https://api.coingecko.com/api/v3/coins/list'
+    page = requests.get(url).content
+    page = json.loads(page)
+    for row in page:
+        coin = db(db.master.coingecko_id == row['id']).select().first()
+        if coin:
+            coin.update_record(custom_slug=row['id'], symbol=row['symbol'].upper(), name=row['name'])
+        else:
+            db.master.insert(coingecko_id=row['id'], custom_slug=row['id'], symbol=row['symbol'].upper(), name=row['name'])
+    return 'success'
+
+def get_coingecko_static():
+    coins = db((db.master.id >= 1000)&(db.master.id < 9000)&(db.master.status!="success111")&(db.master.coingecko_id!=None)).select()
+    for coin in coins:
+        try:
+            time.sleep(0.3) # delay
+            url = 'https://api.coingecko.com/api/v3/coins/'+coin.coingecko_id+'?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false'
+            page = requests.get(url).content
+            page = json.loads(page)
+            coin.update_record(website=None,explorer=None,github=None,telegram=None,bitcointalk=None,twitter=None,medium=None,reddit=None)
+            if ((coin.sector==None) or (coin.sector=='')) and page['categories']:
+                coin.update_record(sector=page['categories'][0])
+#             if page['categories']:
+#                 coin.update_record(sector=page['categories'][0])
+            if page['links']['homepage'][0]:
+                coin.update_record(website=page['links']['homepage'][0])
+            if page['links']['blockchain_site'][0]:
+                coin.update_record(explorer=page['links']['blockchain_site'][0])
+            if page['links']['repos_url']['github'] and page['links']['repos_url']['github'][0]:
+                coin.update_record(github=page['links']['repos_url']['github'][0])
+            elif page['links']['repos_url']['bitbucket'] and page['links']['repos_url']['bitbucket'][0]:
+                coin.update_record(github=page['links']['repos_url']['bitbucket'][0])
+            if page['links']['telegram_channel_identifier']:
+                coin.update_record(telegram="https://t.me/"+str(page['links']['telegram_channel_identifier']))
+            if page['links']['bitcointalk_thread_identifier']:
+                coin.update_record(bitcointalk="https://bitcointalk.org/index.php?topic="+str(page['links']['bitcointalk_thread_identifier']))
+            if page['links']['twitter_screen_name']:
+                coin.update_record(twitter="https://twitter.com/"+str(page['links']['twitter_screen_name']))
+            if page['links']['announcement_url'][0]:
+                coin.update_record(medium=page['links']['announcement_url'][0])
+            if page['links']['subreddit_url']:
+                coin.update_record(reddit=page['links']['subreddit_url'])
+            coin.update_record(status='success111')
+        except:
+            coin.update_record(status='fail111')
+    return 'success'
+
+def update_sector_count():
+    for row in db().select(db.master.sector, distinct=True):
+        if row.sector != None:
+            sector_set = db(db.master.sector==row.sector).select()
+            db.sector.update_or_insert(db.sector.sector == row.sector,
+                                         sector=row.sector,
+                                         sector_slug=IS_SLUG.urlify(row.sector),
+                                         sector_count=len(sector_set))
+    # Update sector_count
+    for row in db().select(db.sector.ALL, distinct=True):
+        coins = db(db.master.sector == row.sector).select()
+        row.update_record(sector_count=len(coins))
+    return 'success'
+
+# Find text in between str_a and str_a by finding str_a then str_b
+def find_a_b(soup, str_a, str_b):
+    # Find str_a
+    pos_a = soup.find(str_a)
+    if pos_a == -1: return ""
+    # Find str_b from str_a to end of string
+    pos_b = soup.find(str_b, pos_a+len(str_a), len(soup))
+    if pos_b == -1: return ""
+    # Return middle part.
+    adjusted_pos_a = pos_a + len(str_a)
+    if adjusted_pos_a >= pos_b: return ""
+    return soup[adjusted_pos_a:pos_b]
+
+# Find b then find a
+def find_b_a(soup,str_a,str_b):
+    # Find str_b
+    pos_b = soup.find(str_b)
+    if pos_b == -1: return ""
+    # Find str_a from beginning to pos_b
+    pos_a = soup.rfind(str_a, 0, pos_b)
+    if pos_a == -1: return ""
+    # Return middle part
+    adjusted_pos_a = pos_a + len(str_a)
+    if adjusted_pos_a >= pos_b: return ""
+    return soup[adjusted_pos_a:pos_b]
+
+def get_cmc_static():
+    start_id = 2000
+    end_id = 2080
+    for coin in db((db.master.cmc_id != None)&(db.master.id >= start_id)&(db.master.id < end_id)).select():
+        url = 'https://coinmarketcap.com/currencies/'+coin.cmc_slug
+        scraper = cfscrape.create_scraper()
+        page = scraper.get(url).content
+        soup = BeautifulSoup(page,'html.parser')
+
+        # Get telegram url
+        url_telegram = ''
+        list_url_telegram = soup.select("a[href*=t.me]")
+        for ahref in list_url_telegram:
+            if ahref['href'] != 'https://t.me/CoinMarketCap':
+                url_telegram = ahref['href']
+        if url_telegram != '':
+            url_telegram = soup.select_one("a[href*=telegram.me]")['href'] if soup.select_one("a[href*=telegram.me]") else ''
+
+        # Insert static record
+        db(db.master.cmc_slug==coin.cmc_slug).update(
+            website=soup.find('a',href=True,text='Website')['href'] if soup.find('a', href=True, text='Website') else '',
+            explorer=soup.find('a',href=True,text='Explorer')['href'] if soup.find('a', href=True, text='Explorer') else '',
+            github=soup.find('a',href=True,text='Source Code')['href'] if soup.find('a', href=True, text='Source Code') else '',
+            telegram=url_telegram,
+            discord=soup.select_one("a[href*=discord.gg]")['href'] if soup.select_one("a[href*=discord.gg]") else '',
+            bitcointalk=soup.select_one("a[href*=bitcointalk]")['href'] if soup.select_one("a[href*=bitcointalk]") else '',
+            twitter=soup.select_one("a[class*=twitter-timeline]")['href'] if soup.select_one("a[class*=twitter-timeline]") else '',
+            medium=soup.select_one("a[href*=medium.com]")['href'] if soup.select_one("a[href*=medium.com]") else '',
+            reddit=find_a_b(str(soup),"oScript.src = \"",".embed"))
+        time.sleep(4) #Delay time
+    return "static update successful from "+str(start_id)+" to "+str(end_id)

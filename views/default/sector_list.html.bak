@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>Crypto Sectors | ViewBase</title>
+    <meta property="og:title" itemprop="name" content="Crypto Sectors | ViewBase">
+    <meta name="twitter:title" content="Crypto Sectors | ViewBase">
+    <meta property="og:description" itemprop="description" name="description" content="Track the performance, market capitalization, and other stats of various cryptocurrency sectors.">
+    <meta name="twitter:description" content="Track the performance, market capitalization, and other stats of various cryptocurrency sectors.">
+    <meta name="twitter:image:src" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <meta property="og:image" itemprop="image" name="image" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <link property="og:url" itemprop="url" rel="canonical" href="https://www.viewbase.com/sector"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta property="og:site_name" content="ViewBase">
+    <meta property="fb:app_id" content="457354494759406">
+    <meta property="og:type" content="article">
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/table.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+    <script type="text/javascript" src="{{=URL('static',STATIC_VERSION,'js/jquery.tablesorter.js')}}"></script>
+    <style>
+        td{white-space: nowrap;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row" style="margin: 0; max-width: inherit;">
+            <div class="col-md-3">
+
+                <div style="display: flex; justify-content: flex-end;">
+                    <div class="d-none d-md-block" style="position: fixed; width: 250px;">
+                        <div style="background-color: #ffffff;">
+                            <div style="background-color: #2cc891; height: 80px;"></div>
+                            {{if auth.user:}}
+                            <div style="text-align: center; margin-top: -40px;">
+                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">
+                                    <img class="avatar rounded-circle" src="{{=get_avatar_url(auth.user.avatar)}}" style="height: 100%; width: 100%;">
+                                </div>
+                                <div style="padding: 20px 0; margin-bottom: 16px;">
+                                    Welcome, {{ =auth.user.username }}!
+                                </div>
+                             </div>
+                            {{else:}}
+                            <div style="text-align: center; margin-top: -40px;">
+                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">
+                                    <i class="fas fa-user avatar-icon" style="font-size: 40px; margin-top: 14px;"></i>
+                                </div>
+                                <div style="padding: 20px 0;">
+                                    You are not <span data-toggle="modal" data-target="#loginModal" style="font-weight: bold; color: #2cc891; cursor: pointer;">logged in</span>.<br>
+                                    Don't have an account?<br>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="{{=registerModal}}" style="font-weight: bold; margin: 10px 0;">Sign Up</button>
+                                </div>
+                             </div>
+                            {{pass}}
+                         </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-7">
+            <div class="col-main" style="border-radius: 0px; padding: 20px;">
+                <h1 style="padding:24px 0; margin: 10px 0;width:100%;text-align:center;font-size:25px;font-weight:700;line-height:1.44em;">
+                    Cryptocurrency Sectors
+                </h1>
+                <table class="table table-responsive-lg tablesorter" id="myTable" style="margin: 0;">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">
+                                Sector <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="Number of coins in sector">
+                                Components  <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="Total market capitalization of sector">
+                                Market Cap <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="Total volume of sector">
+                                Volume (24h) <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="1-day market cap weighted price change of all components in sector">% 1d <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col" data-toggle="tooltip" data-placement="top" title="7-day market cap weighted price change of all components in sector">% 7d <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{for row in sectors:}}
+                        <tr class='clickable-row' data-href="{{=URL('default','sector',args=row['sector_slug'])}}">
+                            <td>
+                                <span class="sector-icon">{{=XML(row['image_html'])}}</span> 
+                                <span><a href="{{=URL('default','sector',args=row['sector_slug'])}}">{{=row['sector']}}</a></span>
+                            </td>
+                            <td class="cell-right">{{='{0:,.0f}'.format(row['count'])}}</td>
+                            <td class="cell-right">${{='{0:,.0f}'.format(row['sum_mcap']) if row['sum_mcap'] else '-'}}</td>
+                            <td class="cell-right">${{='{0:,.0f}'.format(row['sum_vol'])}}</td>
+                            {{if row['weighted_change_1d']:}}
+                            <td class="cell-right {{='cell-green' if row['weighted_change_1d'] > 0 else 'cell-red'}}">
+                                {{='{0:,.2f}'.format(row['weighted_change_1d'])}}%
+                            </td>
+                            {{else:}}
+                            <td>-</td>
+                            {{pass}}
+                            {{if row['weighted_change_7d']:}}
+                            <td class="cell-right {{='cell-green' if row['weighted_change_7d'] > 0 else 'cell-red'}}">
+                                {{='{0:,.2f}'.format(row['weighted_change_7d'])}}%
+                            </td>
+                            {{else:}}
+                            <td>-</td>
+                            {{pass}}
+                        </tr>
+                        {{pass}}
+                    </tbody>
+                </table>
+<!--                 <div style="font-size:.65rem;color:#9f9f9f;text-align:center;">Powered by <a href="https://www.coingecko.com" target="_blank"><img src="https://www.viewbase.com/viewbase/static/_0.0.0/images/coingecko.png" alt="Coingecko"></a></div> -->
+            </div>
+<!--             <div class="col-12 col-lg-3 order-3 order-lg-3 my-col">
+                <h2 class="section-header">
+                    <a class="section-header" href="{{=URL('default','blog')}}">Top Blog Posts</a>
+                </h2>
+                {{for blog in blogs:}}
+                <a class="blog-container" href="{{=URL('default','blog',args=blog['website_slug'])}}">
+                    <div class="blog-image blog-item" style="background-image:url({{=blog['image_url_small']}});"></div>
+                    <div class="blog-overlay blog-item">
+                        <span class="blog-header">{{=blog['title']}}</span>
+                    </div>
+                </a>
+                {{pass}}
+            </div> -->
+            </div>
+        </div>
+    </div>
+{{include 'footer.html'}}
+</body>
+
+<script>
+    $.tablesorter.addParser({
+        id: "commaDelimited",
+        is: function(s) {return /^[0-9]?[0-9,\.]*$/.test(s);},
+        format: function(s) {return jQuery.tablesorter.formatFloat( s.replace(/,/g,'').replace(/\$/g,'') );},
+        type: "numeric"
+    });
+    $(document).ready(function(){
+        $("#myTable").tablesorter({
+            sortList:[[5,1]],
+            headers: {2:{sorter:'commaDelimited'},3:{sorter:'commaDelimited'}}
+        });
+    });
+
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+    $(function () {$('[data-toggle="tooltip"]').tooltip()})
+</script>
+</html>

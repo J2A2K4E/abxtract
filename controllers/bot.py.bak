@@ -1,0 +1,76 @@
+def get_max_val_and_index(lst):
+    m1_val = m2_val = lst[0]
+    m1_index = m2_index = 0
+    for i in range(0, len(lst)):
+        if float(lst[i]) > float(m2_val):
+            if float(lst[i]) > float(m1_val):
+                m1_val, m2_val = lst[i], m1_val
+                m1_index, m2_index = i, m1_index
+            else:
+                m2_val = lst[i]
+                m2_index = i
+    return m1_index, m1_val, m2_index, m2_val
+
+def test():
+    lst = (Decimal('-8356558.5927248300'), Decimal('135584.8326798100'),Decimal('5669.2283791600'),Decimal('0E-10'),Decimal('0E-10'),Decimal('-1479927.7610000000'))
+    lst = [float(i) for i in lst]
+    min_lst = min(lst)
+    return locals()
+
+def get_min_val_and_index(lst):
+    lst = [float(i) for i in lst]
+    m1_val, m2_val = float('inf'), float('inf')
+    m1_index, m2_index = 0, 0
+    index = 0
+    for x in lst:
+        if x <= m1_val:
+            m1_val, m2_val = x, m1_val
+            m1_index, m2_index = index, m1_index
+        elif x < m2_val:
+            m2_val = x
+            m2_index = index
+        index += 1
+    return m1_index, m1_val, m2_index, m2_val
+
+def getBigChange():
+    coin_list = db.executesql("SELECT a.coin_id FROM token_wallet_list a GROUP BY a.coin_id;", as_dict=True)
+    test_list = []
+    for coin in coin_list:
+        coin_id = coin['coin_id']
+        groups = db(db.token_wallet_list.coin_id==coin_id).select(groupby=db.token_wallet_list.group, orderby=db.token_wallet_list.id)
+        subString = ''
+        for row in groups:
+            subString += ", SUM(IF(b.group='"+row.group+"',b.balance_amount,0))"
+        balanceHistory = db.executesql("SELECT b.balance_date, SUM(b.balance_amount)"+subString+" FROM token_wallet_balance b WHERE b.coin_id="+str(coin_id)+" AND b.balance_date > '2018-12-01' GROUP BY b.balance_date ORDER BY b.balance_date;")
+        for i in range(1, len(balanceHistory)):
+            if balanceHistory[i-1][1] > 0:
+                sum_change = balanceHistory[i][1] - balanceHistory[i-1][1]
+                pct_change = (balanceHistory[i][1]/balanceHistory[i-1][1] - 1)*100
+                if abs(pct_change) > 10:
+                    myDictionary = {"coin_id":coin_id, "balance_date":balanceHistory[i][0], "pct_change":pct_change, "sum_change":sum_change}
+                    group_change_list = []
+                    for j in range(0, len(groups)):
+                        group_change = balanceHistory[i][2+j]-balanceHistory[i-1][2+j]
+                        myDictionary[groups[j].group] = group_change
+                        group_change_list.append(group_change)
+                    if pct_change > 0:
+                        myDictionary['type'] = 'positive'
+                        m1_index, m1_val, m2_index, m2_val = get_max_val_and_index(group_change_list)
+                    else:
+                        myDictionary['type'] = 'negative'
+                        m1_index, m1_val, m2_index, m2_val = get_min_val_and_index(group_change_list)
+                    myDictionary['m1_val'] = m1_val
+                    myDictionary['m1_group'] = groups[m1_index].group
+                    myDictionary['m2_val'] = m2_val
+                    myDictionary['m2_group'] = groups[m2_index].group
+                    test_list.append(myDictionary)
+    test_list = sorted(test_list, key=lambda k: k['balance_date'])
+    message_list = []
+    for row in test_list:
+        coin = db(db.master.id==row['coin_id']).select().first()
+        if row['sum_change'] > 0:
+            string = '{0:,.0f}'.format(row['sum_change'])+" "+coin.symbol+" (+"+'{0:,.1f}'.format(row['pct_change'])+"%) has been deposited onto exchanges, of which, "+'{0:,.0f}'.format(row['m1_val'])+" "+coin.symbol+" are deposited into "+row['m1_group']+" wallets. "
+        else:
+            string = '{0:,.0f}'.format(-row['sum_change'])+" "+coin.symbol+" ("+'{0:,.1f}'.format(row['pct_change'])+"%) has been withdrawn from exchanges, of which, "+'{0:,.0f}'.format(row['m1_val'])+" "+coin.symbol+" are withdrawn from "+row['m1_group']+" wallets. "
+        message_list.append(string)
+    return message_list

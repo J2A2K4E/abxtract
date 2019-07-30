@@ -1,0 +1,100 @@
+{{db.auth_user.username.label = T("Username or Email")}}
+{{auth.settings.login_userfield = 'username'}}
+{{if request.vars.username and not IS_EMAIL()(request.vars.username)[1]:}}
+{{auth.settings.login_userfield = 'email'}}
+{{request.vars.email = request.vars.username}}
+{{request.post_vars.email = request.vars.email}}
+{{request.vars.username = None}}
+{{request.post_vars.username = None}}
+{{pass}}
+{{login_form=auth.login(next=URL(args=request.args, vars=request.get_vars, host=True))}}
+<div class="modal fade" id="registerModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Join us now</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body row">
+                <div class="register-form col-12 col-lg-6">
+                    {{if not auth.user:}}
+                    {{register_form = auth.register(next=URL('index', host=True))}}
+                    {{=register_form.custom.begin}}
+                    <div class="form-group">
+                        {{register_form.custom.widget.email["_class"] = "form-control registerEmail"}}
+                        {{register_form.custom.widget.email["_placeholder"] = "Email"}}
+                        {{=register_form.custom.widget.email}}
+                        <span class="registerEmailMessage"></span>
+                    </div>
+                    <div class="form-group">
+                        {{register_form.custom.widget.username["_class"] = "form-control registerUsername"}}
+                        {{register_form.custom.widget.username["_placeholder"] = "Username"}}
+                        {{=register_form.custom.widget.username}}
+                        <span class="registerUsernameMessage"></span>
+                    </div>
+                    <div class="form-group">
+                        {{register_form.custom.widget.password["_class"] = "form-control"}}
+                        {{register_form.custom.widget.password["_placeholder"] = "Password"}}
+                        {{=register_form.custom.widget.password}}
+                    </div>
+                    {{register_form.custom.submit["_class"] = "btn btn-success"}}
+                    {{register_form.custom.submit["_value"] = "Register"}}
+                    {{=register_form.custom.submit}}
+                    {{=register_form.custom.end}}
+                    {{pass}}
+                </div>
+                <div class="register-desc col-12 col-lg-6">
+                    <p>Register to post comments!</p>
+                </div>
+            </div>
+            <div class="modal-footer register-footer">
+                <a href="#" class="loginLink" data-toggle="modal" data-target="#loginModal">Already have an account? <b>Login here</b></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sign In</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{if not auth.user:}}
+                {{=login_form.custom.begin}}
+                <div class="form-group">
+                    {{login_form.custom.widget.username["_class"] = "form-control"}}
+                    {{login_form.custom.widget.username["_placeholder"] = "Username or Email"}}
+                    {{=login_form.custom.widget.username}}
+                </div>
+                <div class="form-group">
+                    {{login_form.custom.widget.password["_class"] = "form-control"}}
+                    {{login_form.custom.widget.password["_placeholder"] = "Password"}}
+                    {{=login_form.custom.widget.password}}
+                </div>
+                <div class="form-group">
+                    {{login_form.custom.submit["_class"] = "btn btn-success"}}
+                    {{login_form.custom.submit["_value"] = "Sign In"}}
+                    {{=login_form.custom.submit}}
+                    {{=login_form.custom.end}}
+                    {{pass}}
+                </div>
+            </div>
+            <div class="modal-footer register-footer">
+                <a href="#" class="registerLink" data-toggle="modal" data-target="#registerModal">Register new account</a><br />
+                <a href="{{=URL('default','user/retrieve_password')}}" style="margin:0;">Forgot your password?</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Close registerModal if opening loginModal, vice versa
+    $(".loginLink").click(function(){$('#registerModal').modal('hide');});
+    $(".registerLink").click(function(){$('#loginModal').modal('hide');});
+    $(function () {$('[data-toggle="tooltip"]').tooltip()})
+</script>

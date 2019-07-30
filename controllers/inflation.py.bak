@@ -1,0 +1,71 @@
+import requests
+import json
+import cfscrape
+from fake_useragent import UserAgent
+import lxml.html
+from datetime import datetime
+from decimal import Decimal
+import time
+from random import randint
+API_KEY = '15CXMHT3FGQ4KU6ZRFPR9UICFJAFWD73X5'
+
+def getBTC():
+    coin_id = 1
+    nowDatetime = datetime.now()
+    try:
+        url = "https://api.blockchain.info/stats?cors=true"
+        page = requests.get(url).content
+        page = json.loads(page)
+        db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                    coin_id = coin_id,
+                    emission_24h = Decimal(page['n_btc_mined']) / 10**8,
+                    updated_on = nowDatetime,
+                    status = 'success')
+    except:
+        db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                    coin_id = coin_id,
+                    updated_on = nowDatetime,
+                    status = 'fail')
+    return 'success'
+
+def getAllBitinfo():
+    getBitinfo(243, 'https://bitinfocharts.com/ethereum/')
+    getBitinfo(2, 'https://bitinfocharts.com/litecoin/')
+    getBitinfo(589, 'https://bitinfocharts.com/bitcoin%20cash/')
+    getBitinfo(2027, 'https://bitinfocharts.com/bitcoin%20sv/')
+    getBitinfo(110, 'https://bitinfocharts.com/monero/')
+    getBitinfo(62, 'https://bitinfocharts.com/dash/')
+    getBitinfo(344, 'https://bitinfocharts.com/ethereum%20classic/')
+    getBitinfo(383, 'https://bitinfocharts.com/zcash/')
+    getBitinfo(39, 'https://bitinfocharts.com/dogecoin/')
+    return locals()
+
+def getBitinfo(coin_id, url):
+    nowDatetime = datetime.now()
+    time.sleep(randint(3,8))
+    try:
+        proxies = {
+          "http": "88.99.145.185:443",
+          "https": "88.99.145.185:443",
+        }
+        user_agent = UserAgent().random;
+        token, agent = cfscrape.get_tokens(url, user_agent=user_agent, proxies=proxies)
+        headers = {'user-agent': agent}
+        page = requests.get(url, headers=headers, cookies=token, proxies=proxies).content
+        doc = lxml.html.fromstring(page)
+        block_reward = doc.xpath("//abbr[@title='block reward']")[1].text_content() if doc.xpath("//abbr[@title='block reward']") else '0'
+        static_block_reward = doc.xpath("//abbr[@title='static block reward']")[1].text_content() if doc.xpath("//abbr[@title='static block reward']") else '0'
+        uncle_inclusion_reward = doc.xpath("//abbr[@title='uncle inclusion rewards']")[1].text_content() if doc.xpath("//abbr[@title='uncle inclusion rewards']") else '0'
+        uncle_reward = doc.xpath("//abbr[@title='uncle rewards']")[1].text_content() if doc.xpath("//abbr[@title='uncle rewards']") else '0'
+        total = float(block_reward.replace(',','')) +float(static_block_reward.replace(',','')) + float(uncle_inclusion_reward.replace(',','')) + float(uncle_reward.replace(',',''))
+        db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                    coin_id = coin_id,
+                    emission_24h = total,
+                    updated_on = nowDatetime,
+                    status = 'success')
+    except:
+        db.inflation.update_or_insert((db.inflation.coin_id==coin_id),
+                    coin_id = coin_id,
+                    updated_on = nowDatetime,
+                    status = 'fail')
+    return 'success'

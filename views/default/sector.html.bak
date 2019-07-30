@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>{{=sector}} Sector | ViewBase</title>
+    <meta property="og:title" itemprop="name" content="{{=sector}} Sector | ViewBase">
+    <meta name="twitter:title" content="{{=sector}} Sector | ViewBase">
+    <meta property="og:description" itemprop="description" name="description" content="A list of crypto projects in the {{=sector}} sector.">
+    <meta name="twitter:description" content="A list of crypto projects in the {{=sector}} sector.">
+    <meta name="twitter:image:src" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <meta property="og:image" itemprop="image" name="image" content="https://res.cloudinary.com/dnpe8yafk/image/upload/v1551092309/static/viewbase.png">
+    <link property="og:url" itemprop="url" rel="canonical" href="https://www.viewbase.com/sector/{{=sector_slug}}"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta property="og:site_name" content="ViewBase">
+    <meta property="fb:app_id" content="457354494759406">
+    <meta property="og:type" content="article">
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/comment.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static',STATIC_VERSION,'css/table.css')}}"/>
+    <script type="text/javascript" src="{{=URL('static',STATIC_VERSION,'js/jquery.tablesorter.js')}}"></script>
+    <style>
+        td{white-space: nowrap;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-2 order-2 order-lg-1 my-col">
+            </div>
+            <div class="col-12 col-lg-7 order-1 order-lg-2 my-col col-main">
+                <div>
+                    <a href="https://www.viewbase.com/sector"><i class="fas fa-caret-left"></i> Back to sector list</a>
+                </div>
+                <h1 style="margin:24px 0;width:100%;text-align:center;font-size:25px;font-weight:700;line-height:1.44em;">
+                    {{=sector}} Sector
+                </h1>
+                <table class="table table-responsive-lg tablesorter" id="myTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">
+                                Name  <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th scope="col">
+                                Ticker <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col">
+                                Market Cap <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col">
+                                Vol (24h) <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col">
+                                Price <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col">
+                                % 1d <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                            <th class="cell-right" scope="col">
+                                % 7d <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{for row in sector_coins:}}
+                        <tr class='clickable-row' data-href="{{=URL('default','coin',args=row['custom_slug'])}}">
+                            <td>{{=counter}}{{counter += 1}}</td>
+                            <td>
+                                <img src="https://www.viewbase.com/static/image_thumb/{{=row['image_thumb']}}">&nbsp;
+                                <a href="{{=URL('default','coin',args=row['custom_slug'])}}">{{=row['name']}}</a>
+                            </td>
+                            <td>{{=row['symbol']}}</td>
+                            <td class="cell-right">{{="$"+'{0:,.0f}'.format(row['usd_market_cap']) if row['usd_market_cap'] is not None else "-"}}</td>
+                            <td class="cell-right">${{='{0:,.0f}'.format(row['usd_volume_24h'] if row['usd_volume_24h'] is not None else 0)}}</td>
+                            <td class="cell-right">${{='{0:,.4f}'.format(row['usd_price'] if row['usd_price'] is not None else 0)}}</td>
+                            <td class="cell-right {{='cell-green' if row['usd_percent_change_24h'] > 0 else 'cell-red'}}">
+                                {{='{0:.2f}'.format(row['usd_percent_change_24h'] if row['usd_percent_change_24h'] is not None else 0)}}%
+                            </td>
+                            <td class="cell-right {{='cell-green' if row['usd_percent_change_7d'] > 0 else 'cell-red'}}">
+                                {{='{0:.2f}'.format(row['usd_percent_change_7d'] if row['usd_percent_change_7d'] is not None else 0)}}%
+                            </td>
+                        </tr>
+                        {{pass}}
+                    </tbody>
+                </table>
+                <div style="font-size:.65rem;color:#9f9f9f;text-align:center;">Powered by <a href="https://www.coingecko.com" target="_blank"><img src="https://www.viewbase.com/viewbase/static/_0.0.0/images/coingecko.png" alt="Coingecko"></a></div>
+            </div>
+            <div class="col-12 col-lg-3 order-3 order-lg-3 my-col">
+                <h2 class="section-header">
+                    <a class="section-header" href="{{=URL('default','blog')}}">Top Blog Posts</a>
+                </h2>
+                {{for blog in blogs:}}
+                <a class="blog-container" href="{{=URL('default','blog',args=blog['website_slug'])}}">
+                    <div class="blog-image blog-item" style="background-image:url({{=blog['image_url_small']}});"></div>
+                    <div class="blog-overlay blog-item">
+                        <span class="blog-header">{{=blog['title']}}</span>
+                    </div>
+                </a>
+                {{pass}}
+            </div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+
+<script>
+    $.tablesorter.addParser({
+        id: "commaDelimited",
+        is: function(s) {return /^[0-9]?[0-9,\.]*$/.test(s);},
+        format: function(s) {return jQuery.tablesorter.formatFloat( s.replace(/,/g,'').replace(/\$/g,'') );},
+        type: "numeric"
+    });
+    $(document).ready(function(){
+        $("#myTable").tablesorter({
+            sortList:[[7,1]],
+            headers: {3:{sorter:'commaDelimited'},4:{sorter:'commaDelimited'},5:{sorter:'commaDelimited'}}
+        });
+    });
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
+</html>

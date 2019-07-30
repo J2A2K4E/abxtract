@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+{{include 'navbar.html'}}
+</head>
+<body>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+        <h4>
+            Sector Gainers
+        </h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Sector</th>
+              <th scope="col">Market Cap</th>
+              <th scope="col">Volume (24h)</th>
+              <th scope="col">% 24h Gain</th>
+              <th scope="col">% 7d Gain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Advertising</td>
+                <td>$123,123,123</td>
+                <td>$123,123</td>
+                <td style="color:green;">30.0%</td>
+                <td style="color:green;">15.0%</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Distributed Computing</td>
+                <td>$123,123,123</td>
+                <td>$123,123</td>
+                <td style="color:green;">30.0%</td>
+                <td style="color:green;">15.0%</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Distributed Storage</td>
+                <td>$123,123,123</td>
+                <td>$123,123</td>
+                <td style="color:green;">30.0%</td>
+                <td style="color:green;">15.0%</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <div class="col">
+        <h4>
+            Sector Losers
+        </h4>
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Sector</th>
+              <th scope="col">Market Cap</th>
+              <th scope="col">Volume (24h)</th>
+              <th scope="col">% 24h Gain</th>
+              <th scope="col">% 7d Gain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Lending</td>
+                <td>$123,123,123</td>
+                <td>$123,123</td>
+                <td style="color:red;">-30.0%</td>
+                <td style="color:red;">-15.0%</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Gaming</td>
+                <td>$123,123,123</td>
+                <td>$123,123</td>
+                <td style="color:red;">-30.0%</td>
+                <td style="color:red;">-15.0%</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Gambling</td>
+                <td>$123,123,123</td>
+                <td>$123,123</td>
+                <td style="color:red;">-30.0%</td>
+                <td style="color:red;">-15.0%</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>

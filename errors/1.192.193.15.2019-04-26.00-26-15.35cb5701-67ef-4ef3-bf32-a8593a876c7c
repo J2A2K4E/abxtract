@@ -1,0 +1,1112 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.AttributeError'> 'NoneType' object has no attribute 'bullish_count'"
+p3
+sS'layer'
+p4
+S'/opt/web2py_apps/web2py/applications/abxtract/views/default/index.html'
+p5
+sS'code'
+p6
+S'response.write(\'<!DOCTYPE html>\\n    <html class="no-js" lang="en">\\n        <head itemscope itemtype="http://schema.org/Organization" lang="en">\\n            <title>Abxtract: Crypto Social Trading</title>\\n            \', escape=False)\nresponse.write(\'<meta name="viewport" content="width=device-width, initial-scale=1.0">\\n<link rel="shortcut icon" type="image/png" href="/static/_0.0.1/images/favicon.png"/>\\n<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">\\n<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">\\n<script\\n  src="https://code.jquery.com/jquery-3.3.1.min.js"\\n  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="\\n  crossorigin="anonymous"></script>\\n<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>\\n<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>\\n<link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'css/lity.min.css\'))\nresponse.write(\'"/>\\n<script src="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'js/lity.min.js\'))\nresponse.write(\'"></script>\\n<script src="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'js/main.js\'))\nresponse.write(\'"></script>\\n<link rel="stylesheet" type="text/css" href="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'css/main.css\'))\nresponse.write(\'"/>\\n<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">\\n\\n    <a class="navbar-brand" href="/" style="position: absolute; top: 0; left: 0; margin: 7px 20px; font-weight: bold;">\\n        Abxtract\\n    </a>\\n    <div class="d-lg-none" style="width: 100%;">\\n        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="float: right">\\n            <span class="navbar-toggler-icon"></span>\\n        </button> \\n    </div>\\n    <div class="collapse navbar-collapse" id="navbarSupportedContent">\\n        <ul class="col-md-3 navbar-nav">\\n        </ul>\\n        <ul class="col-md-5 navbar-nav">\\n            <ul class="col-sm-12">\\n                <form class="form-inline dropdown nav-item nav-search mobile-hide">\\n                    <div class="input-group" style="width: 100%;">\\n                        <input class="form-control form-control-sm" id="coin-search-form" type="search" placeholder="Search insights for cryptocurrency" id="menu1" data-toggle="dropdown" autocomplete="off">\\n                        <div class="input-group-append"><span class="input-group-text" id="basic-addon2" style="border-radius: 0px;"><i class="fas fa-search"></i></span></div>\\n                    </div>\\n                    <div class="dropdown-menu" id="coin-search-menu"></div>\\n                </form>\\n            </ul>\\n        </ul>\\n\\n        <ul class="col-md-4 navbar-nav" style="display: flex; justify-content: flex-end;">\\n            <ul class="navbar-nav">\\n                <li class="nav-item nav-margin-right">\\n                    <a class="nav-link" href="/dashboard" style="color: #ffffff;">Dashboard</a>\\n                </li>\\n                <li class="nav-item nav-margin-right">\\n                    <a class="nav-link" href="/insights" style="color: #ffffff;">Insight of the Month</a>\\n                </li>\\n            </ul>\\n\\n            <ul class="navbar-nav">\\n                \', escape=False)\nif auth.user:\n    response.write(\'\\n                <li class="nav-item dropdown">\\n                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #ffffff;">\\n                        <!--                             <i class="fas fa-user"></i> \', escape=False)\n    response.write(auth.user.username)\n    response.write(\' -->\\n                        <img class="avatar rounded-circle" src="\', escape=False)\n    response.write(get_avatar_url(auth.user.avatar))\n    response.write(\'" style="height: 24px; width: 24px; transform: translate(-1px,-1px); border: 1px solid #ffffff;"> \', escape=False)\n    response.write(auth.user.username)\n    response.write(\'\\n                    </a>\\n                    <div class="dropdown-menu dropdown-menu-right">\\n                        <a class="dropdown-item" href="\', escape=False)\n    response.write(URL(\'default\',\'profile\',args=auth.user.username_slug,host=True))\n    response.write(\'">View Profile</a>\\n                        <a class="dropdown-item" href="/edit_profile">Edit Profile</a>\\n                        <a class="dropdown-item" href="\', escape=False)\n    response.write(URL(\'user\',args=\'change_password\',vars=dict(_next=URL(args=request.args, vars=request.vars)),host=True))\n    response.write(\'">Change Password</a>\\n                        <a class="dropdown-item" href="\', escape=False)\n    response.write(URL(\'default\',\'user/logout\',args=\'logout\',vars=dict(_next=URL(args=request.args,vars=request.vars)), host=True))\n    response.write(\'">Logout</a>\\n                    </div>\\n                </li>\\n                \', escape=False)\nelse:\n    response.write(\'\\n                <li class="nav-item" style="margin-right: 10px;">\\n                    <button class="btn btn-dark btn-border" type="button" data-toggle="modal" data-target="#registerModal">Sign Up</button>\\n                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#loginModal">Log In</button>\\n                </li>\\n                \', escape=False)\n    pass\nresponse.write(\'\\n            </ul>\\n        </ul>\\n    </div>\\n</nav>\\n<div class="alert_placeholder">\\n    \', escape=False)\nif response.flash:\n    response.write(\'\\n        <div class="flash alert alert-success alert-dismissible fade show" role="alert">\\n            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>\\n            \', escape=False)\n    response.write(response.flash)\n    response.write(\'\\n        </div>\\n    \', escape=False)\n    pass\nresponse.write(\'\\n</div>\\n\\n<style>\\n.btn, input, textarea, .modal-content {\\n    border-radius: 0 !important;\\n}\\n\\n#coin-search-menu {\\n    width: 100%;\\n    border-radius: 0px;\\n}\\n</style>\\n\', escape=False)\nresponse.write(\'\\n            <link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'css/spinner.css\'))\nresponse.write(\'"/>\\n            <link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'css/comment.css\'))\nresponse.write(\'"/>\\n            <link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'css/index.css\'))\nresponse.write(\'"/>\\n            <style>\\n                div.comment-action:hover, div.comment-action:hover *{color:#2cc891 !important;}\\n            </style>\\n            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>\\n            <script type="text/javascript">\\n                google.charts.load("current", {packages:["corechart"]});\\n                google.charts.setOnLoadCallback(drawChart);\\n                function drawChart() {\\n                    var data = google.visualization.arrayToDataTable([\\n                        [\\\'Sentiment\\\', \\\'Tweets Count\\\'],\\n                        [\\\'Bullish\\\', \', escape=False)\nresponse.write(ethereumStats.bullish_count if ethereumStats.bullish_count else 0)\nresponse.write("],\\n                        [\'Neutral\', ", escape=False)\nresponse.write(ethereumStats.neutral_count if ethereumStats.neutral_count else 0)\nresponse.write("],\\n                        [\'Bearish\', ", escape=False)\nresponse.write(ethereumStats.bearish_count if ethereumStats.bearish_count else 0)\nresponse.write(\']\\n                    ]);\\n                    var options = {\\n                        pieSliceTextStyle: {color: \\\'black\\\',},\\n                        pieHole: 0.6,\\n                        slices: {0: { color:\\\'#2cc891\\\'}, 1: { color:\\\'grey\\\'}, 2: { color:\\\'c82c2c\\\'}},\\n                        height: 150,\\n                        width: 150,\\n                        legend:{position:\\\'none\\\'},\\n                    };\\n                    var chart = new google.visualization.PieChart(document.getElementById(\\\'ethereumchart\\\'));\\n                    chart.draw(data, options);\\n                }\\n            </script>\\n            <script type="text/javascript">\\n                google.charts.load("current", {packages:["corechart"]});\\n                google.charts.setOnLoadCallback(drawChart);\\n                function drawChart() {\\n                    var data = google.visualization.arrayToDataTable([\\n                        [\\\'Sentiment\\\', \\\'Tweets Count\\\'],\\n                        [\\\'Bullish\\\', \', escape=False)\nresponse.write(litecoinStats.bullish_count if litecoinStats.bullish_count else 0)\nresponse.write("],\\n                        [\'Neutral\', ", escape=False)\nresponse.write(litecoinStats.neutral_count if litecoinStats.neutral_count else 0)\nresponse.write("],\\n                        [\'Bearish\', ", escape=False)\nresponse.write(litecoinStats.bearish_count if litecoinStats.bearish_count else 0)\nresponse.write(\']\\n                    ]);\\n                    var options = {\\n                        pieSliceTextStyle: {color: \\\'black\\\',},\\n                        pieHole: 0.6,\\n                        slices: {0: { color:\\\'#2cc891\\\'}, 1: { color:\\\'grey\\\'}, 2: { color:\\\'c82c2c\\\'}},\\n                        height: 150,\\n                        width: 150,\\n                        legend:{position:\\\'none\\\'},\\n                    };\\n                    var chart = new google.visualization.PieChart(document.getElementById(\\\'litecoinchart\\\'));\\n                    chart.draw(data, options);\\n                }\\n            </script>\\n            <script type="text/javascript">\\n                google.charts.load("current", {packages:["corechart"]});\\n                google.charts.setOnLoadCallback(drawChart);\\n                function drawChart() {\\n                    var data = google.visualization.arrayToDataTable([\\n                        [\\\'Sentiment\\\', \\\'Tweets Count\\\'],\\n                        [\\\'Bullish\\\', \', escape=False)\nresponse.write(moneroStats.bullish_count if moneroStats.bullish_count else 0)\nresponse.write("],\\n                        [\'Neutral\', ", escape=False)\nresponse.write(moneroStats.neutral_count if moneroStats.neutral_count else 0)\nresponse.write("],\\n                        [\'Bearish\', ", escape=False)\nresponse.write(moneroStats.bearish_count if moneroStats.bearish_count else 0)\nresponse.write(\']\\n                    ]);\\n                    var options = {\\n                        pieSliceTextStyle: {color: \\\'black\\\',},\\n                        pieHole: 0.6,\\n                        slices: {0: { color:\\\'#2cc891\\\'}, 1: { color:\\\'grey\\\'}, 2: { color:\\\'c82c2c\\\'}},\\n                        height: 150,\\n                        width: 150,\\n                        legend:{position:\\\'none\\\'},\\n                    };\\n                    var chart = new google.visualization.PieChart(document.getElementById(\\\'monerochart\\\'));\\n                    chart.draw(data, options);\\n                }\\n            </script>\\n        </head>\\n    <body>\\n    <div class="container-fluid">\\n        <div class="row" style="margin: 0; max-width: inherit;">\\n            <div class="col-md-3">\\n                <div style="display: flex; justify-content: flex-end;">\\n                    <div class="d-none d-md-block" style="position: fixed; width: 250px;">\\n                        <div style="border: 1px solid #eeeeee; border-radius: 0px; background-color: #ffffff;">\\n                            <div style="background-color: #2cc891; height: 80px;"></div>\\n                            \', escape=False)\nif auth.user:\n    response.write(\'\\n                            <div style="text-align: center; margin-top: -40px;">\\n                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">\\n                                    <img class="avatar rounded-circle" src="\', escape=False)\n    response.write(get_avatar_url(auth.user.avatar))\n    response.write(\'" style="height: 100%; width: 100%;">\\n                                </div>\\n                                <div style="padding: 20px 0; padding-bottom: 40px;">\\n                                    Welcome, \', escape=False)\n    response.write(auth.user.username)\n    response.write(\'!\\n                                </div>\\n                             </div>\\n                            \', escape=False)\nelse:\n    response.write(\'\\n                            <div style="text-align: center; margin-top: -40px;">\\n                                <div class="avatar-container" style="height: 80px; width: 80px; border: 2px solid #ffffff;">\\n                                    <i class="fas fa-user avatar-icon" style="font-size: 40px; margin-top: 14px;"></i>\\n                                </div>\\n                                <div style="padding: 20px 0;">\\n                                    You are not \\n                                    <span data-toggle="modal" data-target="#loginModal" style="font-weight: bold; color: #2cc891; cursor: pointer;">logged in</span>.\\n                                    <br>\\n                                    Don\\\'t have an account?<br>\\n                                    <button class="btn btn-success" data-toggle="modal" data-target="\', escape=False)\n    response.write(registerModal)\n    response.write(\'" style="font-weight: bold; margin: 10px 0;">\\n                                        Sign Up\\n                                    </button>\\n                                </div>\\n                             </div>\\n                            \', escape=False)\n    pass\nresponse.write(\'\\n                         </div>\\n                    </div>\\n                </div>\\n            </div>\\n            <div class="col-md-5">\\n\\n                \', escape=False)\nif auth.user:\n    response.write(\'\\n                <div style="background-color: #ffffff; padding: 20px 20px 10px 20px; border-radius: 0px; border: 1px solid #eeeeee;">\\n                    <div style="color: 2c2c2c; font-weight: 500; font-size: 1rem;">\\n                        Post a comment\\n                    </div>\\n                    <hr>\\n                    <div class="container-submit">\\n                        <div class="col-avatar">\\n                            \', escape=False)\n    if auth.user:\n        response.write(\'\\n                            <a href="\', escape=False)\n        response.write(URL(\'profile\',args=[auth.user.username_slug],host=True))\n        response.write(\'">\\n                                <img class="avatar rounded-circle" src="\', escape=False)\n        response.write(get_avatar_url(auth.user.avatar))\n        response.write(\'" style="height: 40px; width: 40px; margin-top: 4px;">\\n                            </a>\\n                            \', escape=False)\n    else:\n        response.write(\'\\n                            <div class="avatar-container" style="height: 40px; width: 40px;">\\n                                <i class="fas fa-user avatar-icon" style="margin-top: -10px;"></i>\\n                            </div>\\n                            \', escape=False)\n        pass\n    response.write(\'\\n                        </div>\\n                        <div class="col-message">\\n                            <textarea style="border-radius: 0px;" class="form-control main-form" onkeyup="textAreaAdjust(this)" rows="4" name="body" id="body" minlength="4" maxlength="999"  placeholder="\', escape=False)\n    response.write(\'Write a comment...\' if auth.user else \'Please login to comment\')\n    response.write(\'"  data-toggle="modal" data-target="\', escape=False)\n    response.write(registerModal)\n    response.write(\'"/></textarea>\\n                            <div class="loader">\\n                                <div class="lds-spinner">\\n                                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>\\n                                </div>\\n                            </div>\\n                            <div class="preview-buttons">\\n                                \', escape=False)\n    if auth.user:\n        response.write(\'\\n                                <button type="submit" class="btn btn-success" id="my-submit">Submit</button>\\n                                \', escape=False)\n    else:\n        response.write(\'\\n                                <button class="btn btn-success" data-toggle="modal" data-target="\', escape=False)\n        response.write(registerModal)\n        response.write(\'">Submit</button>\\n                                \', escape=False)\n        pass\n    response.write(\'\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>\\n                \', escape=False)\nelse:\n    response.write(\'\\n                <div style="background-color: #ffffff; padding: 20px; border: 1px solid #eeeeee;">\\n                    <div style="color: 2c2c2c; font-weight: 500; font-size: 1rem;">\\n                        Post a comment\\n                    </div>\\n                    <hr>\\n                    You need to be logged in to post a comment.\\n                </div>\\n\\n                \', escape=False)\n    pass\nresponse.write(\'\\n\\n                <hr>\\n                \', escape=False)\nfor comment in comments:\n    response.write(\'\\n                \', escape=False)\n    comment_url=num_encode(comment[\'id\']+10000)\n    response.write(\'\\n                \', escape=False)\n    sentiment = get_sentiment_results(comment[\'body\'])\n    response.write(\'\\n                <div class="container-post" style="margin: 10px 0; background-color: #ffffff; padding: 10px; border-radius: 0px; border: 1px solid #eeeeee;\\n                 \', escape=False)\n    if sentiment[\'prediction\']==\'Positive\':\n        response.write(\'\\n                 border-left: 3px solid #8bc34a;\\n                 \', escape=False)\n    elif sentiment[\'prediction\']==\'Negative\':\n        response.write(\'\\n                 border-left: 3px solid #ef5350;\\n                 \', escape=False)\n        pass\n    response.write(\'\\n                 ">\\n                    <div class="post-header">\\n                        <div class="col-avatar">\\n                            <a href="\', escape=False)\n    response.write(URL(\'profile\',args=comment[\'username_slug\'],host=True))\n    response.write(\'">\\n                                <img class="avatar-container rounded-circle" src="\', escape=False)\n    response.write(get_avatar_url(comment[\'avatar\']))\n    response.write(\'" style="height: 40px; width: 40px; margin-top: 4px;">\\n                            </a>\\n                        </div>\\n                        <div class="col-message">\\n                            <div class="message-header">\\n                                <span class="message-header-text">\\n                                    <a href="\', escape=False)\n    response.write(URL(\'profile\',args=comment[\'username_slug\'],host=True))\n    response.write(\'"><b>\', escape=False)\n    response.write(comment[\'username\'])\n    response.write(\'</b></a> \\xc2\\xb7 \\n                                    <span class="message-header-desc">\', escape=False)\n    response.write(comment[\'description\'])\n    response.write(\'</span>\\n                                    <span class="message-header-date text-grey">\\n                                        <br>Posted \\n                                        \', escape=False)\n    if comment[\'coin\'] != None and comment[\'coin\'] != \'\':\n        response.write(\'\\n                                        in <a class="link-grey" href="\', escape=False)\n        response.write(URL(\'default\',\'coin\',args=comment[\'custom_slug\']))\n        response.write(\'">\', escape=False)\n        response.write(comment[\'name\'])\n        response.write(\'</a> \\n                                        \', escape=False)\n        pass\n    response.write(\'\\n                                        <a class="link-grey" href="\', escape=False)\n    response.write(URL(\'comment\',args=comment_url))\n    response.write(\'">\', escape=False)\n    response.write(prettydate(comment[\'created_on\']))\n    response.write(\'</a>\\n                                    </span>\\n                                </span>\\n                                <div class="dropdown message-header-dropdown">\\n                                    \', escape=False)\n    for keyword in keywords.getRelatedCurrencies(comment[\'body\']):\n        response.write(\'\\n                                    <div style="display: inline-block; font-weight: bold; text-align: right; margin-right: 2px; background-color: #bdbdbd; color: #ffffff; padding: 4px 10px; border-radius: 1px; ">\', escape=False)\n        response.write(keyword)\n        response.write(\'</div>\\n                                    \', escape=False)\n        pass\n    response.write(\'\\n                                    \', escape=False)\n    if sentiment[\'prediction\']==\'Positive\':\n        response.write(\'\\n                                    <div style="display: inline-block; color: #ffffff; background-color: #8bc34a; padding: 4px 10px; border-radius: 1px; width: 90px; text-align: center;">\\n                                        Bullish\\n                                    </div>\\n                                    \', escape=False)\n    elif sentiment[\'prediction\']==\'Negative\':\n        response.write(\'\\n                                    <div style="display: inline-block; color: #ffffff; background-color: #ef5350; padding: 4px 10px; border-radius: 1px; width: 90px; text-align: center;">\\n                                        Bearish\\n                                    </div>\\n                                    \', escape=False)\n    else:\n        response.write(\'\\n<!--                                     <div style="display: inline-block; color: #ffffff; background-color: #bdbdbd; padding: 4px 10px; border-radius: 1px; width: 90px; text-align: center;">\\n                                        Neutral\\n                                    </div> -->\\n                                    \', escape=False)\n        pass\n    response.write(\'\\n                                </div>\\n                            </div>\\n                        </div>\\n                    </div>\\n                    <div class="message-body" id="\', escape=False)\n    response.write(comment[\'id\'])\n    response.write(\'">\\n                        \', escape=False)\n    if comment[\'created_by\']==4:\n        response.write(\'\\n                        \', escape=False)\n        response.write(XML(comment[\'body\'].replace(\'\\n\',\'<br/>\'), sanitize=False))\n        response.write(\'\\n                        \', escape=False)\n    else:\n        response.write(\'\\n                        \', escape=False)\n        response.write(XML(comment[\'body\'].replace(\'\\n\',\'<br/>\'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES))\n        response.write(\'\\n                        \', escape=False)\n        pass\n    response.write(\'\\n                    </div>\\n                    <div class="container-buttons" style="border-top: 1px solid #eeeeee; margin-top: 10px;">\\n                        <button type="button" class="btn btn-light \', escape=False)\n    response.write(comment_voted(comment[\'id\'],auth.user.id,1) if auth.user else "")\n    response.write(\' vote like text-grey" id="\', escape=False)\n    response.write(comment[\'id\'])\n    response.write(\'" data-toggle="tooltip" data-placement="top" title="Like" style="background-color: #ffffff; border: 0px; width: 52px;">\\n                            <i class="far fa-thumbs-up vote-icon" data-toggle="modal" data-target="\', escape=False)\n    response.write(registerModal)\n    response.write(\'"></i>\\n                            <span id="score" class="vote-score">\', escape=False)\n    if comment[\'like\']>0:\n        response.write(comment[\'like\'])\n        pass\n    response.write(\'</span>\\n                        </button>\\n                        <button type="button" class="btn btn-light round-btn reply-btn text-grey" data-toggle="collapse" data-target="#collapse\', escape=False)\n    response.write(comment[\'id\'])\n    response.write(\'" style="background-color: #ffffff; border: 0px; font-weight: bold;">\\n                            <i class="far fa-comment btn-icon"></i> \\n                            <span class="btn-text">\\n                                Reply \\n                                \', escape=False)\n    if comment[\'reply_count\']:\n        response.write(\'\\xc2\\xb7 \', escape=False)\n        response.write(comment[\'reply_count\'])\n        pass\n    response.write(\'\\n                            </span>\\n                        </button>\\n                    </div>\\n                    <!-- Start of collapsed dropdown -->\\n                    <div class="collapse container-collapse" id="collapse\', escape=False)\n    response.write(comment[\'id\'])\n    response.write(\'">\\n                               \', escape=False)\n    if auth.user and not auth.has_membership(\'banned\'):\n        response.write(\'\\n                               <div class="container-reply">\\n                                   <div class="col-avatar"></div>\\n                                   <div class="col-message">\\n                                        \', escape=False)\n        response.write(form.custom.begin)\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.widget.parent["_value"] = comment[\'id\']\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.widget.parent["_class"] = "d-none"\n        response.write(\'\\n                                        \', escape=False)\n        response.write(form.custom.widget.parent)\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.widget.parent_author["_value"] = comment[\'created_by\']\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.widget.parent_author["_class"] = "d-none"\n        response.write(\'\\n                                        \', escape=False)\n        response.write(form.custom.widget.parent_author)\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.widget.root_parent["_value"] = comment[\'id\']\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.widget.root_parent["_class"] = "d-none"\n        response.write(\'\\n                                        \', escape=False)\n        response.write(form.custom.widget.root_parent)\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.widget.body["_class"] = "form-control reply-textarea"\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.widget.body["_placeholder"] = "Write a comment..."\n        response.write(\'\\n                                        \', escape=False)\n        response.write(form.custom.widget.body)\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.submit["_class"] = "btn btn-success btn-post"\n        response.write(\'\\n                                        \', escape=False)\n        form.custom.submit["_value"] = "Post"\n        response.write(\'\\n                                        \', escape=False)\n        response.write(form.custom.submit)\n        response.write(\'\\n                                        \', escape=False)\n        response.write(form.custom.end)\n        response.write(\'\\n                                    </div>\\n                               </div>\\n                               \', escape=False)\n    else:\n        response.write(\'\\n                               <div class="container-reply">\\n                                   <div class="col-avatar"></div>\\n                                   <div class="col-message">\\n                                      <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="\', escape=False)\n        response.write(registerModal)\n        response.write(\'"/></textarea>\\n                                   </div>\\n                               </div>\\n                              \', escape=False)\n        pass\n    response.write(\'\\n\\n                              \', escape=False)\n    primary_children = db.executesql("SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.parent="+str(comment[\'id\'])+" ORDER BY a.like DESC;", as_dict = True)\n    response.write(\'\\n                              \', escape=False)\n    for primary_child in primary_children:\n        response.write(\'\\n                              <div class="container-reply">\\n                                    <div class="col-avatar">\\n                                        <a href="\', escape=False)\n        response.write(URL(\'profile\',args=[primary_child[\'username_slug\']],host=True))\n        response.write(\'">\\n                                            <img class="avatar-reply rounded-circle" src="\', escape=False)\n        response.write(get_avatar_url(primary_child[\'avatar\']))\n        response.write(\'">\\n                                        </a>\\n                                    </div>\\n                                    <div class="col-message">\\n                                        <div class="message-header">\\n                                            <span class="reply-header-text">\\n                                                <a href="\', escape=False)\n        response.write(URL(\'profile\',args=[primary_child[\'username_slug\']],host=True))\n        response.write(\'"><b>\', escape=False)\n        response.write(primary_child[\'username\'])\n        response.write(\'</b></a>\\n                                            </span>\\n                                            <div class="message-header-date" style="padding-top: 6px; padding-bottom: 10px;">\\n                                                Posted\\n                                                \', escape=False)\n        response.write(prettydate(primary_child[\'created_on\']))\n        response.write(\'\\n                                            </div>\\n                                        </div>\\n                                        <div class="reply-body">\\n                                            \', escape=False)\n        response.write(XML(primary_child[\'body\'].replace(\'\\n\',\'<br/>\'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES))\n        response.write(\'\\n                                        </div>\\n                                        <div class="reply-buttons">\\n                                            <span class="child-vote like \', escape=False)\n        response.write(comment_voted(primary_child[\'id\'],auth.user.id,1) if auth.user else "")\n        response.write(\'" id="\', escape=False)\n        response.write(primary_child[\'id\'])\n        response.write(\'" data-toggle="modal" data-target="\', escape=False)\n        response.write(registerModal)\n        response.write(\'">\\n                                                <span class="icon-container">\\n                                                    <i class="icon fas fa-thumbs-up"></i>\\n                                                </span>\\n                                                <span id="score" class="icon-score">\\n                                                    \', escape=False)\n        if primary_child[\'like\']>0:\n            response.write(\'\\n                                                        \', escape=False)\n            response.write(primary_child[\'like\'])\n            response.write(\'\\n                                                    \', escape=False)\n            pass\n        response.write(\'\\n                                                </span>\\n                                            </span>\\n                                            <span class="icon-container" data-toggle="collapse" data-target="#collapse\', escape=False)\n        response.write(primary_child[\'id\'])\n        response.write(\'">\\n                                                <i class="icon fas fa-reply"></i>\\n                                            </span>\\n                                            <span class="icon-score"></span>\\n                                            <span class="dropdown">\\n                                                <span class="icon-container" role="button" id="dropdownMenuLink" data-toggle="dropdown">\\n                                                    <i class="icon fas fa-ellipsis-h"></i>\\n                                                </span>\\n                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="\', escape=False)\n        response.write(primary_child[\'id\'])\n        response.write(\'">\\n                                                    \', escape=False)\n        if auth.user:\n            if primary_child[\'created_by\']==auth.user.id:\n                response.write(\'\\n                                                    <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal" style="cursor:pointer;">Delete</a>\\n                                                    \', escape=False)\n                pass\n            pass\n        response.write(\'\\n                                                </div>\\n                                            </span>\\n                                        </div>\\n                                        <div class="collapse reply-form" id="collapse\', escape=False)\n        response.write(primary_child[\'id\'])\n        response.write(\'">\\n                                            \', escape=False)\n        if auth.user and not auth.has_membership(\'banned\'):\n            response.write(\'\\n                                            \', escape=False)\n            response.write(form.custom.begin)\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.parent["_value"] = primary_child[\'id\']\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.parent["_class"] = "d-none"\n            response.write(\'\\n                                            \', escape=False)\n            response.write(form.custom.widget.parent)\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.parent_author["_value"] = primary_child[\'created_by\']\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.parent_author["_class"] = "d-none"\n            response.write(\'\\n                                            \', escape=False)\n            response.write(form.custom.widget.parent_author)\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.root_parent["_value"] = comment[\'id\']\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.root_parent["_class"] = "d-none"\n            response.write(\'\\n                                            \', escape=False)\n            response.write(form.custom.widget.root_parent)\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.secondary_parent["_value"] = primary_child[\'id\']\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.secondary_parent["_class"] = "d-none"\n            response.write(\'\\n                                            \', escape=False)\n            response.write(form.custom.widget.secondary_parent)\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.body["_class"] = "form-control reply-textarea"\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.widget.body["_placeholder"] = "Write a comment..."\n            response.write(\'\\n                                            \', escape=False)\n            response.write(form.custom.widget.body)\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.submit["_class"] = "btn btn-success btn-post"\n            response.write(\'\\n                                            \', escape=False)\n            form.custom.submit["_value"] = "Post"\n            response.write(\'\\n                                            \', escape=False)\n            response.write(form.custom.submit)\n            response.write(\'\\n                                            \', escape=False)\n            response.write(form.custom.end)\n            response.write(\'\\n                                            \', escape=False)\n        else:\n            response.write(\'\\n                                                <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="\', escape=False)\n            response.write(registerModal)\n            response.write(\'"/></textarea>\\n                                            \', escape=False)\n            pass\n        response.write(\'\\n                                        </div>\\n                                   </div>\\n                              </div>\\n                \', escape=False)\n        secondary_children = db.executesql("SELECT a.*,b.username,b.username_slug,b.description,b.avatar FROM comment a LEFT JOIN auth_user b ON a.created_by=b.id WHERE a.secondary_parent="+str(primary_child[\'id\'])+" ORDER BY a.like DESC;", as_dict = True)\n        response.write(\'\\n                \', escape=False)\n        for secondary_child in secondary_children:\n            response.write(\'\\n                <div class="container-sec-reply" style="margin-left: 56px; border-left: 0px; border-top: 1px solid #e5e5e5;">\\n                    <div class="col-avatar">\\n                        <a href="\', escape=False)\n            response.write(URL(\'profile\',args=[secondary_child[\'username_slug\']],host=True))\n            response.write(\'">\\n                            <img class="avatar-reply rounded-circle" src="\', escape=False)\n            response.write(get_avatar_url(secondary_child[\'avatar\']))\n            response.write(\'">\\n                        </a>\\n                    </div>\\n                    <div class="col-message">\\n                        <div class="message-header">\\n                            <span class="reply-header-text">\\n                                <a href="\', escape=False)\n            response.write(URL(\'profile\',args=[secondary_child[\'username_slug\']],host=True))\n            response.write(\'"><b>\', escape=False)\n            response.write(secondary_child[\'username\'])\n            response.write(\'</b></a> \\xc2\\xb7 \\n                                <span class="message-header-date">\\n                                    <i class="fas fa-reply"></i> \', escape=False)\n            response.write(XML(author(secondary_child[\'parent_author\'])))\n            response.write(\'\\n                                </span>\\n                            </span>\\n                            <div class="message-header-date" style="padding-top: 6px; padding-bottom: 10px;">\\n                                Posted \', escape=False)\n            response.write(prettydate(secondary_child[\'created_on\']))\n            response.write(\'\\n                            </div>\\n                        </div>\\n                        <div class="reply-body">\\n                            \', escape=False)\n            response.write(XML(secondary_child[\'body\'].replace(\'\\n\',\'<br />\'), sanitize=True, permitted_tags=PERMITTED_TAGS, allowed_attributes=ALLOWED_ATTRIBUTES))\n            response.write(\'\\n                        </div>\\n                        <div class="reply-buttons">\\n                            <span class="child-vote like \', escape=False)\n            response.write(comment_voted(secondary_child[\'id\'],auth.user.id,1) if auth.user else "")\n            response.write(\'" id="\', escape=False)\n            response.write(secondary_child[\'id\'])\n            response.write(\'" data-toggle="modal" data-target="\', escape=False)\n            response.write(registerModal)\n            response.write(\'">\\n                                <span class="icon-container">\\n                                    <i class="icon fas fa-thumbs-up"></i>\\n                                </span>\\n                                <span id="score" class="icon-score">\\n                                    \', escape=False)\n            if secondary_child[\'like\']>0:\n                response.write(\'\\n                                        \', escape=False)\n                response.write(secondary_child[\'like\'])\n                response.write(\'\\n                                    \', escape=False)\n                pass\n            response.write(\'\\n                                </span>\\n                            </span>\\n                            <span class="icon-container" data-toggle="collapse" data-target="#collapse\', escape=False)\n            response.write(secondary_child[\'id\'])\n            response.write(\'">\\n                                <i class="icon fas fa-reply"></i>\\n                            </span>\\n                            <span class="icon-score"></span>\\n                            <span class="dropdown">\\n                                <span class="icon-container" id="dropdownMenuLink" data-toggle="dropdown">\\n                                    <i class="icon fas fa-ellipsis-h"></i>\\n                                </span>\\n                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="\', escape=False)\n            response.write(secondary_child[\'id\'])\n            response.write(\'">\\n                                    \', escape=False)\n            if auth.user:\n                if secondary_child[\'created_by\']==auth.user.id:\n                    response.write(\'\\n                                    <a class="dropdown-item delete" data-toggle="modal" data-target="#deleteModal">Delete</a>\\n                                    \', escape=False)\n                    pass\n                pass\n            response.write(\'\\n                                </div>\\n                            </span>\\n                        </div>\\n                        <div class="collapse reply-form" id="collapse\', escape=False)\n            response.write(secondary_child[\'id\'])\n            response.write(\'">\\n                            \', escape=False)\n            if auth.user and not auth.has_membership(\'banned\'):\n                response.write(\'\\n                            \', escape=False)\n                response.write(form.custom.begin)\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.parent["_value"] = secondary_child[\'id\']\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.parent["_class"] = "d-none"\n                response.write(\'\\n                            \', escape=False)\n                response.write(form.custom.widget.parent)\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.parent_author["_value"] = secondary_child[\'created_by\']\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.parent_author["_class"] = "d-none"\n                response.write(\'\\n                            \', escape=False)\n                response.write(form.custom.widget.parent_author)\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.root_parent["_value"] = comment[\'id\']\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.root_parent["_class"] = "d-none"\n                response.write(\'\\n                            \', escape=False)\n                response.write(form.custom.widget.root_parent)\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.secondary_parent["_value"] = primary_child[\'id\']\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.secondary_parent["_class"] = "d-none"\n                response.write(\'\\n                            \', escape=False)\n                response.write(form.custom.widget.secondary_parent)\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.body["_class"] = "form-control reply-textarea"\n                response.write(\'\\n                            \', escape=False)\n                form.custom.widget.body["_placeholder"] = "Write a comment..."\n                response.write(\'\\n                            \', escape=False)\n                response.write(form.custom.widget.body)\n                response.write(\'\\n                            \', escape=False)\n                form.custom.submit["_class"] = "btn btn-success btn-post"\n                response.write(\'\\n                            \', escape=False)\n                form.custom.submit["_value"] = "Post"\n                response.write(\'\\n                            \', escape=False)\n                response.write(form.custom.submit)\n                response.write(\'\\n                            \', escape=False)\n                response.write(form.custom.end)\n                response.write(\'\\n                            \', escape=False)\n            else:\n                response.write(\'\\n                                <textarea class="form-control reply-textarea" rows="2" placeholder="Please login to comment" data-toggle="modal" data-target="\', escape=False)\n                response.write(registerModal)\n                response.write(\'"/></textarea>\\n                            \', escape=False)\n                pass\n            response.write(\'\\n                         </div>\\n                    </div>\\n                 </div>\\n               \', escape=False)\n            pass\n        response.write(\'\\n            \', escape=False)\n        pass\n    response.write(\'\\n            </div>\\n        <!-- End of collapsed dropdown -->\\n        </div>\\n    \', escape=False)\n    pass\nresponse.write(\'\\n        <div style="text-align:center;margin-top:10px;">\\n            \', escape=False)\nif int(page)>0:\n    response.write(\'\\n            <a href="\', escape=False)\n    response.write(URL(\'index\',vars=dict(page=int(page)-1),host=True))\n    response.write(\'" class="btn btn-success round-btn">\\n                <i class="fas fa-caret-left"></i> Previous\\n            </a>\\n            \', escape=False)\n    pass\nresponse.write(\'\\n            \', escape=False)\nif comment_count > last_comment_on_page:\n    response.write(\'\\n            <a href="\', escape=False)\n    response.write(URL(\'index\',vars=dict(page=int(page)+1),host=True))\n    response.write(\'" class="btn btn-success round-btn btn-page">Next <i class="fas fa-caret-right"></i></a>\\n            \', escape=False)\n    pass\nresponse.write(\'\\n        </div>\\n    </div>\\n    <div class="col-md-4 col-lg-4">\\n        <div style="background-color:#ffffff; padding: 20px 20px 40px 20px;position:fixed;width:480px;">\\n            <h2 class="section-header">\\n                <a class="section-header" href="/dashboard">Today\\\'s Market - \', escape=False)\nresponse.write(nowDate.strftime(\'%B %d, %Y\'))\nresponse.write(\'</a>\\n            </h2>\\n            <hr>\\n            <div style="display: flex;height:200px;text-align:center;">\\n                <a href="/dashboard" style="display:block;">\\n                <div style="display:flex;flex-direction:column;flex:1;text-align:center;">\\n                    <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">\\n                        Ethereum (ETH)\\n                    </div>\\n                    <div id="ethereumchart" style="display:flex;height:100;"></div>\\n                    \', escape=False)\nresponse.write(sum(filter(None, [ethereumStats.bullish_count,ethereumStats.neutral_count,ethereumStats.bearish_count])))\nresponse.write(\' tweets today<br>\\n                    \', escape=False)\nif ethereumStats.bullish_count > ethereumStats.bearish_count and ethereumStats.bullish_count > ethereumStats.neutral_count:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">\\n                        Bullish\\n                    </div>\\n                    \', escape=False)\nelif ethereumStats.bearish_count > ethereumStats.bullish_count and ethereumStats.bearish_count > ethereumStats.neutral_count:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">\\n                        Bearish\\n                    </div>\\n                    \', escape=False)\nelse:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">\\n                        Neutral\\n                    </div>\\n                    \', escape=False)\n    pass\nresponse.write(\'\\n                </div>\\n                </a>\\n                <a href="/dashboard" style="display:block;">\\n                <div style="display:flex;flex-direction:column;flex:1;text-align:center;">\\n                    <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">\\n                        Litecoin (LTC)\\n                    </div>\\n                    <div id="litecoinchart" style="display:flex;height:100;"></div>\\n                    \', escape=False)\nresponse.write(sum(filter(None, [litecoinStats.bullish_count,litecoinStats.neutral_count,litecoinStats.bearish_count])))\nresponse.write(\' tweets today<br>\\n                    \', escape=False)\nif litecoinStats.bullish_count > litecoinStats.bearish_count and litecoinStats.bullish_count > litecoinStats.neutral_count:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">\\n                        Bullish\\n                    </div>\\n                    \', escape=False)\nelif litecoinStats.bearish_count > litecoinStats.bullish_count and litecoinStats.bearish_count > litecoinStats.neutral_count:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">\\n                        Bearish\\n                    </div>\\n                    \', escape=False)\nelse:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">\\n                        Neutral\\n                    </div>\\n                    \', escape=False)\n    pass\nresponse.write(\'\\n                </div>\\n                </a>\\n                <a href="/dashboard" style="display:block;">\\n                <div style="display:flex;flex-direction:column;flex:1;text-align:center;">\\n                    <div style="font-size: 1rem; color: #2c2c2c; font-weight: 500;">\\n                        Monero (XMR)\\n                    </div>\\n                    <div id="monerochart" style="display:flex;height:100;"></div>\\n                    \', escape=False)\nresponse.write(sum(filter(None, [moneroStats.bullish_count,moneroStats.neutral_count,moneroStats.bearish_count])))\nresponse.write(\' tweets today<br>\\n                    \', escape=False)\nif moneroStats.bullish_count > moneroStats.bearish_count and moneroStats.bullish_count > moneroStats.neutral_count:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #8bc34a; text-align:center; border-radius: 1px; width: 120px;">\\n                        Bullish\\n                    </div>\\n                    \', escape=False)\nelif moneroStats.bearish_count > moneroStats.bullish_count and moneroStats.bearish_count > moneroStats.neutral_count:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #ef5350; text-align:center; border-radius: 1px; width: 120px;">\\n                        Bearish\\n                    </div>\\n                    \', escape=False)\nelse:\n    response.write(\'\\n                    <div style="margin:0 auto; color: #ffffff;background-color: #bdbdbd; text-align:center; border-radius: 1px; width: 120px;">\\n                        Neutral\\n                    </div>\\n                    \', escape=False)\n    pass\nresponse.write(\'\\n                </div>\\n                </a>\\n            </div>\\n        </div>\\n    </div>\\n    </div>\\n    </div>\\n    \', escape=False)\ndb.auth_user.username.label = T("Username or Email")\nresponse.write(\'\\n\', escape=False)\nauth.settings.login_userfield = \'username\'\nresponse.write(\'\\n\', escape=False)\nif request.vars.username and not IS_EMAIL()(request.vars.username)[1]:\n    response.write(\'\\n\', escape=False)\n    auth.settings.login_userfield = \'email\'\n    response.write(\'\\n\', escape=False)\n    request.vars.email = request.vars.username\n    response.write(\'\\n\', escape=False)\n    request.post_vars.email = request.vars.email\n    response.write(\'\\n\', escape=False)\n    request.vars.username = None\n    response.write(\'\\n\', escape=False)\n    request.post_vars.username = None\n    response.write(\'\\n\', escape=False)\n    pass\nresponse.write(\'\\n\', escape=False)\nlogin_form=auth.login(next=URL(args=request.args, vars=request.get_vars, host=True))\nresponse.write(\'\\n<div class="modal fade" id="registerModal" tabindex="-1">\\n    <div class="modal-dialog" role="document">\\n        <div class="modal-content">\\n            <div class="modal-header">\\n                <h5 class="modal-title">Join us now</h5>\\n                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\\n                    <span aria-hidden="true">&times;</span>\\n                </button>\\n            </div>\\n            <div class="modal-body row">\\n                <div class="register-form col-12 col-lg-6">\\n                    \', escape=False)\nif not auth.user:\n    response.write(\'\\n                    \', escape=False)\n    register_form = auth.register(next=URL(\'index\', host=True))\n    response.write(\'\\n                    \', escape=False)\n    response.write(register_form.custom.begin)\n    response.write(\'\\n                    <div class="form-group">\\n                        \', escape=False)\n    register_form.custom.widget.email["_class"] = "form-control registerEmail"\n    response.write(\'\\n                        \', escape=False)\n    register_form.custom.widget.email["_placeholder"] = "Email"\n    response.write(\'\\n                        \', escape=False)\n    response.write(register_form.custom.widget.email)\n    response.write(\'\\n                        <span class="registerEmailMessage"></span>\\n                    </div>\\n                    <div class="form-group">\\n                        \', escape=False)\n    register_form.custom.widget.username["_class"] = "form-control registerUsername"\n    response.write(\'\\n                        \', escape=False)\n    register_form.custom.widget.username["_placeholder"] = "Username"\n    response.write(\'\\n                        \', escape=False)\n    response.write(register_form.custom.widget.username)\n    response.write(\'\\n                        <span class="registerUsernameMessage"></span>\\n                    </div>\\n                    <div class="form-group">\\n                        \', escape=False)\n    register_form.custom.widget.password["_class"] = "form-control"\n    response.write(\'\\n                        \', escape=False)\n    register_form.custom.widget.password["_placeholder"] = "Password"\n    response.write(\'\\n                        \', escape=False)\n    response.write(register_form.custom.widget.password)\n    response.write(\'\\n                    </div>\\n                    \', escape=False)\n    register_form.custom.submit["_class"] = "btn btn-success"\n    response.write(\'\\n                    \', escape=False)\n    register_form.custom.submit["_value"] = "Register"\n    response.write(\'\\n                    \', escape=False)\n    response.write(register_form.custom.submit)\n    response.write(\'\\n                    \', escape=False)\n    response.write(register_form.custom.end)\n    response.write(\'\\n                    \', escape=False)\n    pass\nresponse.write(\'\\n                </div>\\n                <div class="register-desc col-12 col-lg-6">\\n                    <p>Register to post comments!</p>\\n                </div>\\n            </div>\\n            <div class="modal-footer register-footer">\\n                <a href="#" class="loginLink" data-toggle="modal" data-target="#loginModal">Already have an account? <b>Login here</b></a>\\n            </div>\\n        </div>\\n    </div>\\n</div>\\n<div class="modal fade" id="loginModal" tabindex="-1">\\n    <div class="modal-dialog" role="document">\\n        <div class="modal-content">\\n            <div class="modal-header">\\n                <h5 class="modal-title">Sign In</h5>\\n                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\\n                    <span aria-hidden="true">&times;</span>\\n                </button>\\n            </div>\\n            <div class="modal-body">\\n                \', escape=False)\nif not auth.user:\n    response.write(\'\\n                \', escape=False)\n    response.write(login_form.custom.begin)\n    response.write(\'\\n                <div class="form-group">\\n                    \', escape=False)\n    login_form.custom.widget.username["_class"] = "form-control"\n    response.write(\'\\n                    \', escape=False)\n    login_form.custom.widget.username["_placeholder"] = "Username or Email"\n    response.write(\'\\n                    \', escape=False)\n    response.write(login_form.custom.widget.username)\n    response.write(\'\\n                </div>\\n                <div class="form-group">\\n                    \', escape=False)\n    login_form.custom.widget.password["_class"] = "form-control"\n    response.write(\'\\n                    \', escape=False)\n    login_form.custom.widget.password["_placeholder"] = "Password"\n    response.write(\'\\n                    \', escape=False)\n    response.write(login_form.custom.widget.password)\n    response.write(\'\\n                </div>\\n                <div class="form-group">\\n                    \', escape=False)\n    login_form.custom.submit["_class"] = "btn btn-success"\n    response.write(\'\\n                    \', escape=False)\n    login_form.custom.submit["_value"] = "Sign In"\n    response.write(\'\\n                    \', escape=False)\n    response.write(login_form.custom.submit)\n    response.write(\'\\n                    \', escape=False)\n    response.write(login_form.custom.end)\n    response.write(\'\\n                    \', escape=False)\n    pass\nresponse.write(\'\\n                </div>\\n            </div>\\n            <div class="modal-footer register-footer">\\n                <a href="#" class="registerLink" data-toggle="modal" data-target="#registerModal">Register new account</a><br />\\n                <a href="\', escape=False)\nresponse.write(URL(\'default\',\'user/retrieve_password\'))\nresponse.write(\'" style="margin:0;">Forgot your password?</a>\\n            </div>\\n        </div>\\n    </div>\\n</div>\\n<script>\\n    // Close registerModal if opening loginModal, vice versa\\n    $(".loginLink").click(function(){$(\\\'#registerModal\\\').modal(\\\'hide\\\');});\\n    $(".registerLink").click(function(){$(\\\'#loginModal\\\').modal(\\\'hide\\\');});\\n    $(function () {$(\\\'[data-toggle="tooltip"]\\\').tooltip()})\\n</script>\\n\', escape=False)\nresponse.write(\'\\n    </body>\\n    \', escape=False)\nresponse.write(\'<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">\\n    <div class="modal-dialog" role="document">\\n        <div class="modal-content">\\n            <div class="modal-header">\\n                <h5 class="modal-title">Delete comment</h5>\\n                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\\n                    <span aria-hidden="true">&times;</span>\\n                </button>\\n            </div>\\n            <div class="modal-body">\\n                Are you sure you want to delete your comment?\\n            </div>\\n            <div class="modal-footer deleteModal" id="">\\n                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keep</button>\\n                <button type="button" class="btn btn-danger confirm-delete">Delete</button>\\n            </div>\\n        </div>\\n    </div>\\n</div>\\n<script>\\n    // Variable to check if logged in or not\\n    var loggedin = \', escape=False)\nresponse.write(\'true\' if auth.user else \'false\')\nresponse.write(\';\\n</script>\\n<script src="\', escape=False)\nresponse.write(URL(\'static\',STATIC_VERSION,\'js/comment.js\'))\nresponse.write(\'"></script>\\n\', escape=False)\nresponse.write(\'\\n    </html>\\n\', escape=False)'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__getslice__'
+p12
+S"<method-wrapper '__getslice__' of exceptions.AttributeError object>"
+p13
+sS'__str__'
+p14
+S"<method-wrapper '__str__' of exceptions.AttributeError object>"
+p15
+sS'__reduce__'
+p16
+S'<built-in method __reduce__ of exceptions.AttributeError object>'
+p17
+sS'__dict__'
+p18
+S'{}'
+p19
+sS'message'
+p20
+S'"\'NoneType\' object has no attribute \'bullish_count\'"'
+p21
+sS'__sizeof__'
+p22
+S'<built-in method __sizeof__ of exceptions.AttributeError object>'
+p23
+sS'__init__'
+p24
+S"<method-wrapper '__init__' of exceptions.AttributeError object>"
+p25
+sS'__setattr__'
+p26
+S"<method-wrapper '__setattr__' of exceptions.AttributeError object>"
+p27
+sS'__reduce_ex__'
+p28
+S'<built-in method __reduce_ex__ of exceptions.AttributeError object>'
+p29
+sS'__new__'
+p30
+S'<built-in method __new__ of type object>'
+p31
+sS'__format__'
+p32
+S'<built-in method __format__ of exceptions.AttributeError object>'
+p33
+sS'__class__'
+p34
+S"<type 'exceptions.AttributeError'>"
+p35
+sS'__doc__'
+p36
+S"'Attribute not found.'"
+p37
+sS'__getitem__'
+p38
+S"<method-wrapper '__getitem__' of exceptions.AttributeError object>"
+p39
+sS'__setstate__'
+p40
+S'<built-in method __setstate__ of exceptions.AttributeError object>'
+p41
+sS'__getattribute__'
+p42
+S"<method-wrapper '__getattribute__' of exceptions.AttributeError object>"
+p43
+sS'args'
+p44
+S'("\'NoneType\' object has no attribute \'bullish_count\'",)'
+p45
+sS'__subclasshook__'
+p46
+S'<built-in method __subclasshook__ of type object>'
+p47
+sS'__unicode__'
+p48
+S'<built-in method __unicode__ of exceptions.AttributeError object>'
+p49
+sS'__delattr__'
+p50
+S"<method-wrapper '__delattr__' of exceptions.AttributeError object>"
+p51
+sS'__repr__'
+p52
+S"<method-wrapper '__repr__' of exceptions.AttributeError object>"
+p53
+sS'__hash__'
+p54
+S"<method-wrapper '__hash__' of exceptions.AttributeError object>"
+p55
+ssS'evalue'
+p56
+S"'NoneType' object has no attribute 'bullish_count'"
+p57
+sS'request'
+p58
+cgluon.html
+XML_unpickle
+p59
+(S's\xfd<\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>1.192.193.15</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>default</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_LENGTH</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_TYPE</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">DOCUMENT_ROOT</td><td style="vertical-align:top;">:</td><td><div>/usr/share/nginx/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTPS</td><td style="vertical-align:top;">:</td><td><div>on</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>45.55.52.237:443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Go-http-client/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>1.192.193.15</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>15016</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_SCHEME</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_URI</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>abxtract.com</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/opt/web2py_apps/web2py/applications/admin/&#x27;, &#x27;/opt/web2py_apps/web2py/applications/abxtract/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_length</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_type</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">document_root</td><td style="vertical-align:top;">:</td><td><div>/usr/share/nginx/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>45.55.52.237:443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Go-http-client/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">https</td><td style="vertical-align:top;">:</td><td><div>on</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_py2</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>45.55.52.237</div></td></tr><tr><td><div>abxtract.com</div></td></tr><tr><td><div>127.0.0.1</div></td></tr><tr><td><div>abxtract</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>1.192.193.15</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>15016</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/abxtract/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>abxtract.com</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.core</td><td style="vertical-align:top;">:</td><td><div>2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.node</td><td style="vertical-align:top;">:</td><td><div>abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.version</td><td style="vertical-align:top;">:</td><td><div>2.0.17.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_core</td><td style="vertical-align:top;">:</td><td><div>2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_node</td><td style="vertical-align:top;">:</td><td><div>abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_version</td><td style="vertical-align:top;">:</td><td><div>2.0.17.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_original_uri</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.17.2-stable+timestamp.2018.10.06.18.54.02</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;wsgi_errors&#x27;, mode &#x27;w&#x27; at 0x7f1bd24b5c90&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;built-in function uwsgi_sendfile&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;uwsgi._Input object at 0x7f1ba9bdd9d8&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;wsgi_errors&#x27;, mode &#x27;w&#x27; at 0x7f1bd24b5c90&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;built-in function uwsgi_sendfile&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;uwsgi._Input object at 0x7f1ba9bdd9d8&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py/applications/abxtract/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/opt/web2py_apps/web2py/applications/admin/&#x27;, &#x27;/opt/web2py_apps/web2py/applications/abxtract/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_py2</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>45.55.52.237</div></td></tr><tr><td><div>abxtract.com</div></td></tr><tr><td><div>127.0.0.1</div></td></tr><tr><td><div>abxtract</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.17.2-stable+timestamp.2018.10.06.18.54.02</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_scheduler</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2019, 4, 26, 0, 26, 15, 502011)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2019, 4, 26, 0, 26, 15, 502040)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x7f1b9a855910&gt;</div></td></tr></table></div>'
+tRp60
+sS'frames'
+p61
+(lp62
+(dp63
+S'file'
+p64
+S'/opt/web2py_apps/web2py/gluon/restricted.py'
+p65
+sS'dump'
+p66
+(dp67
+S'environment'
+p68
+S"{'A': <class 'gluon.html.A'>, 'ACCESS_KEY': 'Z0ITlc1Fp5fAjZmX1ks8OzM2j', 'ACCESS_SECRET': 'aLqR5uoV2vLLHCkIFmej3R43WGrqrfluZAguHuRRq0Xk8ScDBa', 'ALLOWED_ATTRIBUTES': {'blockquote': ['type'], 'img': ['src', 'alt']}, 'ALPHABET': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_', 'ALPHABET_REVERSE': {'-': 62, '0': 52, '1': 53, '2': 54, '3': 55, '4': 56, '5': 57, '6': 58, '7': 59, '8': 60, ...}, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, ...}"
+p69
+sS'ccode'
+p70
+S'<code object <module> at 0x7f1baad27c30, file "/...tions/abxtract/views/default/index.html", line 1>'
+p71
+ssS'lnum'
+p72
+I219
+sS'lines'
+p73
+(dp74
+I214
+S'    if environment is None:'
+p75
+sI215
+S'        environment = {}'
+p76
+sI216
+S"    environment['__file__'] = layer"
+p77
+sI217
+S"    environment['__name__'] = '__restricted__'"
+p78
+sI218
+S'    try:'
+p79
+sI219
+S'        exec(ccode, environment)'
+p80
+sI220
+S'    except HTTP:'
+p81
+sI221
+S'        raise'
+p82
+sI222
+S'    except RestrictedError:'
+p83
+sI223
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p84
+ssS'call'
+p85
+S'(ccode=<code object <module> at 0x7f1baad27c30, file "/...tions/abxtract/views/default/index.html", line 1>, environment={\'A\': <class \'gluon.html.A\'>, \'ACCESS_KEY\': \'Z0ITlc1Fp5fAjZmX1ks8OzM2j\', \'ACCESS_SECRET\': \'aLqR5uoV2vLLHCkIFmej3R43WGrqrfluZAguHuRRq0Xk8ScDBa\', \'ALLOWED_ATTRIBUTES\': {\'blockquote\': [\'type\'], \'img\': [\'src\', \'alt\']}, \'ALPHABET\': \'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_\', \'ALPHABET_REVERSE\': {\'-\': 62, \'0\': 52, \'1\': 53, \'2\': 54, \'3\': 55, \'4\': 56, \'5\': 57, \'6\': 58, \'7\': 59, \'8\': 60, ...}, \'ANY_OF\': <class \'gluon.validators.ANY_OF\'>, \'ASSIGNJS\': <function ASSIGNJS>, \'AppConfig\': <function AppConfig>, \'Auth\': <class \'gluon.tools.Auth\'>, ...}, layer=\'/opt/web2py_apps/web2py/applications/abxtract/views/default/index.html\', scode="response.write(\'<!DOCTYPE html>\\\\n    <html class...)\\nresponse.write(\'\\\\n    </html>\\\\n\', escape=False)")'
+p86
+sS'func'
+p87
+S'restricted'
+p88
+sa(dp89
+g64
+S'/opt/web2py_apps/web2py/applications/abxtract/views/default/index.html'
+p90
+sg66
+(dp91
+S'litecoinStats.neutral_count'
+p92
+S'undefined'
+p93
+sS'litecoinStats'
+p94
+S'None'
+p95
+ssg72
+I42
+sg73
+(dp96
+I33
+S'    pass'
+p97
+sI34
+S"response.write('\\n</div>\\n\\n<style>\\n.btn, input, textarea, .modal-content {\\n    border-radius: 0 !important;\\n}\\n\\n#coin-search-menu {\\n    width: 100%;\\n    border-radius: 0px;\\n}\\n</style>\\n', escape=False)"
+p98
+sI35
+S'response.write(\'\\n            <link rel="stylesheet" href="\', escape=False)'
+p99
+sI36
+S"response.write(URL('static',STATIC_VERSION,'css/spinner.css'))"
+p100
+sI37
+S'response.write(\'"/>\\n            <link rel="stylesheet" href="\', escape=False)'
+p101
+sI38
+S"response.write(URL('static',STATIC_VERSION,'css/comment.css'))"
+p102
+sI39
+S'response.write(\'"/>\\n            <link rel="stylesheet" href="\', escape=False)'
+p103
+sI40
+S"response.write(URL('static',STATIC_VERSION,'css/index.css'))"
+p104
+sI41
+S'response.write(\'"/>\\n            <style>\\n                div.comment-action:hover, div.comment-action:hover *{color:#2cc891 !important;}\\n            </style>\\n            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>\\n            <script type="text/javascript">\\n                google.charts.load("current", {packages:["corechart"]});\\n                google.charts.setOnLoadCallback(drawChart);\\n                function drawChart() {\\n                    var data = google.visualization.arrayToDataTable([\\n                        [\\\'Sentiment\\\', \\\'Tweets Count\\\'],\\n                        [\\\'Bullish\\\', \', escape=False)'
+p105
+sI42
+S'response.write(ethereumStats.bullish_count if ethereumStats.bullish_count else 0)'
+p106
+sI43
+S'response.write("],\\n                        [\'Neutral\', ", escape=False)'
+p107
+sI44
+S'response.write(ethereumStats.neutral_count if ethereumStats.neutral_count else 0)'
+p108
+sI45
+S'response.write("],\\n                        [\'Bearish\', ", escape=False)'
+p109
+sI46
+S'response.write(ethereumStats.bearish_count if ethereumStats.bearish_count else 0)'
+p110
+sI47
+S'response.write(\']\\n                    ]);\\n                    var options = {\\n                        pieSliceTextStyle: {color: \\\'black\\\',},\\n                        pieHole: 0.6,\\n                        slices: {0: { color:\\\'#2cc891\\\'}, 1: { color:\\\'grey\\\'}, 2: { color:\\\'c82c2c\\\'}},\\n                        height: 150,\\n                        width: 150,\\n                        legend:{position:\\\'none\\\'},\\n                    };\\n                    var chart = new google.visualization.PieChart(document.getElementById(\\\'ethereumchart\\\'));\\n                    chart.draw(data, options);\\n                }\\n            </script>\\n            <script type="text/javascript">\\n                google.charts.load("current", {packages:["corechart"]});\\n                google.charts.setOnLoadCallback(drawChart);\\n                function drawChart() {\\n                    var data = google.visualization.arrayToDataTable([\\n                        [\\\'Sentiment\\\', \\\'Tweets Count\\\'],\\n                        [\\\'Bullish\\\', \', escape=False)'
+p111
+sI48
+S'response.write(litecoinStats.bullish_count if litecoinStats.bullish_count else 0)'
+p112
+sI49
+S'response.write("],\\n                        [\'Neutral\', ", escape=False)'
+p113
+sI50
+S'response.write(litecoinStats.neutral_count if litecoinStats.neutral_count else 0)'
+p114
+sI51
+S'response.write("],\\n                        [\'Bearish\', ", escape=False)'
+p115
+sI52
+S'response.write(litecoinStats.bearish_count if litecoinStats.bearish_count else 0)'
+p116
+ssg85
+S'()'
+p117
+sg87
+S'<module>'
+p118
+sasS'pyver'
+p119
+S'Python 2.7.5: /usr/bin/uwsgi (prefix: /usr)'
+p120
+sS'session'
+p121
+g59
+(S's\x1a\x00\x00\x00<div><table></table></div>'
+tRp122
+sS'etype'
+p123
+S"<type 'exceptions.AttributeError'>"
+p124
+sS'date'
+p125
+S'Fri Apr 26 00:26:15 2019'
+p126
+sS'response'
+p127
+g59
+(S'sn<\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x7f1baa5f71f0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_abxtract</td><td style="vertical-align:top;">:</td><td><div>1.192.193.15-ddf79be9-c51b-4b8b-8b11-9c511359101b<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">samesite</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>bootstrap4_inline</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">google_analytics_id</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div><table><tr><td><div>Home</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>My Sites</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/site</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>This App</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Design</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/design/abxtract</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Controller</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/controllers/default.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>View</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/views/default/index.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>DB Model</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/models/db.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Menu Model</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/models/menu.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Config.ini</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/private/appconfig.ini</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Layout</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/views/layout.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Stylesheet</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/edit/abxtract/static/css/web2py-bootstrap3.css</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Database</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/appadmin</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Errors</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/errors/abxtract</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>About</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/about/abxtract</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>web2py.com</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Download</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/download</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Support</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/support</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Demo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/demo_admin</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Quick Examples</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/examples/default/examples</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>FAQ</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/AlterEgo</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Videos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/videos/</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Free Applications</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/appliances</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/plugins</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recipes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2pyslices.com/</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Documentation</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Online book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Preface</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/00</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Introduction</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/01</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Python</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/02</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Overview</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/03</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>The Core</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/04</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>The Views</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/05</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Database</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/06</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Forms and Validators</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/07</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Email and SMS</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/08</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Access Control</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/09</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Services</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/10</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Ajax Recipes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/11</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Components and Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/12</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Deployment Recipes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/13</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Other Recipes</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/14</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Helping web2py</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/15</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Buy web2py\'s book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://stores.lulu.com/web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Community</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>None</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Groups</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/usergroups</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Twitter</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://twitter.com/web2py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Live Chat</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://webchat.freenode.net/?channels=web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">author</td><td style="vertical-align:top;">:</td><td><div>Your Name &lt;you@example.com&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">description</td><td style="vertical-align:top;">:</td><td><div>a cool new app</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generator</td><td style="vertical-align:top;">:</td><td><div>Web2py Web Framework</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">keywords</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>web2py</div></td></tr><tr><td><div>python</div></td></tr><tr><td><div>framework</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^default/\\w+\\.py$</div></td></tr><tr><td><div>^default/index/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>1.192.193.15</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>/opt/web2py_apps/web2py/applications/abxtract/sessions/1.192.193.15-ddf79be9-c51b-4b8b-8b11-9c511359101b</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>c0762cbf4baf7f9af97c051e7fcb8083</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>1.192.193.15-ddf79be9-c51b-4b8b-8b11-9c511359101b</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>abxtract</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">static_version</td><td style="vertical-align:top;">:</td><td><div>0.0.7</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>default/index.html</div></td></tr></table></div>'
+tRp128
+sS'locals'
+p129
+(dp130
+S'Service'
+p131
+S"<class 'gluon.tools.Service'>"
+p132
+sS'rm_html_tags'
+p133
+S'<function rm_html_tags>'
+p134
+sS'PY2'
+p135
+S'True'
+p136
+sS'OBJECT'
+p137
+S"<class 'gluon.html.OBJECT'>"
+p138
+sS'datetime'
+p139
+S"<type 'datetime.datetime'>"
+p140
+sg121
+S"<Storage {'_secure': True}>"
+p141
+sS'LINK'
+p142
+S"<class 'gluon.html.LINK'>"
+p143
+sS'Auth'
+p144
+S"<class 'gluon.tools.Auth'>"
+p145
+sS'BR'
+p146
+S"<class 'gluon.html.BR'>"
+p147
+sS'local_import'
+p148
+S'<function <lambda>>'
+p149
+sS'keywords'
+p150
+S"<module 'applications.abxtract.modules.keywords' from 'applications/abxtract/modules/keywords.pyc'>"
+p151
+sS'rm_html_escape_characters'
+p152
+S'<function rm_html_escape_characters>'
+p153
+sS'num_encode'
+p154
+S'<function num_encode>'
+p155
+sS'positiveTweets'
+p156
+S'<function positiveTweets>'
+p157
+sS'redirect'
+p158
+S'<function redirect>'
+p159
+sS'IS_INT_IN_RANGE'
+p160
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p161
+sS'to_bytes'
+p162
+S'<function to_bytes>'
+p163
+sS'vars'
+p164
+S'<Storage {}>'
+p165
+sS'IS_LOWER'
+p166
+S"<class 'gluon.validators.IS_LOWER'>"
+p167
+sS'IS_STRONG'
+p168
+S"<class 'gluon.validators.IS_STRONG'>"
+p169
+sS'cache'
+p170
+S'<gluon.cache.Cache object>'
+p171
+sS'IS_IN_DB'
+p172
+S"<class 'gluon.validators.IS_IN_DB'>"
+p173
+sS'TAG'
+p174
+S'<gluon.html.__TAG__ object>'
+p175
+sS'Scheduler'
+p176
+S"<class 'gluon.scheduler.Scheduler'>"
+p177
+sS'SQLField'
+p178
+S"<class 'pydal.objects.Field'>"
+p179
+sS'BODY'
+p180
+S"<class 'gluon.html.BODY'>"
+p181
+sS'IS_DATE_IN_RANGE'
+p182
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p183
+sS'string'
+p184
+S"<module 'string' from '/usr/lib64/python2.7/string.pyc'>"
+p185
+sS'ON'
+p186
+g136
+sS'URL'
+p187
+S'<function URL>'
+p188
+sS'__file__'
+p189
+S"'/opt/web2py_apps/web2py/applications/abxtract/views/default/index.html'"
+p190
+sS'db'
+p191
+S'<DAL uri="mysql:******@localhost/main?set_encoding=utf8mb4">'
+p192
+sS'auth'
+p193
+S'<gluon.tools.Auth object>'
+p194
+sS'P'
+S"<class 'gluon.html.P'>"
+p195
+sS'BASE'
+p196
+S'64'
+p197
+sS'T'
+S'<gluon.languages.translator object>'
+p198
+sS'scheduler'
+p199
+S'<Scheduler(Thread-1645, initial daemon)>'
+p200
+sS'iteritems'
+p201
+S'<function <lambda>>'
+p202
+sS'ACCESS_SECRET'
+p203
+S"'aLqR5uoV2vLLHCkIFmej3R43WGrqrfluZAguHuRRq0Xk8ScDBa'"
+p204
+sS'XHTML'
+p205
+S"<class 'gluon.html.XHTML'>"
+p206
+sS'SQLDB'
+p207
+S"<class 'pydal.base.DAL'>"
+p208
+sS'markmin2html'
+p209
+S'<function markmin2html>'
+p210
+sS'get_tweet_counts'
+p211
+S'<function get_tweet_counts>'
+p212
+sS'OL'
+p213
+S"<class 'gluon.html.OL'>"
+p214
+sS'TEXTAREA'
+p215
+S"<class 'gluon.html.TEXTAREA'>"
+p216
+sS'MENU'
+p217
+S"<class 'gluon.html.MENU'>"
+p218
+sS'__package__'
+p219
+S'None'
+p220
+sS'page'
+p221
+S'0'
+sS'ACCESS_KEY'
+p222
+S"'Z0ITlc1Fp5fAjZmX1ks8OzM2j'"
+p223
+sS'CODE'
+p224
+S"<class 'gluon.html.CODE'>"
+p225
+sS'HTTP'
+p226
+S"<class 'gluon.http.HTTP'>"
+p227
+sS'sentiment_analyzer'
+p228
+S"<module 'applications.abxtract.modules.sentiment...cations/abxtract/modules/sentiment_analyzer.pyc'>"
+p229
+sS'HR'
+p230
+S"<class 'gluon.html.HR'>"
+p231
+sS'IFRAME'
+p232
+S"<class 'gluon.html.IFRAME'>"
+p233
+sS'IS_DATETIME'
+p234
+S"<class 'gluon.validators.IS_DATETIME'>"
+p235
+sS'reduce'
+p236
+S'<built-in function reduce>'
+p237
+sS'STYLE'
+p238
+S"<class 'gluon.html.STYLE'>"
+p239
+sS'LABEL'
+p240
+S"<class 'gluon.html.LABEL'>"
+p241
+sS'OPTGROUP'
+p242
+S"<class 'gluon.html.OPTGROUP'>"
+p243
+sS'CLEANUP'
+p244
+S"<class 'gluon.validators.CLEANUP'>"
+p245
+sS'rm_at_user'
+p246
+S'<function rm_at_user>'
+p247
+sS'SELECT'
+p248
+S"<class 'gluon.html.SELECT'>"
+p249
+sS'stop_words'
+p250
+S'[\'a\', \'about\', \'above\', \'after\', \'again\', \'against\', \'ain\', \'all\', \'am\', \'an\', \'and\', \'any\', \'are\', \'aren\', "aren\'t", \'as\', \'at\', \'be\', \'because\', \'been\', ...]'
+p251
+sS'timedelta'
+p252
+S"<type 'datetime.timedelta'>"
+p253
+sS'prettydate'
+p254
+S'<function prettydate>'
+p255
+sS'custom_auth_table'
+p256
+S'<Table auth_user (id, username, username_slug, e...ollowing, count_new_reply, unsub_key, verif_key)>'
+p257
+sS'Crud'
+p258
+S"<class 'gluon.tools.Crud'>"
+p259
+sS'cleanhtml'
+p260
+S'<function cleanhtml>'
+p261
+sS'comments'
+p262
+S"[{'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'Price of bitcoin is going to be neutral for next two days', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 16, 8, 49, 11), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 28L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'i think bitcoin is going to dump. ', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 16, 8, 48, 47), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 27L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'I love bitcoin.', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 16, 8, 48, 26), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 26L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'Singapore-Based Crypto Exchange DragonEx Has Been Hacked', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 14, 15, 21, 14), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 25L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'Ripple Co-Founder Donates $25 Million in XRP to US University', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 14, 15, 19, 13), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 24L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'Bitcoin Drops Back to $5K Price Support After Failed Breakout', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 14, 15, 17, 55), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 23L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'MakerDAO to Increase Fees Above 10% in Bid to Stabilize DAI Stablecoin', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 14, 15, 16, 25), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 22L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'Coinbase Exec Dan Romero Leaving Crypto Exchange After 5 Years', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 14, 14, 59, 15), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 21L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'\\u2018Onerous\\u2019 FATF Recommendations Harmful for Crypto Transparency: Chainalysis', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 14, 14, 58, 48), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 20L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b535fa139c084eab.6176617461722e706e67.png', 'body': u'Ok I changed my mind. I love bitcoin now. Very bullish on $BTC. ', 'coin': None, 'created_by': 1L, 'created_on': datetime.datetime(2019, 4, 13, 20, 55, 35), 'custom_slug': None, 'description': u'Admin', 'dislike': 0L, 'id': 19L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b535fa139c084eab.6176617461722e706e67.png', 'body': u'I hate bitcoin. Bitcoin is bad. ', 'coin': None, 'created_by': 1L, 'created_on': datetime.datetime(2019, 4, 13, 20, 52), 'custom_slug': None, 'description': u'Admin', 'dislike': 0L, 'id': 18L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'Japanese Bank Abandons Work With SBI Ripple\\u2019s \\u2018Money Tap\\u2019 App', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 4, 2, 23, 45, 49), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 15L, 'image_url': None, ...}, {'avatar': u'auth_user.avatar.b7e3f06df04f67db.6176617461722e706e67.png', 'body': u'Bitcoin Price above $3,000 is Good News for Bulls: Analyst', 'coin': None, 'created_by': 3L, 'created_on': datetime.datetime(2019, 2, 22, 14, 19, 54), 'custom_slug': None, 'description': u'Crypto Analyst', 'dislike': 0L, 'id': 14L, 'image_url': None, ...}]"
+p263
+sS'__builtins__'
+p264
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'BufferError': <type 'exceptions.BufferError'>, 'BytesWarning': <type 'exceptions.BytesWarning'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, ...}"
+p265
+sS'HTML'
+p266
+S"<class 'gluon.html.HTML'>"
+p267
+sS'last_comment_on_page'
+p268
+S'15'
+p269
+sS'SQLFORM'
+p270
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p271
+sS'get_current_price'
+p272
+S'<function get_current_price>'
+p273
+sS'LOAD'
+p274
+S'<function LOAD>'
+p275
+sS'PRE'
+p276
+S"<class 'gluon.html.PRE'>"
+p277
+sS'FIELDSET'
+p278
+S"<class 'gluon.html.FIELDSET'>"
+p279
+sS'IS_EQUAL_TO'
+p280
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p281
+sS'rm_hashtag_symbol'
+p282
+S'<function rm_hashtag_symbol>'
+p283
+sS'embed64'
+p284
+S'<function embed64>'
+p285
+sS'IS_LIST_OF'
+p286
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p287
+sS'ALPHABET_REVERSE'
+p288
+S"{'-': 62, '0': 52, '1': 53, '2': 54, '3': 55, '4': 56, '5': 57, '6': 58, '7': 59, '8': 60, ...}"
+p289
+sS'num_decode'
+p290
+S'<function num_decode>'
+p291
+sS're'
+p292
+S"<module 're' from '/usr/lib64/python2.7/re.pyc'>"
+p293
+sS'EMBED'
+p294
+S"<class 'gluon.html.EMBED'>"
+p295
+sS'configuration'
+p296
+S"{'host': {'names': 'localhost:*, 127.0.0.1:*, *:...': 'sqlite://storage.sqlite', 'pool_size': '10'}}"
+p297
+sS'placeholder'
+p298
+S"'Please login or register'"
+p299
+sS'FORM'
+p300
+S"<class 'gluon.html.FORM'>"
+p301
+sS'ALLOWED_ATTRIBUTES'
+p302
+S"{'blockquote': ['type'], 'img': ['src', 'alt']}"
+p303
+sS'IS_NOT_IN_DB'
+p304
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p305
+sS'H2'
+p306
+S"<class 'gluon.html.H2'>"
+p307
+sS'H3'
+p308
+S"<class 'gluon.html.H3'>"
+p309
+sS'AppConfig'
+p310
+S'<function AppConfig>'
+p311
+sS'getReturns'
+p312
+S'<function getReturns>'
+p313
+sS'H6'
+p314
+S"<class 'gluon.html.H6'>"
+p315
+sS'ethereumStats'
+p316
+S'None'
+p317
+sS'H4'
+p318
+S"<class 'gluon.html.H4'>"
+p319
+sS'H5'
+p320
+S"<class 'gluon.html.H5'>"
+p321
+sS'UL'
+p322
+S"<class 'gluon.html.UL'>"
+p323
+sS'get_tweet_analysis'
+p324
+S'<function get_tweet_analysis>'
+p325
+sS'xmlescape'
+p326
+S'<function xmlescape>'
+p327
+sS'requests'
+p328
+S"<module 'requests' from '/usr/lib/python2.7/site-packages/requests/__init__.pyc'>"
+p329
+sS'IS_TIME'
+p330
+S"<class 'gluon.validators.IS_TIME'>"
+p331
+sS'rm_punctuation'
+p332
+S'<function rm_punctuation>'
+p333
+sS'OPTION'
+p334
+S"<class 'gluon.html.OPTION'>"
+p335
+sS'TITLE'
+p336
+S"<class 'gluon.html.TITLE'>"
+p337
+sS'CRYPT'
+p338
+S"<class 'gluon.validators.CRYPT'>"
+p339
+sS'empty_to_none'
+p340
+S'<function empty_to_none>'
+p341
+sS'IS_EMPTY_OR'
+p342
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p343
+sS'MARKMIN'
+p344
+S"<class 'gluon.html.MARKMIN'>"
+p345
+sS'COLGROUP'
+p346
+S"<class 'gluon.html.COLGROUP'>"
+p347
+sS'INPUT'
+p348
+S"<class 'gluon.html.INPUT'>"
+p349
+sS'get_avatar_url'
+p350
+S'<function get_avatar_url>'
+p351
+sS'STRONG'
+p352
+S"<class 'gluon.html.STRONG'>"
+p353
+sS'moneroStats'
+p354
+S'None'
+p355
+sS'COL'
+p356
+S"<class 'gluon.html.COL'>"
+p357
+sS'SCRIPT'
+p358
+S"<class 'gluon.html.SCRIPT'>"
+p359
+sS'ALPHABET'
+p360
+S"'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'"
+p361
+sS'json'
+p362
+S"<module 'gluon.contrib.simplejson' from '/opt/web2py_apps/web2py/gluon/contrib/simplejson.pyc'>"
+p363
+sS'comment_count'
+p364
+S'13L'
+p365
+sS'TABLE'
+p366
+S"<class 'gluon.html.TABLE'>"
+p367
+sS'THEAD'
+p368
+S"<class 'gluon.html.THEAD'>"
+p369
+sS'IS_IPV4'
+p370
+S"<class 'gluon.validators.IS_IPV4'>"
+p371
+sS'IS_LENGTH'
+p372
+S"<class 'gluon.validators.IS_LENGTH'>"
+p373
+sS'IS_IPV6'
+p374
+S"<class 'gluon.validators.IS_IPV6'>"
+p375
+sS'XML'
+p376
+S"<class 'gluon.html.XML'>"
+p377
+sS'B'
+S"<class 'gluon.html.B'>"
+p378
+sS'IMG'
+p379
+S"<class 'gluon.html.IMG'>"
+p380
+sS'rm_url'
+p381
+S'<function rm_url>'
+p382
+sS'SQLTABLE'
+p383
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p384
+sS'STATIC_VERSION'
+p385
+S"'_0.0.7'"
+p386
+sS'IS_MATCH'
+p387
+S"<class 'gluon.validators.IS_MATCH'>"
+p388
+sS'comment_voted'
+p389
+S'<function comment_voted>'
+p390
+sS'IS_ALPHANUMERIC'
+p391
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p392
+sS'preprocess'
+p393
+S'<function preprocess>'
+p394
+sS'PERMITTED_TAGS'
+p395
+S"['b', 'blockquote', 'br/', 'i', 'li', 'ol', 'ul', 'p', 'cite', 'code', 'pre', 'img/']"
+p396
+sS'oauth2'
+p397
+S"<module 'oauth2' from '/usr/lib/python2.7/site-packages/oauth2/__init__.pyc'>"
+p398
+sS'SPAN'
+p399
+S"<class 'gluon.html.SPAN'>"
+p400
+sS'IS_JSON'
+p401
+S"<class 'gluon.validators.IS_JSON'>"
+p402
+sS'replace_emoticon'
+p403
+S'<function replace_emoticon>'
+p404
+sS'IS_IPADDRESS'
+p405
+S"<class 'gluon.validators.IS_IPADDRESS'>"
+p406
+sS'_app'
+p407
+S"'abxtract'"
+p408
+sS'IS_SLUG'
+p409
+S"<class 'gluon.validators.IS_SLUG'>"
+p410
+sS'litecoinStats'
+p411
+S'None'
+p412
+sS'TFOOT'
+p413
+S"<class 'gluon.html.TFOOT'>"
+p414
+sS'nowDate'
+p415
+S'datetime.date(2019, 4, 26)'
+p416
+sS'META'
+p417
+S"<class 'gluon.html.META'>"
+p418
+sS'get_tweet_sentiment'
+p419
+S'<function get_tweet_sentiment>'
+p420
+sS'BUTTON'
+p421
+S"<class 'gluon.html.BUTTON'>"
+p422
+sS'rm_repeat_chars'
+p423
+S'<function rm_repeat_chars>'
+p424
+sS'EM'
+p425
+S"<class 'gluon.html.EM'>"
+p426
+sS'H1'
+p427
+S"<class 'gluon.html.H1'>"
+p428
+sS'IS_DATE'
+p429
+S"<class 'gluon.validators.IS_DATE'>"
+p430
+sS'IS_EMAIL'
+p431
+S"<class 'gluon.validators.IS_EMAIL'>"
+p432
+sS'IS_NOT_EMPTY'
+p433
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p434
+sS'xrange'
+p435
+S"<type 'xrange'>"
+p436
+sS'BEAUTIFY'
+p437
+S"<class 'gluon.html.BEAUTIFY'>"
+p438
+sS'TBODY'
+p439
+S"<class 'gluon.html.TBODY'>"
+p440
+sS'CAT'
+p441
+S"<class 'gluon.html.CAT'>"
+p442
+sS'CONSUMER_SECRET'
+p443
+S"'FLqXC5f1UGUX4AwaKURWNDSUrB2FkRDajZemus9TKWhwY'"
+p444
+sS'Field'
+p445
+S"<class 'pydal.objects.Field'>"
+p446
+sS'registerModal'
+p447
+S"'#registerModal'"
+p448
+sS'IS_LIST_OF_EMAILS'
+p449
+S"<class 'gluon.validators.IS_LIST_OF_EMAILS'>"
+p450
+sS'DIV'
+p451
+S"<class 'gluon.html.DIV'>"
+p452
+sS'LEGEND'
+p453
+S"<class 'gluon.html.LEGEND'>"
+p454
+sS'negativeTweets'
+p455
+S'<function negativeTweets>'
+p456
+sS'form'
+p457
+S'<gluon.html.A object>'
+p458
+sS'to_native'
+p459
+S'<function to_native>'
+p460
+sS'randint'
+p461
+S'<bound method Random.randint of <random.Random object>>'
+p462
+sS'DAL'
+p463
+S"<class 'pydal.base.DAL'>"
+p464
+sS'TT'
+p465
+S"<class 'gluon.html.TT'>"
+p466
+sS'TR'
+p467
+S"<class 'gluon.html.TR'>"
+p468
+sS'LI'
+p469
+S"<class 'gluon.html.LI'>"
+p470
+sS'TH'
+p471
+S"<class 'gluon.html.TH'>"
+p472
+sS'TD'
+p473
+S"<class 'gluon.html.TD'>"
+p474
+sS'PluginManager'
+p475
+S"<class 'gluon.tools.PluginManager'>"
+p476
+sS'IS_URL'
+p477
+S"<class 'gluon.validators.IS_URL'>"
+p478
+sS'Decimal'
+p479
+S"<class 'decimal.Decimal'>"
+p480
+sS'IS_UPPER'
+p481
+S"<class 'gluon.validators.IS_UPPER'>"
+p482
+sS'A'
+S"<class 'gluon.html.A'>"
+p483
+sS'HEAD'
+p484
+S"<class 'gluon.html.HEAD'>"
+p485
+sS'IS_DATETIME_IN_RANGE'
+p486
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p487
+sS'IS_IMAGE'
+p488
+S"<class 'gluon.validators.IS_IMAGE'>"
+p489
+sS'I'
+S"<class 'gluon.html.I'>"
+p490
+sS'quote_plus'
+p491
+S'<function quote_plus>'
+p492
+sS'neutralTweets'
+p493
+S'<function neutralTweets>'
+p494
+sg125
+S"<type 'datetime.date'>"
+p495
+sS'get_sentiment_results'
+p496
+S'<function get_sentiment_results>'
+p497
+sS'CONSUMER_KEY'
+p498
+S"'2972187968-JmUT3zeu2UyVIw315arct0tFjFO0J92r5ozwE1W'"
+p499
+sg127
+S"<Storage {'body': <cStringIO.StringO object at 0...t 0x7f1baaa0b7d0>, 'view': 'default/index.html'}>"
+p500
+sS'rm_time'
+p501
+S'<function rm_time>'
+p502
+sS'CENTER'
+p503
+S"<class 'gluon.html.CENTER'>"
+p504
+sS'ANY_OF'
+p505
+S"<class 'gluon.validators.ANY_OF'>"
+p506
+sS'IS_NULL_OR'
+p507
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p508
+sS'IS_FLOAT_IN_RANGE'
+p509
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p510
+sS'os'
+p511
+S"<module 'os' from '/usr/lib64/python2.7/os.pyc'>"
+p512
+sS'__name__'
+p513
+S"'__restricted__'"
+p514
+sS'author'
+p515
+S'<function author>'
+p516
+sg58
+S"<Storage {'_vars': <Storage {}>, 'function': 'in...web2py/applications/abxtract/', 'method': 'GET'}>"
+p517
+sS'IS_EXPR'
+p518
+S"<class 'gluon.validators.IS_EXPR'>"
+p519
+sS'sqlQuery'
+p520
+S"'SELECT c.*, d.reply_count, e.name, e.custom_slug... c.id = d.root LEFT JOIN master e ON c.coin=e.id;'"
+p521
+sS'get_old_tweets'
+p522
+S'<function get_old_tweets>'
+p523
+sS'IS_IN_SET'
+p524
+S"<class 'gluon.validators.IS_IN_SET'>"
+p525
+sS'IS_UPLOAD_FILENAME'
+p526
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p527
+sS'time'
+p528
+S"<module 'time' from '/usr/lib64/python2.7/lib-dynload/timemodule.so'>"
+p529
+sS'ASSIGNJS'
+p530
+S'<function ASSIGNJS>'
+p531
+sS'IS_DECIMAL_IN_RANGE'
+p532
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p533
+sssS'traceback'
+p534
+S'Traceback (most recent call last):\n  File "/opt/web2py_apps/web2py/gluon/restricted.py", line 219, in restricted\n    exec(ccode, environment)\n  File "/opt/web2py_apps/web2py/applications/abxtract/views/default/index.html", line 42, in <module>\n    [\'Neutral\', {{=litecoinStats.neutral_count if litecoinStats.neutral_count else 0}}],\nAttributeError: \'NoneType\' object has no attribute \'bullish_count\'\n'
+p535
+s.

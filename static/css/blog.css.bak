@@ -1,0 +1,14 @@
+.container-fluid{background-color:white !important;}
+.blog-col{padding:15px 15px 20px 15px;}
+.blog-body{margin-top:50px;text-align:left;color:#333;font-size: 18px;line-height: 1.9;}
+.blog-section-header{margin:50px 0 5px 0;font-size:1rem;font-weight:600;}
+.author-container{display:flex;flex-direction:row;}
+
+a {color:black;}
+.jumbo-container{display:block;height:450px;min-height:450px;position:relative;width:100%;}
+.jumbo-image{background-position:center center;background-repeat:no-repeat;background-size:cover;color:transparent;z-index: 1;}
+.jumbo-overlay{color:white;display:flex;background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5));z-index:99;text-align:center;}
+.jumbo-item{top:0;bottom:0;left:0;right:0;position: absolute;}
+.jumbo-text{max-width:700px;margin:auto;padding:0 15px;}
+.jumbo-tag{padding:20px;font-size:10px;text-transform:uppercase;letter-spacing:.125em;color:#fff;font-weight:bold;}
+.jumbo-header{font-size:2.5rem;line-height:66px;letter-spacing:.05em;color:#fff;font-weight:500;}

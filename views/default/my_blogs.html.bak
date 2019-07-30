@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head itemscope itemtype="http://schema.org/Organization" lang="en">
+    <title>My Blogs | ViewBase</title>
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static','css/spinner.css')}}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
+    <style>
+        /* Layout settings */
+        .container-fluid{background-color:#f2f3f5;}
+        .row{max-width:1350px;margin:0 auto;padding:20px 0;}
+        .my-col{padding:15px 30px 20px 30px;}
+        .my-main{background-color:white;margin:15px !important;}
+        .col-header{margin:5px 0 15px 0;width:100%;text-align:center;font-size:25px;font-weight:700;}
+        td {vertical-align:middle !important;}
+        .blog-title{font-weight:500;}
+        .blog-status{font-size:0.75rem;}
+        .blog-del-button:hover{cursor:pointer;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-3 my-col my-main">
+                <p>You have...</p>
+                <p><i class="far fa-star"></i> {{=published_blog_count}} published posts</p>
+                <p><i class="far fa-clock"></i> {{=pending_blog_count}} posts pending approval</p>
+                <p><i class="fas fa-edit"></i> {{=draft_blog_count}} drafts</p>
+            </div>
+            <div class="col-12 col-lg-8 my-col my-main">
+                <h1 class="col-header">My Blogs</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Post</th>
+                            <th scope="col">Status</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{for blog in blogs:}}
+                        <tr>
+                            <td class="blog-title">
+                                {{if blog.show:}}
+                                <a href="https://www.viewbase.com/blog/{{=blog.website_slug}}">{{=blog.title}}</a>
+                                {{else:}}
+                                {{=blog.title}}
+                                {{pass}}
+                            </td>
+                            <td class="blog-status">{{if blog.show:}}Published{{elif blog.submit:}}Pending approval{{else:}}Draft{{pass}}</td>
+                            <td>
+                                {{if blog.show:}}
+                                <button type="button" class="btn btn-light disabled"><i class="fas fa-pen"></i> Edit</button>
+                                {{else:}}
+                                <a class="btn btn-success" href="https://www.viewbase.com/edit_blog/{{=blog.id}}"><i class="fas fa-pen"></i> Edit</a>
+                                {{pass}}
+                            </td>
+                            <td><i class="fas fa-trash-alt blog-del-button" data-toggle="modal" data-target="#deleteBlogModal"></i></td>
+                        </tr>
+                        {{pass}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-lg my-col"></div>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+<div class="modal fade" id="deleteBlogModal" tabindex="-1" role="dialog" aria-labelledby="deleteBlogModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteBlogModalLabel">Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          Post deletion is permanent. Are you sure you wish to delete?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">Keep</button>
+        <button type="button" class="btn btn-secondary" id="delete-blog">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+</script>
+</html>

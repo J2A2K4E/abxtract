@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+{{include 'navbar.html'}}
+    <style>
+        .clickable-row:hover{background-color:#f5f5f5;cursor: pointer;}
+        .table td, .table th {padding: .3rem;}
+    </style>
+</head>
+<body>
+
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10 text-right">
+            {{if day=='7d':}}
+                <a href="{{=URL('default','gainers')}}" class="btn btn-light btn-lg active" role="button">1D</a>
+                <a href="{{=URL('default','gainers',args='7d')}}" class="btn btn-secondary btn-lg disabled" role="button"><b>7D</b></a>
+            {{else:}}
+                <a href="{{=URL('default','gainers')}}" class="btn btn-secondary btn-lg disabled" role="button"><b>1D</b></a>
+                <a href="{{=URL('default','gainers',args='7d')}}" class="btn btn-light btn-lg active" role="button">7D</a>
+            {{pass}}
+        </div>
+        <div class="col-1"></div>
+    </div>
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-5">
+        <h4>
+            Top Gainers
+        </h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Ticker</th>
+              <th scope="col">Vol (24)</th>
+              <th scope="col">Price</th>
+              <th scope="col">% Gain</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{for i in range(0, len(top_gainers)):}}
+            <tr class='clickable-row' data-href="{{=URL('default','coin',args=top_gainers[i].custom_slug)}}">
+              <th scope="row">{{=i}}</th>
+              <td>
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/{{=top_gainers[i].cmc_id}}.png">
+                  <a href="{{=URL('default','coin',args=top_gainers[i].custom_slug)}}">{{=top_gainers[i].name}}</a>
+              </td>
+              <td>{{=top_gainers[i].symbol}}</td>
+              <td>${{='{0:,.0f}'.format(top_gainers[i].usd_volume_24h)}}</td>
+              <td>${{='{0:,.6f}'.format(top_gainers[i].usd_price)}}</td>
+              {{price_change = top_gainers[i].usd_percent_change_7d if day=='7d' else top_gainers[i].usd_percent_change_24h}}
+              <td style="color:green;">{{='{0:.2f}'.format(price_change)}}%</td>
+            </tr>
+            {{pass}}
+          </tbody>
+        </table>
+    </div>
+    <div class="col-5">
+      <h4>
+          Top Losers
+      </h4>
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Ticker</th>
+              <th scope="col">Vol (24)</th>
+              <th scope="col">Price</th>
+              <th scope="col">% Loss</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{for i in range(0, len(top_losers)):}}
+            <tr class='clickable-row' data-href="{{=URL('default','coin',args=top_losers[i].custom_slug)}}">
+              <th scope="row">{{=i}}</th>
+              <td>
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/{{=top_losers[i].cmc_id}}.png"> 
+                  <a href="{{=URL('default','coin',args=top_losers[i].custom_slug)}}">{{=top_losers[i].name}}</a>
+              </td>
+              <td>{{=top_losers[i].symbol}}</td>
+              <td>${{='{0:,.0f}'.format(top_losers[i].usd_volume_24h)}}</td>
+              <td>${{='{0:,.6f}'.format(top_losers[i].usd_price)}}</td>
+              {{price_change = top_losers[i].usd_percent_change_7d if day=='7d' else top_losers[i].usd_percent_change_24h}}
+              <td style="color:red;">{{='{0:.2f}'.format(price_change)}}%</td>
+            </tr>
+            {{pass}}
+          </tbody>
+        </table>
+    </div>
+    <div class="col-1"></div>
+  </div>
+</div>
+</body>
+
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+</html>

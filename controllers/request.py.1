@@ -1,0 +1,82 @@
+from bs4 import BeautifulSoup
+import requests
+try:
+  import simplejson as json
+except:
+  import json
+
+# Load search suggestions
+def search():
+    vars = request.post_vars
+    list = db2((db2.master.symbol.contains([vars.search_term]))|(db2.master.name.contains([vars.search_term]))).select(orderby=~db2.master.usd_market_cap,limitby=(0, 12))
+    html_string = ''
+    counter = 0
+    for coin in list:
+        if counter==0:
+            html_string = (html_string+'<a class="dropdown-item active first-result" href="'+URL('default','coin',args=coin.custom_slug)+
+                           '"><img src="https://s2.coinmarketcap.com/static/img/coins/16x16/'+str(coin.cmc_id)+'.png">  '+coin.name+'</a>')
+            counter = 1
+        else:
+            html_string = (html_string+'<a class="dropdown-item" href="'+URL('default','coin',args=coin.custom_slug)+
+                           '"><img src="https://s2.coinmarketcap.com/static/img/coins/16x16/'+str(coin.cmc_id)+'.png">  '+coin.name+'</a>')
+    return html_string
+
+# Check if username exists in registration form
+def check_username():
+    vars = request.post_vars
+    username_slug = IS_SLUG.urlify(vars.username)
+    if len(username_slug)>3:
+        if db.auth_user(username_slug=username_slug):
+            return '<span style="color:red;">Username has been taken</span>'
+        else:
+            return '<span style="color:green;">Username is available!</span>'
+
+# Check if email exists in registration form
+def check_email():
+    vars = request.post_vars
+    if db.auth_user(email=vars.email):
+        return '<span style="color:red;">Email has been registered</span>'
+    else:
+        return ''
+
+
+def link_preview():
+    url = request.post_vars.url
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'}
+    print(url)
+    page = requests.head(url, headers=headers)
+    print('page')
+    page_type = page.headers['content-type']
+    print('page_type')
+    if page_type[:9]=='text/html':
+        soup = BeautifulSoup(page.content,'html.parser').find('head')
+        title = soup.title.string if soup.title else url
+        desc = soup.find('meta', attrs={'name':'description'})["content"] if soup.find('meta', attrs={'name':'description'}) else None
+        # Remove title for tweets
+        if url[:15]=='https://twitter':
+            desc = title
+            title = ''
+        image = soup.find('meta', attrs={'property':'og:image'})["content"] if soup.find('meta', attrs={'property':'og:image'}) else None
+        # Remove profile pic from tweets
+        if image[:36]=='https://pbs.twimg.com/profile_images':
+            image = ''
+        if desc == None:
+            desc = soup.find('meta', attrs={'name':'og:description'})["content"] if soup.find('meta', attrs={'name':'og:description'}) else None
+        if desc == None:
+            desc = soup.find('meta', attrs={'property':'og:description'})["content"] if soup.find('meta', attrs={'property':'og:description'}) else None
+        out = {'title':title,'desc':desc,'image':image,'url':url}
+        return json.dumps(out)
+    elif page_type[:5]=='image':
+        out = {'title':'','desc':'','image':url,'url':''}
+        return json.dumps(out)
+    else:
+        out = {'title':'','desc':'','image':'','url':''}
+        return json.dumps(out)
+
+@auth.requires(not auth.has_membership('banned'))
+def upload():
+    vars = request.post_vars
+    if vars and auth.user:
+        db.comment.insert(body=vars.body, image_url=vars.image_url, link_title=vars.link_title, link_desc=vars.link_desc, link_url=vars.link_url, link_image=vars.link_image)
+        print('success')
+    return 'success'

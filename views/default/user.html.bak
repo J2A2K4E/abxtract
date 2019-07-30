@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+{{include 'navbar.html'}}
+    <style>
+        .my-container{max-width: 80rem;margin: 0 auto;padding: 1.25rem 0 0;}
+        .my-col{padding:1rem;}
+        .my-header{font-size:22px;color:#929292;}
+    </style>
+</head>
+<body>
+<div class="container-fluid" style="background-color:#f2f3f5;">
+    <div class="row my-container">
+        <div class="col-3 my-col">
+        </div>
+        <div class="col-6 my-col" style="background-color:white;">
+            <h1 class="my-header">
+            </h1>
+            {{=form}}
+        </div>
+        <div class="col-3 my-col"></div>
+    </div>
+</div>
+    {{include 'footer.html'}}
+</body>
+
+<script>
+</script>
+</html>

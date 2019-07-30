@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+    <title>Decentralization Index | ViewBase</title>
+    <meta itemprop="name" content="Decentralization Index | ViewBase" />
+    <meta itemprop="description" name="description" content="We have rated major cryptocurrencies on their level of decentralization by looking at the ownership and distribution mechanism." />
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="Decentralization Index | ViewBase" />
+    <meta property="og:description" content="We have rated major cryptocurrencies on their level of decentralization by looking at the ownership and distribution mechanism." />
+    <meta property="og:image" content="" />
+    <meta property="og:image" name="twitter:image" content="" />
+    <meta itemprop="image" content="" />
+    <link itemprop="url" rel="canonical" href="https://www.viewbase.com/decentralization"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ViewBase" />
+    <meta property="fb:admins" content="TBC" />
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@viewbasecom">
+    <meta name="twitter:title" content="Decentralization Index | ViewBase">
+    <meta name="twitter:description" content="We have rated major cryptocurrencies on their level of decentralization by looking at the ownership and distribution mechanism.">
+    <meta name="twitter:creator" content="@viewbasecom">
+    <meta name="twitter:image" content="">
+    {{include 'navbar.html'}}
+    <link rel="stylesheet" href="{{=URL('static','css/table.css')}}"/>
+    <script type="text/javascript" src="{{=URL('static','js/jquery.tablesorter.js')}}"></script>
+    <style>
+        .highlight-row:hover{background-color:#f5f5f5;}
+        .cell-score{font-weight:500;color:#333;font-size:22px;}
+        td{vertical-align:middle !important;}
+        .thead-light th:hover{cursor:default;}
+        .cell-small{font-size:12px;}
+        table{table-layout: fixed;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row" style="max-width:1200px;margin:20px auto;">
+            <h1 style="margin:24px 0 12px 0;width:100%;text-align:center;font-size:25px;font-weight:700;line-height:1.44em;">Decentralization Index</h1>
+            <p style="margin:0 auto 24px auto;max-width:700px;text-align:center;color:#999;">
+                We have rated major cryptocurrencies on their level of decentralization on a scale of 1 to 10 (with 10 being the most decentralized) by looking at the ownership and distribution mechanism.
+            </p>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" style="width:20px"># <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i></th>
+                        <th scope="col" style="width:120px">
+                            Name  <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:100px;">
+                            Current Total Supply <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:90px;">
+                            Launch Type <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:90px;">
+                            Premined Supply <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:90px;">
+                            Founders Allocation <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:90px;">
+                            Private Sale Allocation <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:90px;">
+                            Consensus Mechanism <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:90px;">
+                            ASIC Resistant <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:90px;">
+                            Overall Score <i class="sort-asc fas fa-caret-up"></i><i class="sort-dsc fas fa-caret-down"></i>
+                        </th>
+                        <th class="cell-center" scope="col" style="width:280px;">
+                            Comments
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class='highlight-row'>
+                        <td>1</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/1.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='btc')}}">Bitcoin</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='BTC').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">Genesis block</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">POW</td>
+                        <td class="cell-center">No</td>
+                        <td class="cell-center cell-score">9.0</td>
+                        <td class="cell-small">Although Satoshi purportedly owns a million BTC, the founders allocation is zero as he has obtained them through mining instead of a premine.</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>2</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/1027.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='eth')}}">Ethereum</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='ETH').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">ICO</td>
+                        <td class="cell-center">{{='{0:,.1f}'.format(60*100/total_supply*1000000)}}%</td>
+                        <td class="cell-center">{{='{0:,.1f}'.format(12*100/total_supply*1000000)}}%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">POW</td>
+                        <td class="cell-center">No</td>
+                        <td class="cell-center cell-score">7.5</td>
+                        <td class="cell-small">60m ETH were issued in the crowdsale, out of which 12m were given to the founding team.</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>3</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/52.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='xrp')}}">XRP</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='XRP').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">Perpetual sale</td>
+                        <td class="cell-center">100.0%</td>
+                        <td class="cell-center">100.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">DBFT</td>
+                        <td class="cell-center">Not applicable</td>
+                        <td class="cell-center cell-score">2.0</td>
+                        <td class="cell-small">Of the 100 bn XRP created, 20 bn XRP were allocated to the founders and 80 bn XRP to Ripple Labs.</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>4</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/1831.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='bch')}}">Bitcoin Cash</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='BCH').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">Fork</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">POW</td>
+                        <td class="cell-center">No</td>
+                        <td class="cell-center cell-score">8.5</td>
+                        <td class="cell-small">In 1 August 2017, Bitcoin Cash was hard forked from bitcoin. At the time of the fork anyone owning Bitcoin also owned the same number of Bitcoin Cash.</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>5</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/1765.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='eos')}}">EOS</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='EOS').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">ICO</td>
+                        <td class="cell-center">{{='{0:,.1f}'.format(1000000000/total_supply*100)}}%</td>
+                        <td class="cell-center">{{='{0:,.1f}'.format(100000000/total_supply*100)}}%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">DPOS</td>
+                        <td class="cell-center">Not applicable</td>
+                        <td class="cell-center cell-score">3.0</td>
+                        <td class="cell-small">EOS issued 1 billion tokens in their ICO, with a perpetual 5% annual inflation rate thereafter. 100m EOS (10% of ICO distribution) is allocated to founders.</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>6</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/512.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='xlm')}}">Stellar</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='XLM').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">ICO</td>
+                        <td class="cell-center">10.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">30.0%</td>
+                        <td class="cell-center">DPoS</td>
+                        <td class="cell-center">No</td>
+                        <td class="cell-center cell-score">4.0</td>
+                        <td class="cell-small">Coming soon</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>7</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/2.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='ltc')}}">Litecoin</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='LTC').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">Genesis block</td>
+                        <td class="cell-center">10.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">30.0%</td>
+                        <td class="cell-center">DPoS</td>
+                        <td class="cell-center">No</td>
+                        <td class="cell-center cell-score">8.0</td>
+                        <td class="cell-small">Coming soon</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>8</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/825.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='usdt')}}">Tether</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='USDT').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">Perpetual sale</td>
+                        <td class="cell-center">100.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">NA (ERC20 Token)</td>
+                        <td class="cell-center">Not applicable</td>
+                        <td class="cell-center cell-score">1.0</td>
+                        <td class="cell-small">Coming soon</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>9</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/328.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='xmr')}}">Monero</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='XMR').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">Fork</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">POW</td>
+                        <td class="cell-center">Yes</td>
+                        <td class="cell-center cell-score">9.5</td>
+                        <td class="cell-small">Coming soon</td>
+                    </tr>
+                    <tr class='highlight-row'>
+                        <td>10</td>
+                        <td class="cell-nowrap">
+                            <img src="https://s2.coinmarketcap.com/static/img/coins/16x16/2010.png">&nbsp;
+                            <a href="{{=URL('default','coin',args='ada')}}">Cardano</a>
+                        </td>
+                        {{total_supply = db(db.master.symbol=='ADA').select().first().total_supply}}
+                        <td class="cell-center">{{='{0:,.0f}'.format(total_supply)}}</td>
+                        <td class="cell-center">ICO</td>
+                        <td class="cell-center">10.0%</td>
+                        <td class="cell-center">0.0%</td>
+                        <td class="cell-center">30.0%</td>
+                        <td class="cell-center">POW</td>
+                        <td class="cell-center">No</td>
+                        <td class="cell-center cell-score">4.0</td>
+                        <td class="cell-small">Coming soon</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{include 'footer.html'}}
+</body>
+
+<script>
+</script>
+</html>
